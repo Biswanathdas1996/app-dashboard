@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Search, Plus, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AppCard } from "@/components/app-card";
-import { AppModal } from "@/components/app-modal";
 import { useApps, useCategories } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -12,7 +11,6 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [subcategory, setSubcategory] = useState("all");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: apps, isLoading } = useApps(
     search, 
@@ -36,16 +34,10 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold text-slate-800">Web Applications Dashboard</h2>
             <p className="text-slate-600 mt-1">Manage and access your web applications</p>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="bg-blue-50 px-4 py-2 rounded-lg">
-              <span className="text-blue-700 font-medium">
-                {apps?.length || 0} Apps
-              </span>
-            </div>
-            <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
-              <Plus className="mr-2 h-4 w-4" />
-              Add App
-            </Button>
+          <div className="bg-blue-50 px-4 py-2 rounded-lg">
+            <span className="text-blue-700 font-medium">
+              {apps?.length || 0} Apps
+            </span>
           </div>
         </div>
       </header>
@@ -143,19 +135,11 @@ export default function Dashboard() {
                 Clear Filters
               </Button>
             ) : (
-              <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Your First App
-              </Button>
+              <p className="text-slate-500">Visit the Admin Panel to add your first app</p>
             )}
           </div>
         )}
       </main>
-
-      <AppModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   );
 }

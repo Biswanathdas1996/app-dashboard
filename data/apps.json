@@ -1,0 +1,17 @@
+{
+  "users": [],
+  "webApps": [
+    {
+      "name": "Loacl LLM",
+      "description": "sbsdg h hs sgfh gsf hgfs j",
+      "url": "http://localhost:5000/",
+      "category": "marketing",
+      "subcategory": "test",
+      "icon": "fas fa-dollar-sign",
+      "isActive": true,
+      "id": 1
+    }
+  ],
+  "nextUserId": 1,
+  "nextAppId": 2
+}
