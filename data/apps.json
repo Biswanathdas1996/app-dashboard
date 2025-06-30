@@ -40,8 +40,18 @@
       "subcategory": "Payments",
       "icon": "fas fa-credit-card",
       "isActive": true
+    },
+    {
+      "name": "Insta",
+      "description": "insta",
+      "url": "https://www.instagram.com/reel/C5GJAoyr7YCZGsiVpqER-88fIm7FOgX00Jalgc0/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+      "category": "development",
+      "subcategory": "test",
+      "icon": "fas fa-globe",
+      "isActive": true,
+      "id": 5
     }
   ],
   "nextUserId": 1,
-  "nextAppId": 5
+  "nextAppId": 6
 }

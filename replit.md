@@ -105,8 +105,12 @@ Currently implements in-memory storage with file persistence for development. Th
 - `start`: Production server startup
 - `db:push`: Apply database schema changes
 
+## Recent Changes
+- June 30, 2025: Added app preview functionality with favicon display and website information
+- June 30, 2025: Initial setup with full-stack web application directory
+
 ## Changelog
-- June 30, 2025. Initial setup
+- June 30, 2025: Initial setup
 
 ## User Preferences
 

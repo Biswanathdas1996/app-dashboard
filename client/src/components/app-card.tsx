@@ -18,7 +18,6 @@ const categoryColors = {
 
 export function AppCard({ app, onClick }: AppCardProps) {
   const [showPreview, setShowPreview] = useState(false);
-  const [previewError, setPreviewError] = useState(false);
   
   const colorClasses = categoryColors[app.category as keyof typeof categoryColors] || 
     "from-slate-500 to-slate-600 bg-slate-100 text-slate-700";
@@ -43,10 +42,6 @@ export function AppCard({ app, onClick }: AppCardProps) {
     setShowPreview(!showPreview);
   };
 
-  const handleIframeError = () => {
-    setPreviewError(true);
-  };
-
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 group">
       {/* Preview Section */}
@@ -62,26 +57,36 @@ export function AppCard({ app, onClick }: AppCardProps) {
                 ✕
               </button>
             </div>
-            {!previewError ? (
-              <div className="relative h-32 bg-slate-50 rounded-lg overflow-hidden">
-                <iframe
-                  src={app.url}
-                  className="w-full h-full border-0 transform scale-50 origin-top-left"
-                  style={{ width: '200%', height: '200%' }}
-                  onError={handleIframeError}
-                  title={`Preview of ${app.name}`}
-                  sandbox="allow-same-origin"
-                />
-              </div>
-            ) : (
-              <div className="h-32 bg-slate-50 rounded-lg flex items-center justify-center">
-                <div className="text-center text-slate-500">
-                  <div className="text-2xl mb-2">🚫</div>
-                  <div className="text-xs">Preview not available</div>
-                  <div className="text-xs">Click to visit site</div>
+            <div className="relative h-32 bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg overflow-hidden border border-slate-200">
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                {/* Website Favicon */}
+                <div className="mb-3">
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${new URL(app.url).hostname}&sz=64`}
+                    alt={`${app.name} favicon`}
+                    className="w-8 h-8 rounded"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </div>
+                
+                {/* App Info */}
+                <div className="text-center">
+                  <div className="text-sm font-medium text-slate-700 mb-1">{app.name}</div>
+                  <div className="text-xs text-slate-500 mb-2">{new URL(app.url).hostname}</div>
+                  <div className="text-xs px-2 py-1 bg-white rounded-full text-slate-600 border">
+                    Live Preview
+                  </div>
+                </div>
+                
+                {/* Preview Indicator */}
+                <div className="absolute top-2 right-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       )}
