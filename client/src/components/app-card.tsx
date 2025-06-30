@@ -1,5 +1,4 @@
-import { ExternalLink, Eye } from "lucide-react";
-import { useState } from "react";
+import { ExternalLink } from "lucide-react";
 import type { WebApp } from "@shared/schema";
 
 interface AppCardProps {
@@ -17,19 +16,12 @@ const categoryColors = {
 } as const;
 
 export function AppCard({ app, onClick }: AppCardProps) {
-  const [showPreview, setShowPreview] = useState(false);
-  
   const colorClasses = categoryColors[app.category as keyof typeof categoryColors] || 
     "from-slate-500 to-slate-600 bg-slate-100 text-slate-700";
   
   const [gradientClasses, badgeClasses] = colorClasses.split(' bg-');
   
-  const handleClick = (e: React.MouseEvent) => {
-    // Don't trigger navigation if clicking on preview button
-    if ((e.target as HTMLElement).closest('.preview-button')) {
-      return;
-    }
-    
+  const handleClick = () => {
     if (onClick) {
       onClick(app);
     } else {
@@ -37,62 +29,12 @@ export function AppCard({ app, onClick }: AppCardProps) {
     }
   };
 
-  const handlePreviewClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowPreview(!showPreview);
-  };
-
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 group">
-      {/* Preview Section */}
-      {showPreview && (
-        <div className="p-4 border-b border-slate-200">
-          <div className="relative">
-            <div className="text-xs text-slate-500 mb-2 flex items-center justify-between">
-              <span>Preview of {app.name}</span>
-              <button 
-                className="text-slate-400 hover:text-slate-600"
-                onClick={handlePreviewClick}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="relative h-32 bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg overflow-hidden border border-slate-200">
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                {/* Website Favicon */}
-                <div className="mb-3">
-                  <img
-                    src={`https://www.google.com/s2/favicons?domain=${new URL(app.url).hostname}&sz=64`}
-                    alt={`${app.name} favicon`}
-                    className="w-8 h-8 rounded"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                    }}
-                  />
-                </div>
-                
-                {/* App Info */}
-                <div className="text-center">
-                  <div className="text-sm font-medium text-slate-700 mb-1">{app.name}</div>
-                  <div className="text-xs text-slate-500 mb-2">{new URL(app.url).hostname}</div>
-                  <div className="text-xs px-2 py-1 bg-white rounded-full text-slate-600 border">
-                    Live Preview
-                  </div>
-                </div>
-                
-                {/* Preview Indicator */}
-                <div className="absolute top-2 right-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Card Content */}
-      <div className="p-6 cursor-pointer" onClick={handleClick}>
+    <div 
+      className="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 cursor-pointer group"
+      onClick={handleClick}
+    >
+      <div className="p-6">
         <div className="flex items-center mb-4">
           <div className={`w-12 h-12 bg-gradient-to-br ${gradientClasses} rounded-lg flex items-center justify-center`}>
             <i className={`${app.icon} text-white text-lg`}></i>
@@ -113,16 +55,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
           <span className="text-xs text-slate-500">
             {app.subcategory}
           </span>
-          <div className="flex items-center space-x-2">
-            <button
-              className="preview-button p-1 text-slate-400 hover:text-blue-600 transition-colors"
-              onClick={handlePreviewClick}
-              title="Toggle preview"
-            >
-              <Eye className="h-4 w-4" />
-            </button>
-            <ExternalLink className="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
-          </div>
+          <ExternalLink className="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
         </div>
       </div>
     </div>
