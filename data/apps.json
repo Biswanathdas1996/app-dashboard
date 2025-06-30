@@ -1,0 +1,17 @@
+{
+  "users": [],
+  "webApps": [
+    {
+      "name": "Policy Bazar",
+      "description": "",
+      "url": "https://www.policybazaar.com/?utm_source=yahoo_brand&utm_medium=cpc&utm_term=policybazaar&utm_campaign=PolicyBazaar00PolicyBazaar&msclkid=e25be584a8281f0973af8de6dd01f87b",
+      "category": "marketing",
+      "subcategory": "test",
+      "icon": "fas fa-code",
+      "isActive": true,
+      "id": 1
+    }
+  ],
+  "nextUserId": 1,
+  "nextAppId": 2
+}
