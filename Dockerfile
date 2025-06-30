@@ -1,31 +1,58 @@
-# Base Python image
-FROM python:3.11.4
- 
-# Install OS dependencies
-RUN apt-get update && \
-    apt-get install -y git libgl1-mesa-glx libglib2.0-0 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
- 
+# Multi-stage build for Node.js/React application
+FROM node:20-alpine AS builder
+
 # Set working directory
-WORKDIR /src
- 
-# Copy the codebase
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY . .
- 
-# Copy .env file into image
-# Note: For security in production, handle secrets via Kubernetes secrets or external config!
-COPY .env .env
- 
-# Set env var to avoid interactive prompts
-ENV PYTHONUNBUFFERED=1 \
-    GIT_PYTHON_REFRESH=quiet
- 
-# Install Python dependencies
-RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
- 
+
+# Build the application (both client and server)
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS production
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+
+# Copy any other necessary files
+COPY --chown=nextjs:nodejs data ./data
+
+# Switch to non-root user
+USER nextjs
+
 # Expose the app port
 EXPOSE 5000
- 
-# Start the app
-CMD ["python3", "main.py"]
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:5000/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })" || exit 1
+
+# Start the app with dumb-init for proper signal handling
+CMD ["dumb-init", "node", "dist/index.js"]

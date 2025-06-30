@@ -4,8 +4,11 @@ kind: Deployment
 metadata:
   name: app-dashboard
   namespace: app-dashboard-dev
+  labels:
+    app: app-dashboard
+    version: v1
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: app-dashboard
@@ -13,12 +16,47 @@ spec:
     metadata:
       labels:
         app: app-dashboard
+        version: v1
     spec:
       containers:
-        - name: app-dashboard-backend
+        - name: app-dashboard
           image: acrcampdev01.azurecr.io/dev/app-dashboard:#__#IMAGE_TAG#__#
           ports:
             - containerPort: 5000
+              name: http
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "5000"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
       imagePullSecrets:
         - name: acrregistrydev
       tolerations:
@@ -28,6 +66,8 @@ spec:
           effect: NoSchedule
       nodeSelector:
         agentpool: workerpool01
+      securityContext:
+        fsGroup: 1001
 
 ---
 apiVersion: v1
@@ -35,13 +75,15 @@ kind: Service
 metadata:
   name: app-dashboard
   namespace: app-dashboard-dev
+  labels:
+    app: app-dashboard
 spec:
   selector:
     app: app-dashboard
   ports:
-    - name: http-port
+    - name: http
       protocol: TCP
-      port: 5000
+      port: 80
       targetPort: 5000
   type: ClusterIP
 
@@ -51,10 +93,14 @@ kind: Ingress
 metadata:
   name: app-dashboard
   namespace: app-dashboard-dev
+  labels:
+    app: app-dashboard
   annotations:
-    ingressClassName: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
 spec:
   ingressClassName: nginx
   rules:
@@ -67,7 +113,7 @@ spec:
               service:
                 name: app-dashboard
                 port:
-                  number: 5000
+                  number: 80
   tls:
     - hosts:
         - process-efficiency-analyzer-dev.pwc.in

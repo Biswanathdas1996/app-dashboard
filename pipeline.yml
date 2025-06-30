@@ -1,7 +1,8 @@
 trigger:
   branches:
     include:
-      - none
+      - main
+      - develop
 
 resources:
   repositories:
@@ -14,60 +15,111 @@ variables:
   - group: camp-acr-variables
   - name: VER
     value: $(Build.BuildId)
+  - name: NODE_VERSION
+    value: "20"
+  - name: IMAGE_NAME
+    value: "acrcampdev01.azurecr.io/dev/app-dashboard"
 
 stages:
-  - stage:
-      displayName: Build
-      pool: camp-dev
-      jobs:
-        - job: Build
-          steps:
-            - checkout: self
-              displayName: "Checkout Code from Repo"
+  - stage: Build
+    displayName: "Build and Push Docker Image"
+    pool: camp-dev
+    jobs:
+      - job: Build
+        displayName: "Build Node.js Application"
+        steps:
+          - checkout: self
+            displayName: "Checkout Source Code"
 
-            - task: Bash@3
-              displayName: Build Docker Image
-              inputs:
-                targetType: "inline"
-                script: |
-                  echo "Building the image"
-                  docker login acrcampdev01.azurecr.io -u $(acrforuser) -p $(acrforpassword)
-                  docker build -t acrcampdev01.azurecr.io/dev/app-dashboard:$(VER) .
-                  docker push acrcampdev01.azurecr.io/dev/app-dashboard:$(VER)
-                  docker images
+          - task: NodeTool@0
+            displayName: "Use Node.js $(NODE_VERSION)"
+            inputs:
+              versionSpec: "$(NODE_VERSION)"
 
-            - task: Bash@3
-              displayName: Delete Docker Image from Agent
-              inputs:
-                targetType: "inline"
-                script: |
-                  echo "Cleaning up Docker images"
-                  docker system prune -af
-              condition: always()
+          - task: Npm@1
+            displayName: "Install Dependencies"
+            inputs:
+              command: "ci"
+              verbose: false
 
-  - stage:
-      displayName: Deploy
-      pool: camp-dev
-      jobs:
-        - job: Deploy
-          steps:
-            - checkout: self
+          - task: Npm@1
+            displayName: "Run Type Check"
+            inputs:
+              command: "custom"
+              customCommand: "run check"
 
-            - task: Bash@3
-              displayName: Update image tag in deployment.yaml
-              inputs:
-                targetType: "inline"
-                script: |
-                  echo "Injecting version into deployment manifest"
-                  sed -i "s|#_#IMAGE_TAG#_#|$(VER)|g" deployment.yaml
-                  cat deployment.yaml
+          - task: Npm@1
+            displayName: "Build Application"
+            inputs:
+              command: "custom"
+              customCommand: "run build"
 
-            - task: Kubernetes@1
-              displayName: Apply Deployment to AKS (camp-dev)
-              inputs:
-                connectionType: "Kubernetes Service Connection"
-                kubernetesServiceEndpoint: "camp-dev"
-                namespace: "app-dashboard-dev"
-                command: apply
-                useConfigurationFile: true
-                configuration: "deployment.yaml"
+          - task: Docker@2
+            displayName: "Build Docker Image"
+            inputs:
+              containerRegistry: "acrcampdev01"
+              repository: "dev/app-dashboard"
+              command: "build"
+              tags: |
+                $(VER)
+                latest
+
+          - task: Docker@2
+            displayName: "Push Docker Image"
+            inputs:
+              containerRegistry: "acrcampdev01"
+              repository: "dev/app-dashboard"
+              command: "push"
+              tags: |
+                $(VER)
+                latest
+
+          - task: Bash@3
+            displayName: "Docker System Cleanup"
+            inputs:
+              targetType: "inline"
+              script: |
+                echo "Cleaning up Docker images and system"
+                docker system prune -af --volumes
+            condition: always()
+
+  - stage: Deploy
+    displayName: "Deploy to Kubernetes"
+    pool: camp-dev
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Deploy
+        displayName: "Deploy to AKS"
+        steps:
+          - checkout: self
+            displayName: "Checkout Source Code"
+
+          - task: Bash@3
+            displayName: "Update Image Tag in Deployment"
+            inputs:
+              targetType: "inline"
+              script: |
+                echo "Updating deployment.yaml with image tag: $(VER)"
+                sed -i "s|#__#IMAGE_TAG#__#|$(VER)|g" deployment.yaml
+                echo "Updated deployment.yaml:"
+                cat deployment.yaml
+
+          - task: Kubernetes@1
+            displayName: "Apply Deployment to AKS"
+            inputs:
+              connectionType: "Kubernetes Service Connection"
+              kubernetesServiceEndpoint: "camp-dev"
+              namespace: "app-dashboard-dev"
+              command: apply
+              useConfigurationFile: true
+              configuration: "deployment.yaml"
+
+          - task: Kubernetes@1
+            displayName: "Check Rollout Status"
+            inputs:
+              connectionType: "Kubernetes Service Connection"
+              kubernetesServiceEndpoint: "camp-dev"
+              namespace: "app-dashboard-dev"
+              command: "custom"
+              customCommand: "rollout status deployment/app-dashboard --timeout=300s"
