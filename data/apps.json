@@ -50,8 +50,18 @@
       "icon": "fas fa-globe",
       "isActive": true,
       "id": 5
+    },
+    {
+      "name": "Local LLM",
+      "description": "test",
+      "url": "http://localhost:5000/",
+      "category": "development",
+      "subcategory": "test",
+      "icon": "fas fa-cog",
+      "isActive": true,
+      "id": 6
     }
   ],
   "nextUserId": 1,
-  "nextAppId": 6
+  "nextAppId": 7
 }
