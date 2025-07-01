@@ -108,7 +108,6 @@ Uses file-based JSON storage (`data/apps.json`) for all data persistence. The st
 - `start`: Production server startup
 
 ## Changelog
-- July 1, 2025: Completely redesigned app cards with ultra-compact modern layout: 8x8px icons, micro text sizing, clean borders, minimal padding, and streamlined information hierarchy
 - July 1, 2025: Fixed scrolling issue in app details modal by adding proper flex layout and min-height constraints
 - July 1, 2025: Added comprehensive export/import functionality for app.json data with responsive UI buttons and proper error handling
 - July 1, 2025: Fixed all accessibility warnings by adding proper DialogDescription components to all modal dialogs
