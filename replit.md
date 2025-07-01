@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Enhanced application filters with modern PwC-compliant design including gradient accents and improved form controls
+- July 1, 2025: Completely redesigned application cards with contemporary styling, hover effects, and enhanced visual hierarchy
+- July 1, 2025: Modernized empty state with gradient backgrounds, improved messaging, and branded styling
 - July 1, 2025: Updated UI to modern PwC branding with orange color scheme and removed sidebar
 - July 1, 2025: Implemented new header navigation with PwC logo and responsive design
 - July 1, 2025: Added gradient hero sections with PwC orange-to-dark orange styling

@@ -53,90 +53,126 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <div className="mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+        {/* Modern Filters Section */}
+        <div className="mb-8 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 hover:shadow-xl transition-all duration-300">
+          <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Filter Applications</h3>
-              <p className="text-gray-600 text-sm">Narrow down your search by category and subcategory</p>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Filter & Discover</h3>
+              </div>
+              <p className="text-gray-600 font-medium">Explore applications by category and find exactly what you need</p>
             </div>
-            <div className="flex gap-3">
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {categoriesData?.categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-semibold text-gray-700 tracking-wide">Category</label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger className="w-56 h-12 rounded-xl border-gray-200/60 bg-gray-50/50 hover:bg-white focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all duration-200 font-medium">
+                    <SelectValue placeholder="All Categories" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
+                    <SelectItem value="all" className="rounded-lg font-medium">All Categories</SelectItem>
+                    {categoriesData?.categories.map((cat) => (
+                      <SelectItem key={cat} value={cat} className="rounded-lg font-medium">
+                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               
-              <Select value={subcategory} onValueChange={setSubcategory}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="All Subcategories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Subcategories</SelectItem>
-                  {categoriesData?.subcategories.map((subcat) => (
-                    <SelectItem key={subcat} value={subcat}>
-                      {subcat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-semibold text-gray-700 tracking-wide">Subcategory</label>
+                <Select value={subcategory} onValueChange={setSubcategory}>
+                  <SelectTrigger className="w-56 h-12 rounded-xl border-gray-200/60 bg-gray-50/50 hover:bg-white focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all duration-200 font-medium">
+                    <SelectValue placeholder="All Subcategories" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
+                    <SelectItem value="all" className="rounded-lg font-medium">All Subcategories</SelectItem>
+                    {categoriesData?.subcategories.map((subcat) => (
+                      <SelectItem key={subcat} value={subcat} className="rounded-lg font-medium">
+                        {subcat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex flex-col justify-end">
+                <Button 
+                  onClick={handleClearFilters} 
+                  variant="outline" 
+                  className="h-12 px-6 rounded-xl border-gray-300 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all duration-200 font-semibold"
+                >
+                  Clear Filters
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Apps Grid */}
+        {/* Enhanced Apps Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <div className="flex items-center mb-4">
-                  <Skeleton className="w-12 h-12 rounded-lg" />
+              <div key={i} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-8 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-center mb-6">
+                  <Skeleton className="w-14 h-14 rounded-xl" />
                   <div className="ml-4 flex-1">
-                    <Skeleton className="h-4 w-32 mb-2" />
+                    <Skeleton className="h-5 w-32 mb-3" />
                     <Skeleton className="h-3 w-20" />
                   </div>
                 </div>
-                <Skeleton className="h-16 w-full mb-4" />
+                <Skeleton className="h-20 w-full mb-6" />
                 <div className="flex items-center justify-between">
-                  <Skeleton className="h-3 w-24" />
-                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-3 w-28" />
+                  <Skeleton className="h-5 w-5" />
                 </div>
               </div>
             ))}
           </div>
         ) : apps && apps.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
             {apps.map((app) => (
-              <AppCard key={app.id} app={app} />
+              <AppCard 
+                key={app.id} 
+                app={app} 
+                onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
+              />
             ))}
           </div>
         ) : (
-          /* Empty State */
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FileText className="text-gray-400 h-8 w-8" />
+          /* Modern Empty State */
+          <div className="text-center py-20">
+            <div className="relative mx-auto mb-8">
+              <div className="w-32 h-32 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl flex items-center justify-center mx-auto shadow-lg">
+                <FileText className="text-primary h-12 w-12" />
+              </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-full opacity-20"></div>
+              <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-accent to-primary rounded-full opacity-30"></div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No apps found</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              {search || category || subcategory ? "No matches found" : "Ready to get started?"}
+            </h3>
+            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto leading-relaxed">
               {search || category || subcategory 
-                ? "Try adjusting your search or filter criteria"
-                : "Get started by adding your first web application"
+                ? "We couldn't find any applications matching your criteria. Try adjusting your filters or search terms."
+                : "Your application portfolio is waiting to be built. Add your first web application to begin."
               }
             </p>
             {(search || category || subcategory) ? (
-              <Button onClick={handleClearFilters} variant="outline">
-                Clear Filters
+              <Button 
+                onClick={handleClearFilters} 
+                className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                Clear All Filters
               </Button>
             ) : (
-              <p className="text-gray-500">Visit the Admin Panel to add your first app</p>
+              <div className="bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 max-w-md mx-auto">
+                <p className="text-gray-700 font-medium">
+                  Visit the <span className="text-primary font-bold">Admin Panel</span> to add your first application
+                </p>
+              </div>
             )}
           </div>
         )}
