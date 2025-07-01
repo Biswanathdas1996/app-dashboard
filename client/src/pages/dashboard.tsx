@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
+import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -44,6 +45,34 @@ export default function Dashboard() {
         currentSubcategory={subcategory}
       />
       
+      {/* Hero Banner with Image */}
+      <div className="relative h-[400px] overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={heroImage} 
+            alt="Woman and robot collaboration" 
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+        </div>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="text-white max-w-2xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header">
+              The Future of Business
+            </h1>
+            <p className="text-xl md:text-2xl mb-6 opacity-95 font-body leading-relaxed">
+              Where innovation meets excellence. Discover cutting-edge solutions that transform how we work.
+            </p>
+            <div className="flex items-center gap-4">
+              <Badge variant="secondary" className="px-4 py-2 bg-white/20 text-white border-white/30 text-sm font-medium backdrop-blur-sm">
+                <FileText className="h-4 w-4 mr-2" />
+                {apps?.length || 0} Solutions Available
+              </Badge>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Compact Welcome Banner */}
       <div className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
