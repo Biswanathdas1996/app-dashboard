@@ -108,6 +108,12 @@ Uses file-based JSON storage (`data/apps.json`) for all data persistence. The st
 - `start`: Production server startup
 
 ## Changelog
+- July 1, 2025: Fixed all accessibility warnings by adding proper DialogDescription components to all modal dialogs
+- July 1, 2025: Resolved TypeScript errors in app-modal and app-details-modal components for handling optional description fields
+- July 1, 2025: Updated browser compatibility database to resolve outdated caniuse-lite warnings
+- July 1, 2025: Implemented comprehensive error handling and form validation across all components
+- July 1, 2025: Verified and tested all API endpoints (apps, categories, subcategories) for full functionality
+- July 1, 2025: Cleaned up test data and ensured data integrity across all storage operations
 - July 1, 2025: Reverted to direct category/subcategory storage in app.json - categories and subcategories are now stored and managed independently in the JSON file
 - July 1, 2025: Restored full CRUD functionality for categories and subcategories with proper storage methods
 - July 1, 2025: Removed all database dependencies, app now uses only JSON file storage for complete database independence

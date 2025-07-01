@@ -20,6 +20,11 @@
       "id": 4,
       "name": "Infrastructure & Real Estate",
       "isActive": true
+    },
+    {
+      "id": 7,
+      "name": "dfgdfh",
+      "isActive": false
     }
   ],
   "subcategories": [
@@ -133,7 +138,7 @@
     }
   ],
   "nextUserId": 1,
-  "nextCategoryId": 7,
+  "nextCategoryId": 8,
   "nextSubcategoryId": 7,
   "nextAppId": 6
 }

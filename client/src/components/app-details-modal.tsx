@@ -66,7 +66,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
           
           <div className="relative z-10">
             <DialogHeader className="space-y-0">
-              <DialogDescription className="sr-only">
+              <DialogDescription className="text-white/80 text-base mb-4">
                 View detailed information about {app.name} including description, documents, and launch link.
               </DialogDescription>
               <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
               </div>
               <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl p-6 border border-gray-200/50 shadow-sm">
                 <RichTextViewer 
-                  content={app.description} 
+                  content={app.description || ""} 
                   className="text-gray-700 leading-relaxed text-lg"
                 />
               </div>

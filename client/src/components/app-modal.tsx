@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -124,6 +124,9 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-header">{app ? "Edit App" : "Add New App"}</DialogTitle>
+          <DialogDescription>
+            {app ? "Update the application information below." : "Fill in the details below to add a new application to the directory."}
+          </DialogDescription>
         </DialogHeader>
         
         <Form {...form}>
@@ -228,8 +231,8 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <RichTextEditor
-                      content={field.value}
-                      onChange={field.onChange}
+                      content={field.value || ""}
+                      onChange={(value: string) => field.onChange(value)}
                       placeholder="Describe the application and its features..."
                     />
                   </FormControl>
