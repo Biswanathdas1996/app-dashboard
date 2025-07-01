@@ -89,7 +89,12 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                   </div>
                 </div>
                 <Button
-                  onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open(app.url, '_blank', 'noopener,noreferrer');
+                  }}
                   className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                   size="lg"
                 >
@@ -137,7 +142,12 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <p className="text-xs text-gray-500 mb-3">Click below to launch the application in a new tab</p>
                     <Button
-                      onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open(app.url, '_blank', 'noopener,noreferrer');
+                      }}
                       className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                     >
                       <ExternalLink className="h-5 w-5 mr-2" />
@@ -179,9 +189,14 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                               </div>
                             </div>
                             <Button
+                              type="button"
                               variant="outline"
                               size="sm"
-                              onClick={() => window.open(`/api/files/${filename}`, '_blank')}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(`/api/files/${filename}`, '_blank');
+                              }}
                               className="opacity-70 group-hover:opacity-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-all duration-200"
                             >
                               <Eye className="h-4 w-4 mr-2" />
@@ -201,8 +216,13 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
           <div className="p-8 border-t border-gray-200/50 bg-gray-50/30">
             <div className="flex justify-end">
               <Button 
+                type="button"
                 variant="outline" 
-                onClick={onClose}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onClose();
+                }}
                 className="px-8 py-3 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
               >
                 Close
