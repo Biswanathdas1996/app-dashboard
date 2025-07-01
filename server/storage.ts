@@ -1,6 +1,12 @@
-import { users, webApps, type User, type InsertUser, type WebApp, type InsertWebApp, type UpdateWebApp } from "@shared/schema";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { eq, and, ilike, or } from "drizzle-orm";
+import { users, categories, subcategories, webApps, type User, type Category, type Subcategory, type WebApp, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp } from "@shared/schema";
 import fs from 'fs/promises';
 import path from 'path';
+
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'apps.json');
 
@@ -18,6 +24,21 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  // Categories methods
+  getAllCategories(): Promise<Category[]>;
+  getCategory(id: number): Promise<Category | undefined>;
+  createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: number, category: UpdateCategory): Promise<Category | undefined>;
+  deleteCategory(id: number): Promise<boolean>;
+  
+  // Subcategories methods
+  getAllSubcategories(): Promise<Subcategory[]>;
+  getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]>;
+  getSubcategory(id: number): Promise<Subcategory | undefined>;
+  createSubcategory(subcategory: InsertSubcategory): Promise<Subcategory>;
+  updateSubcategory(id: number, subcategory: UpdateSubcategory): Promise<Subcategory | undefined>;
+  deleteSubcategory(id: number): Promise<boolean>;
   
   // Web Apps methods
   getAllWebApps(): Promise<WebApp[]>;
