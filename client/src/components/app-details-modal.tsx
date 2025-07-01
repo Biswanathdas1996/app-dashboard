@@ -57,7 +57,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-hidden p-0 gap-0">
+      <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-hidden p-0 gap-0 flex flex-col">
         {/* Header Section with Gradient Background */}
         <div className={`relative bg-gradient-to-br ${gradientClasses} p-8 text-white overflow-hidden`}>
           <div className="absolute inset-0 bg-black/10"></div>
@@ -126,7 +126,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
         </div>
 
         {/* Content Section */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           <div className="p-8 space-y-8">
             {/* Short Description */}
             {app.shortDescription && (
