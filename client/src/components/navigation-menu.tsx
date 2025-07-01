@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useCategories, useSubcategories } from "@/hooks/use-categories";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +13,7 @@ interface NavigationMenuProps {
 export function NavigationMenu({ onCategoryChange, currentCategory, currentSubcategory }: NavigationMenuProps) {
   const { data: allCategories = [], isLoading } = useCategories();
   const { data: allSubcategories = [] } = useSubcategories();
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   
   // Filter to only show active categories
   const categories = allCategories.filter((category: any) => category.isActive);
@@ -64,62 +58,71 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
         // Use full category name from app.json
         const shortName = category.name;
         
-        // If category has subcategories, show as dropdown
+        // If category has subcategories, show as hover dropdown
         if (categorySubcategories.length > 0) {
           return (
-            <DropdownMenu key={category.id}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "h-9 px-4 text-sm font-semibold rounded-lg transition-all duration-300 relative overflow-hidden group",
-                    isActive 
-                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105" 
-                      : "text-gray-700 hover:text-gray-900 hover:bg-white/80 hover:shadow-md hover:scale-102 backdrop-blur-sm"
-                  )}
-                >
-                  <span className="relative z-10 flex items-center">
-                    {shortName}
-                    <ChevronDown className={cn(
-                      "ml-1.5 h-3 w-3 transition-all duration-300",
-                      isActive ? "opacity-90" : "opacity-60 group-hover:opacity-80"
-                    )} />
-                  </span>
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="min-w-52 border border-gray-200/40 shadow-xl bg-white/95 backdrop-blur-md rounded-xl p-1">
-                <DropdownMenuItem 
-                  onClick={() => handleCategorySelect(category.name)}
-                  className={cn(
-                    "font-semibold cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
-                    isActive && currentSubcategory === "all" 
-                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm" 
-                      : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
-                  )}
-                >
-                  All {category.name}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="mx-2 my-1 bg-gray-200/50" />
-                {categorySubcategories.map((subcategory: any) => (
-                  <DropdownMenuItem 
-                    key={subcategory.id}
-                    onClick={() => handleCategorySelect(category.name, subcategory.name)}
+            <div
+              key={category.id}
+              className="relative"
+              onMouseEnter={() => setHoveredCategory(category.id)}
+              onMouseLeave={() => setHoveredCategory(null)}
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleCategorySelect(category.name)}
+                className={cn(
+                  "h-9 px-4 text-sm font-semibold rounded-lg transition-all duration-300 relative overflow-hidden group",
+                  isActive 
+                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105" 
+                    : "text-gray-700 hover:text-gray-900 hover:bg-white/80 hover:shadow-md hover:scale-102 backdrop-blur-sm"
+                )}
+              >
+                <span className="relative z-10 flex items-center">
+                  {shortName}
+                  <ChevronDown className={cn(
+                    "ml-1.5 h-3 w-3 transition-all duration-300",
+                    hoveredCategory === category.id ? "rotate-180" : "rotate-0",
+                    isActive ? "opacity-90" : "opacity-60 group-hover:opacity-80"
+                  )} />
+                </span>
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse" />
+                )}
+              </Button>
+              
+              {/* Hover dropdown content */}
+              {hoveredCategory === category.id && (
+                <div className="absolute top-full left-0 mt-1 min-w-52 border border-gray-200/40 shadow-xl bg-white/95 backdrop-blur-md rounded-xl p-1 z-50">
+                  <button
+                    onClick={() => handleCategorySelect(category.name)}
                     className={cn(
-                      "cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
-                      isActive && currentSubcategory === subcategory.name 
+                      "w-full text-left font-semibold cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
+                      isActive && !currentSubcategory 
                         ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm" 
-                        : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                        : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                     )}
                   >
-                    {subcategory.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    All {category.name}
+                  </button>
+                  <div className="mx-2 my-1 h-px bg-gray-200/50" />
+                  {categorySubcategories.map((subcategory: any) => (
+                    <button
+                      key={subcategory.id}
+                      onClick={() => handleCategorySelect(category.name, subcategory.name)}
+                      className={cn(
+                        "w-full text-left cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
+                        isActive && currentSubcategory === subcategory.name 
+                          ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm" 
+                          : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                      )}
+                    >
+                      {subcategory.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           );
         } else {
           // If no subcategories, make category directly clickable
