@@ -10,30 +10,36 @@ export function Footer() {
             <div className="flex items-center space-x-3 mb-6">
               <PwCLogo size="md" className="text-white" />
               <div>
-                <h3 className="text-xl font-bold text-white">Application Portfolio</h3>
-                <p className="text-gray-400 text-sm">Powered by PwC Innovation</p>
+                <h3 className="text-xl font-bold text-white">
+                  Application Portfolio
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Powered by PwC Innovation
+                </p>
               </div>
             </div>
             <p className="text-gray-300 leading-relaxed max-w-md">
-              Centralized access to our comprehensive suite of business applications and tools. 
-              Streamlining workflows and enhancing productivity across all departments.
+              Centralized access to our comprehensive suite of business
+              applications and tools. Streamlining workflows and enhancing
+              productivity across all departments.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Quick Access</h4>
+            <h4 className="text-lg font-semibold text-white mb-4">
+              Quick Access
+            </h4>
             <ul className="space-y-3">
               <li>
-                <a href="/" className="text-gray-300 hover:text-primary transition-colors duration-200">
+                <a
+                  href="/"
+                  className="text-gray-300 hover:text-primary transition-colors duration-200"
+                >
                   Dashboard
                 </a>
               </li>
-              <li>
-                <a href="/admin" className="text-gray-300 hover:text-primary transition-colors duration-200">
-                  Admin Panel
-                </a>
-              </li>
+
               <li>
                 <span className="text-gray-400 text-sm">Categories</span>
               </li>
