@@ -38,7 +38,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
 
           {/* Navigation Menu - Only show on dashboard */}
           {location === "/" && onCategoryChange && (
-            <div className="hidden lg:flex items-center">
+            <div className="hidden md:flex items-center flex-1 justify-center max-w-2xl mx-4">
               <NavigationMenu 
                 onCategoryChange={onCategoryChange}
                 currentCategory={currentCategory}
@@ -49,17 +49,17 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
 
           {/* Search Bar - Only show on dashboard */}
           {location === "/" && onSearchChange && (
-            <div className="hidden lg:flex items-center space-x-2 flex-1 max-w-lg mx-8">
-              <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-4">
-                  <Search className="text-gray-400 h-5 w-5" />
+            <div className="hidden lg:flex items-center">
+              <div className="relative w-72">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <Search className="text-gray-400 h-4 w-4" />
                 </div>
                 <Input
                   type="text"
                   placeholder="Search applications..."
                   value={searchValue || ""}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  className="pl-12 pr-4 py-3 bg-gray-50/70 border-gray-200/50 rounded-xl focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-sm font-medium placeholder:text-gray-400 hover:bg-gray-100/50 shadow-sm focus:shadow-md"
+                  className="pl-10 pr-4 py-2 h-9 bg-gray-50/70 border-gray-200/50 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-gray-100/50"
                 />
               </div>
             </div>
@@ -70,27 +70,29 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
 
         {/* Mobile Navigation and Search - Only show on dashboard */}
         {location === "/" && onSearchChange && (
-          <div className="lg:hidden px-4 pb-6 space-y-4">
+          <div className="md:hidden px-4 pb-4 space-y-3">
             {/* Mobile Navigation */}
             {onCategoryChange && (
-              <NavigationMenu 
-                onCategoryChange={onCategoryChange}
-                currentCategory={currentCategory}
-                currentSubcategory={currentSubcategory}
-              />
+              <div className="overflow-x-auto scrollbar-hide">
+                <NavigationMenu 
+                  onCategoryChange={onCategoryChange}
+                  currentCategory={currentCategory}
+                  currentSubcategory={currentSubcategory}
+                />
+              </div>
             )}
             
             {/* Mobile Search */}
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
-                <Search className="text-gray-400 h-5 w-5" />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <Search className="text-gray-400 h-4 w-4" />
               </div>
               <Input
                 type="text"
                 placeholder="Search applications..."
                 value={searchValue || ""}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-12 pr-4 py-3 bg-gray-50/70 border-gray-200/50 rounded-xl focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 font-medium placeholder:text-gray-400 hover:bg-gray-100/50 shadow-sm focus:shadow-md"
+                className="pl-10 pr-4 py-2 h-9 bg-gray-50/70 border-gray-200/50 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-gray-100/50"
               />
             </div>
           </div>

@@ -31,26 +31,27 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
 
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-4">
-        <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
-        <div className="w-24 h-8 bg-gray-200 rounded animate-pulse"></div>
-        <div className="w-28 h-8 bg-gray-200 rounded animate-pulse"></div>
+      <div className="flex items-center space-x-0.5 bg-gray-50/50 rounded-lg p-1 border border-gray-200/60">
+        <div className="w-12 h-8 bg-gray-200 rounded-md animate-pulse"></div>
+        <div className="w-16 h-8 bg-gray-200 rounded-md animate-pulse"></div>
+        <div className="w-20 h-8 bg-gray-200 rounded-md animate-pulse"></div>
+        <div className="w-18 h-8 bg-gray-200 rounded-md animate-pulse"></div>
       </div>
     );
   }
 
   return (
-    <nav className="flex items-center space-x-1">
+    <nav className="flex items-center space-x-0.5 bg-gray-50/50 rounded-lg p-1 border border-gray-200/60 min-w-fit"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {/* All Categories */}
       <Button
-        variant={currentCategory === "all" ? "default" : "ghost"}
+        variant="ghost"
         size="sm"
         onClick={() => handleCategorySelect("all")}
         className={cn(
-          "font-medium",
+          "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
           currentCategory === "all" 
-            ? "bg-primary text-white" 
-            : "text-gray-700 hover:text-primary hover:bg-primary/10"
+            ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
+            : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
         )}
       >
         All
@@ -61,42 +62,49 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
         const categorySubcategories = getCategorySubcategories(category.id);
         const isActive = currentCategory === category.name;
         
+        // Shorten category names for compact display
+        const shortName = category.name
+          .replace('Financial Services', 'Finance')
+          .replace('Healthcare & Life Sciences', 'Healthcare')
+          .replace('Government & Public Services', 'Government')
+          .replace('Infrastructure & Real Estate', 'Infrastructure');
+        
         // If category has subcategories, show as dropdown
         if (categorySubcategories.length > 0) {
           return (
             <DropdownMenu key={category.id}>
               <DropdownMenuTrigger asChild>
                 <Button
-                  variant={isActive ? "default" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   className={cn(
-                    "font-medium",
+                    "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
                     isActive 
-                      ? "bg-primary text-white" 
-                      : "text-gray-700 hover:text-primary hover:bg-primary/10"
+                      ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
+                      : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
                   )}
                 >
-                  {category.name}
-                  <ChevronDown className="ml-1 h-3 w-3" />
+                  {shortName}
+                  <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="min-w-48">
+              <DropdownMenuContent align="start" className="min-w-48 border border-gray-200/60 shadow-lg bg-white/95 backdrop-blur-sm">
                 <DropdownMenuItem 
                   onClick={() => handleCategorySelect(category.name)}
                   className={cn(
-                    "font-medium cursor-pointer",
+                    "font-medium cursor-pointer text-sm",
                     isActive && currentSubcategory === "all" && "bg-primary/10 text-primary"
                   )}
                 >
                   All {category.name}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-gray-200/60" />
                 {categorySubcategories.map((subcategory: any) => (
                   <DropdownMenuItem 
                     key={subcategory.id}
                     onClick={() => handleCategorySelect(category.name, subcategory.name)}
                     className={cn(
-                      "cursor-pointer",
+                      "cursor-pointer text-sm",
                       currentSubcategory === subcategory.name && "bg-primary/10 text-primary"
                     )}
                   >
@@ -111,17 +119,17 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
           return (
             <Button
               key={category.id}
-              variant={isActive ? "default" : "ghost"}
+              variant="ghost"
               size="sm"
               onClick={() => handleCategorySelect(category.name)}
               className={cn(
-                "font-medium",
+                "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
                 isActive 
-                  ? "bg-primary text-white" 
-                  : "text-gray-700 hover:text-primary hover:bg-primary/10"
+                  ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
+                  : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
               )}
             >
-              {category.name}
+              {shortName}
             </Button>
           );
         }
