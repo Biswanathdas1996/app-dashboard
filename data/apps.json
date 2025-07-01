@@ -20,6 +20,11 @@
       "id": 4,
       "name": "Infrastructure & Real Estate",
       "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "hiii",
+      "isActive": false
     }
   ],
   "subcategories": [
@@ -52,6 +57,12 @@
       "name": "Property Management",
       "categoryId": 4,
       "isActive": true
+    },
+    {
+      "id": 6,
+      "name": "gggg",
+      "categoryId": 2,
+      "isActive": false
     }
   ],
   "webApps": [
@@ -127,7 +138,7 @@
     }
   ],
   "nextUserId": 1,
-  "nextCategoryId": 5,
-  "nextSubcategoryId": 6,
+  "nextCategoryId": 6,
+  "nextSubcategoryId": 7,
   "nextAppId": 6
 }

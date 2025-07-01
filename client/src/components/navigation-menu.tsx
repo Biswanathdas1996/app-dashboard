@@ -33,14 +33,7 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center space-x-0.5 bg-gray-50/50 rounded-lg p-1 border border-gray-200/60">
-        <div className="w-12 h-8 bg-gray-200 rounded-md animate-pulse"></div>
-        <div className="w-16 h-8 bg-gray-200 rounded-md animate-pulse"></div>
-        <div className="w-20 h-8 bg-gray-200 rounded-md animate-pulse"></div>
-        <div className="w-18 h-8 bg-gray-200 rounded-md animate-pulse"></div>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -68,12 +61,8 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
         const categorySubcategories = getCategorySubcategories(category.id);
         const isActive = currentCategory === category.name;
         
-        // Shorten category names for compact display
-        const shortName = category.name
-          .replace('Financial Services', 'Finance')
-          .replace('Healthcare & Life Sciences', 'Healthcare')
-          .replace('Government & Public Services', 'Government')
-          .replace('Infrastructure & Real Estate', 'Infrastructure');
+        // Use full category name from app.json
+        const shortName = category.name;
         
         // If category has subcategories, show as dropdown
         if (categorySubcategories.length > 0) {
