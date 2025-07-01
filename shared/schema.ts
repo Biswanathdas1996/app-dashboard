@@ -11,6 +11,7 @@ export const users = pgTable("users", {
 export const webApps = pgTable("web_apps", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  shortDescription: text("short_description"),
   description: text("description").notNull(),
   url: text("url").notNull(),
   category: text("category").notNull(),

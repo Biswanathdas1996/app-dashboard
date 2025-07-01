@@ -112,8 +112,13 @@ export class MemStorage implements IStorage {
   async createWebApp(insertApp: InsertWebApp): Promise<WebApp> {
     const id = this.currentAppId++;
     const app: WebApp = { 
-      ...insertApp, 
       id,
+      name: insertApp.name,
+      shortDescription: insertApp.shortDescription ?? null,
+      description: insertApp.description,
+      url: insertApp.url,
+      category: insertApp.category,
+      subcategory: insertApp.subcategory,
       icon: insertApp.icon || "fas fa-globe",
       isActive: insertApp.isActive ?? true,
       attachments: insertApp.attachments || []
@@ -147,7 +152,8 @@ export class MemStorage implements IStorage {
     return apps.filter(app => {
       const matchesQuery = !query || 
         app.name.toLowerCase().includes(query.toLowerCase()) ||
-        app.description.toLowerCase().includes(query.toLowerCase());
+        app.description.toLowerCase().includes(query.toLowerCase()) ||
+        (app.shortDescription && app.shortDescription.toLowerCase().includes(query.toLowerCase()));
       
       const matchesCategory = !category || app.category === category;
       const matchesSubcategory = !subcategory || app.subcategory === subcategory;

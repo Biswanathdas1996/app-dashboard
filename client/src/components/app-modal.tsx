@@ -50,6 +50,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
     resolver: zodResolver(insertWebAppSchema),
     defaultValues: {
       name: "",
+      shortDescription: "",
       description: "",
       url: "",
       category: "",
@@ -64,6 +65,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
     if (app) {
       form.reset({
         name: app.name,
+        shortDescription: app.shortDescription || "",
         description: app.description,
         url: app.url,
         category: app.category,
@@ -75,6 +77,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
     } else {
       form.reset({
         name: "",
+        shortDescription: "",
         description: "",
         url: "",
         category: "",
@@ -154,6 +157,27 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="shortDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Short Description (Optional)</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="Brief summary of the application (e.g., 'A tool for project management')" 
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField

@@ -75,11 +75,17 @@ export function AppCard({ app, onClick }: AppCardProps) {
         
         {/* Compact description */}
         <div className="mb-4">
-          <RichTextViewer 
-            content={app.description} 
-            maxLines={2} 
-            className="text-gray-600 text-sm leading-relaxed"
-          />
+          {app.shortDescription ? (
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+              {app.shortDescription}
+            </p>
+          ) : (
+            <RichTextViewer 
+              content={app.description} 
+              maxLines={2} 
+              className="text-gray-600 text-sm leading-relaxed"
+            />
+          )}
         </div>
         
         {/* File attachments */}

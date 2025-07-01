@@ -128,6 +128,21 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
         {/* Content Section */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-8 space-y-8">
+            {/* Short Description */}
+            {app.shortDescription && (
+              <div>
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                  <h3 className="text-2xl font-bold text-gray-900">Summary</h3>
+                </div>
+                <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-6 border border-primary/10 shadow-sm">
+                  <p className="text-gray-700 leading-relaxed text-lg font-medium">
+                    {app.shortDescription}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Description */}
             <div>
               <div className="flex items-center space-x-3 mb-6">
