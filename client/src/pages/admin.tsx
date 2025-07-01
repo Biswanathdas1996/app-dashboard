@@ -94,15 +94,34 @@ export default function Admin() {
               <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
               <p className="text-gray-600 mt-1">Manage your web application directory</p>
             </div>
-            <div className="sm:hidden">
-              <Button 
-                onClick={() => setIsModalOpen(true)} 
-                size="sm"
-                className="bg-primary hover:bg-primary/90"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add App
-              </Button>
+            <div className="flex gap-2">
+              <div className="sm:hidden">
+                <Button 
+                  onClick={() => setIsModalOpen(true)} 
+                  size="sm"
+                  className="bg-pwc-orange hover:bg-pwc-orange/90 text-white"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add App
+                </Button>
+              </div>
+              <div className="hidden sm:flex gap-2">
+                <Button 
+                  onClick={() => setIsModalOpen(true)} 
+                  className="bg-pwc-orange hover:bg-pwc-orange/90 text-white text-helvetica font-semibold"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add New App
+                </Button>
+                <Button 
+                  onClick={() => window.location.href = '/admin/content'} 
+                  variant="outline"
+                  className="border-pwc-orange text-pwc-orange hover:bg-pwc-orange hover:text-white text-helvetica font-semibold"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Manage Content
+                </Button>
+              </div>
             </div>
           </div>
           <div className="overflow-x-auto">

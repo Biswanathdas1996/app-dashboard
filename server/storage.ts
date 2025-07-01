@@ -1,4 +1,4 @@
-import { users, webApps, type User, type InsertUser, type WebApp, type InsertWebApp, type UpdateWebApp } from "@shared/schema";
+import { users, webApps, siteContent, navigationItems, type User, type InsertUser, type WebApp, type InsertWebApp, type UpdateWebApp, type SiteContent, type InsertSiteContent, type UpdateSiteContent, type NavigationItem, type InsertNavigationItem } from "@shared/schema";
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -26,6 +26,19 @@ export interface IStorage {
   updateWebApp(id: number, app: UpdateWebApp): Promise<WebApp | undefined>;
   deleteWebApp(id: number): Promise<boolean>;
   searchWebApps(query: string, category?: string, subcategory?: string): Promise<WebApp[]>;
+  
+  // Site Content methods
+  getAllSiteContent(): Promise<SiteContent[]>;
+  getSiteContentBySection(section: string): Promise<SiteContent | undefined>;
+  createSiteContent(content: InsertSiteContent): Promise<SiteContent>;
+  updateSiteContent(id: number, content: UpdateSiteContent): Promise<SiteContent | undefined>;
+  deleteSiteContent(id: number): Promise<boolean>;
+  
+  // Navigation methods
+  getAllNavigationItems(): Promise<NavigationItem[]>;
+  createNavigationItem(item: InsertNavigationItem): Promise<NavigationItem>;
+  updateNavigationItem(id: number, item: Partial<NavigationItem>): Promise<NavigationItem | undefined>;
+  deleteNavigationItem(id: number): Promise<boolean>;
 }
 
 interface StorageData {
@@ -154,6 +167,53 @@ export class MemStorage implements IStorage {
       
       return matchesQuery && matchesCategory && matchesSubcategory;
     });
+  }
+  
+  // Site Content methods
+  async getAllSiteContent(): Promise<SiteContent[]> {
+    // Return empty array for now - will be implemented with database
+    return [];
+  }
+
+  async getSiteContentBySection(section: string): Promise<SiteContent | undefined> {
+    // Return undefined for now - will be implemented with database
+    return undefined;
+  }
+
+  async createSiteContent(content: InsertSiteContent): Promise<SiteContent> {
+    // Will be implemented with database
+    throw new Error("Content management not implemented in memory storage");
+  }
+
+  async updateSiteContent(id: number, content: UpdateSiteContent): Promise<SiteContent | undefined> {
+    // Will be implemented with database
+    throw new Error("Content management not implemented in memory storage");
+  }
+
+  async deleteSiteContent(id: number): Promise<boolean> {
+    // Will be implemented with database
+    throw new Error("Content management not implemented in memory storage");
+  }
+  
+  // Navigation methods
+  async getAllNavigationItems(): Promise<NavigationItem[]> {
+    // Return empty array for now - will be implemented with database
+    return [];
+  }
+
+  async createNavigationItem(item: InsertNavigationItem): Promise<NavigationItem> {
+    // Will be implemented with database
+    throw new Error("Navigation management not implemented in memory storage");
+  }
+
+  async updateNavigationItem(id: number, item: Partial<NavigationItem>): Promise<NavigationItem | undefined> {
+    // Will be implemented with database
+    throw new Error("Navigation management not implemented in memory storage");
+  }
+
+  async deleteNavigationItem(id: number): Promise<boolean> {
+    // Will be implemented with database
+    throw new Error("Navigation management not implemented in memory storage");
   }
 }
 
