@@ -48,71 +48,73 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+      className="group relative bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/60 hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/40 hover:-translate-y-2 transition-all duration-400 cursor-pointer overflow-hidden min-w-[280px]"
       onClick={handleClick}
     >
-      {/* Modern glassmorphism effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-white/50 to-accent/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* Enhanced glassmorphism effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-white/60 to-accent/8 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
       
-      {/* Floating action button */}
-      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 z-10">
+      {/* Modern floating action button */}
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-400 transform translate-y-2 group-hover:translate-y-0 z-10">
         <Button
           variant="ghost"
           size="sm"
           onClick={handleViewDetails}
-          className="h-7 w-7 p-0 bg-white/90 backdrop-blur-sm border border-gray-200/60 hover:bg-white shadow-md hover:shadow-lg transition-all rounded-lg"
+          className="h-9 w-9 p-0 bg-white/95 backdrop-blur-md border border-gray-200/80 hover:bg-white shadow-xl hover:shadow-2xl transition-all rounded-2xl hover:scale-110"
         >
-          <Eye className="h-3 w-3 text-gray-600" />
+          <Eye className="h-4 w-4 text-gray-700" />
         </Button>
       </div>
       
-      <div className="relative p-4">
-        {/* Compact header with icon and info */}
-        <div className="flex items-center gap-3 mb-3">
-          <div className={`w-10 h-10 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-lg ${shadowClass} group-hover:scale-105 transition-all duration-200`}>
-            <i className={`${app.icon} text-white text-base`}></i>
+      <div className="relative p-6">
+        {/* Modern header with larger icon */}
+        <div className="flex items-start gap-4 mb-4">
+          <div className={`w-14 h-14 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-2xl ${shadowClass} group-hover:scale-110 group-hover:rotate-6 transition-all duration-400 border border-white/30`}>
+            <i className={`${app.icon} text-white text-xl`}></i>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base text-gray-900 group-hover:text-primary transition-colors leading-tight line-clamp-1 mb-1">
+            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors leading-tight line-clamp-2 mb-2">
               {app.name}
             </h3>
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
               {app.category}
             </p>
           </div>
         </div>
         
-        {/* Compact description */}
+        {/* Enhanced description */}
         {(app.shortDescription || app.description) && (
-          <div className="mb-3">
+          <div className="mb-5">
             {app.shortDescription ? (
-              <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
+              <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                 {app.shortDescription}
               </p>
             ) : (
               <RichTextViewer 
                 content={app.description || ""} 
-                maxLines={2} 
-                className="text-gray-600 text-xs leading-relaxed"
+                maxLines={3} 
+                className="text-gray-600 text-sm leading-relaxed"
               />
             )}
           </div>
         )}
         
-        {/* Minimal file indicator */}
+        {/* Enhanced file indicator */}
         {app.attachments && app.attachments.length > 0 && (
-          <div className="flex items-center gap-1 mb-3">
-            <FileText className="h-3 w-3 text-gray-400" />
-            <span className="text-xs text-gray-500">{app.attachments.length}</span>
+          <div className="flex items-center gap-2 mb-5 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
+            <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+              <FileText className="h-4 w-4 text-blue-600" />
+            </div>
+            <span className="text-sm font-medium text-gray-700">{app.attachments.length} files</span>
           </div>
         )}
 
-        {/* Compact launch button */}
+        {/* Modern launch button */}
         <Button
-          className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 transition-all duration-200 shadow-md ${shadowClass} rounded-lg font-medium py-2 text-sm border-0`}
+          className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
         >
-          <ExternalLink className="h-3 w-3 mr-1" />
-          Launch
+          <ExternalLink className="h-5 w-5 mr-2" />
+          Launch Application
         </Button>
       </div>
 
