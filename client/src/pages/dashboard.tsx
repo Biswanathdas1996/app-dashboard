@@ -53,7 +53,7 @@ export default function Dashboard() {
       />
 
       {/* Compact Professional Hero */}
-      <div className="relative h-[280px] md:h-[320px] overflow-hidden bg-black">
+      <div className="relative h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] overflow-hidden bg-black">
         <div className="absolute inset-0">
           <img
             src={genaiImage}
@@ -63,43 +63,45 @@ export default function Dashboard() {
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white max-w-4xl relative z-10">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center shadow-lg">
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-full flex items-center">
+          <div className="text-white w-full max-w-4xl relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500 rounded-lg flex items-center justify-center shadow-lg">
                 <svg
-                  className="w-5 h-5 text-white"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path d="M13 3v18M8 8h12M8 16h12" />
                 </svg>
               </div>
-              <Badge className="bg-black/50 text-orange-300 border-orange-400/50 font-medium text-sm backdrop-blur-sm">
+              <Badge className="bg-black/50 text-orange-300 border-orange-400/50 font-medium text-xs sm:text-sm backdrop-blur-sm w-fit">
                 Digital Solutions Hub
               </Badge>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 font-header leading-tight drop-shadow-lg">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 sm:mb-3 font-header leading-tight drop-shadow-lg">
               Business <span className="text-orange-400">Innovation</span>{" "}
-              Platform
+              <span className="block sm:inline">Platform</span>
             </h1>
-            <p className="text-lg md:text-xl mb-4 leading-relaxed max-w-3xl drop-shadow-md">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-4 leading-relaxed max-w-full lg:max-w-3xl drop-shadow-md">
               Access enterprise-grade applications and submit project requests
               through our centralized digital hub.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <Badge
                 variant="outline"
-                className="bg-black/50 text-white border-white/40 px-3 py-1 backdrop-blur-sm text-sm shadow-lg"
+                className="bg-black/50 text-white border-white/40 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs sm:text-sm shadow-lg"
               >
-                <FileText className="h-3 w-3 mr-2" />
-                {apps?.length || 0} Applications Available
+                <FileText className="h-3 w-3 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">{apps?.length || 0} Applications Available</span>
+                <span className="xs:hidden">{apps?.length || 0} Apps</span>
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-black/50 text-white border-white/40 px-3 py-1 backdrop-blur-sm text-sm shadow-lg"
+                className="bg-black/50 text-white border-white/40 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs sm:text-sm shadow-lg"
               >
-                Secure & Compliant
+                <span className="hidden sm:inline">Secure & Compliant</span>
+                <span className="sm:hidden">Secure</span>
               </Badge>
             </div>
           </div>
@@ -108,19 +110,19 @@ export default function Dashboard() {
 
       {/* Main Applications Section */}
       <main className="bg-gray-50/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-8">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 sm:mb-8 gap-4">
+            <div className="flex-1">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
                 Business Applications
               </h2>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Access your enterprise tools and digital solutions
               </p>
             </div>
-            <div className="flex items-center gap-2 mt-4 sm:mt-0">
-              <Badge variant="secondary" className="text-sm">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <Badge variant="secondary" className="text-xs sm:text-sm whitespace-nowrap">
                 {apps?.length || 0} Available
               </Badge>
               {(search || category !== "all" || subcategory !== "all") && (
@@ -128,7 +130,7 @@ export default function Dashboard() {
                   onClick={handleClearFilters}
                   variant="outline"
                   size="sm"
-                  className="text-sm"
+                  className="text-xs sm:text-sm whitespace-nowrap"
                 >
                   Clear Filters
                 </Button>
@@ -138,7 +140,7 @@ export default function Dashboard() {
 
           {/* Applications Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div
                   key={i}
@@ -160,7 +162,7 @@ export default function Dashboard() {
               ))}
             </div>
           ) : apps && apps.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-6">
               {apps.map((app) => (
                 <AppCard
                   key={app.id}
@@ -172,32 +174,33 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="bg-white rounded-xl border border-gray-200 p-8 max-w-md mx-auto">
-                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <FileText className="text-gray-400 h-8 w-8" />
+            <div className="text-center py-8 sm:py-12 lg:py-16">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 max-w-sm sm:max-w-md mx-auto">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <FileText className="text-gray-400 h-6 w-6 sm:h-8 sm:w-8" />
                 </div>
                 {search || category !== "all" || subcategory !== "all" ? (
                   <>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
                       No Results Found
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-sm sm:text-base text-gray-600 mb-4">
                       No applications match your current filters
                     </p>
                     <Button
                       onClick={handleClearFilters}
-                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      className="bg-orange-500 hover:bg-orange-600 text-white text-sm sm:text-base"
+                      size="sm"
                     >
                       Clear All Filters
                     </Button>
                   </>
                 ) : (
                   <>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
                       No Applications
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-sm sm:text-base text-gray-600">
                       Applications will appear here once they're added through
                       the Admin Panel
                     </p>
@@ -211,18 +214,18 @@ export default function Dashboard() {
 
       {/* Industry Insights Section */}
       <section className="bg-white border-t border-gray-200">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8 sm:py-12">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
               Industry Insights
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-base sm:text-lg max-w-xl lg:max-w-2xl mx-auto">
               Stay informed with the latest trends, research, and thought
               leadership from PwC experts
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {/* Card 1 - Container Operations */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
               <div className="aspect-video bg-gradient-to-br from-blue-500 to-orange-500 relative overflow-hidden">
@@ -325,7 +328,7 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[200px] md:h-[220px] overflow-hidden bg-black">
+        <div className="relative h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] overflow-hidden bg-black">
           <div className="absolute inset-0">
             <img
               src={genaiCircleImage}
@@ -335,9 +338,9 @@ export default function Dashboard() {
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
-          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-            <div className="text-white max-w-2xl relative z-10">
-              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 mb-3 w-fit border border-white/20">
+          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-full flex items-center">
+            <div className="text-white w-full max-w-3xl relative z-10">
+              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1 mb-2 sm:mb-3 w-fit border border-white/20">
                 <svg
                   className="w-3 h-3"
                   fill="currentColor"
@@ -347,21 +350,21 @@ export default function Dashboard() {
                 </svg>
                 <span className="text-xs font-medium">Project Services</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-3 drop-shadow-lg">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
                 Ready to Start Your Project?
               </h2>
-              <p className="text-base md:text-lg mb-4 leading-relaxed drop-shadow-md">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-3 sm:mb-4 leading-relaxed drop-shadow-md max-w-full lg:max-w-3xl">
                 Submit your requirements and connect with our expert team to
                 bring your digital transformation ideas to life.
               </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+              <div className="flex flex-wrap gap-1 sm:gap-2">
+                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
                   Fast Response
                 </Badge>
-                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
                   Expert Review
                 </Badge>
-                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
                   Tailored Solutions
                 </Badge>
               </div>
@@ -370,7 +373,7 @@ export default function Dashboard() {
         </div>
 
         {/* Form Section */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 lg:py-8">
           <ProjectRequisitionForm />
         </div>
       </section>
