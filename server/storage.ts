@@ -56,6 +56,130 @@ interface StorageData {
   nextAppId: number;
 }
 
+export class DatabaseStorage implements IStorage {
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.id, id));
+    return result[0];
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.username, username));
+    return result[0];
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const result = await db.insert(users).values(insertUser).returning();
+    return result[0];
+  }
+
+  // Category methods
+  async getAllCategories(): Promise<Category[]> {
+    return await db.select().from(categories).where(eq(categories.isActive, true));
+  }
+
+  async getCategory(id: number): Promise<Category | undefined> {
+    const result = await db.select().from(categories).where(eq(categories.id, id));
+    return result[0];
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const result = await db.insert(categories).values(category).returning();
+    return result[0];
+  }
+
+  async updateCategory(id: number, category: UpdateCategory): Promise<Category | undefined> {
+    const result = await db.update(categories).set(category).where(eq(categories.id, id)).returning();
+    return result[0];
+  }
+
+  async deleteCategory(id: number): Promise<boolean> {
+    const result = await db.update(categories).set({ isActive: false }).where(eq(categories.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Subcategory methods
+  async getAllSubcategories(): Promise<Subcategory[]> {
+    return await db.select().from(subcategories).where(eq(subcategories.isActive, true));
+  }
+
+  async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
+    return await db.select().from(subcategories)
+      .where(and(eq(subcategories.categoryId, categoryId), eq(subcategories.isActive, true)));
+  }
+
+  async getSubcategory(id: number): Promise<Subcategory | undefined> {
+    const result = await db.select().from(subcategories).where(eq(subcategories.id, id));
+    return result[0];
+  }
+
+  async createSubcategory(subcategory: InsertSubcategory): Promise<Subcategory> {
+    const result = await db.insert(subcategories).values(subcategory).returning();
+    return result[0];
+  }
+
+  async updateSubcategory(id: number, subcategory: UpdateSubcategory): Promise<Subcategory | undefined> {
+    const result = await db.update(subcategories).set(subcategory).where(eq(subcategories.id, id)).returning();
+    return result[0];
+  }
+
+  async deleteSubcategory(id: number): Promise<boolean> {
+    const result = await db.update(subcategories).set({ isActive: false }).where(eq(subcategories.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Web Apps methods
+  async getAllWebApps(): Promise<WebApp[]> {
+    return await db.select().from(webApps).where(eq(webApps.isActive, true));
+  }
+
+  async getWebApp(id: number): Promise<WebApp | undefined> {
+    const result = await db.select().from(webApps).where(eq(webApps.id, id));
+    return result[0];
+  }
+
+  async createWebApp(app: InsertWebApp): Promise<WebApp> {
+    const result = await db.insert(webApps).values(app).returning();
+    return result[0];
+  }
+
+  async updateWebApp(id: number, app: UpdateWebApp): Promise<WebApp | undefined> {
+    const result = await db.update(webApps).set(app).where(eq(webApps.id, id)).returning();
+    return result[0];
+  }
+
+  async deleteWebApp(id: number): Promise<boolean> {
+    const result = await db.update(webApps).set({ isActive: false }).where(eq(webApps.id, id));
+    return result.rowCount > 0;
+  }
+
+  async searchWebApps(query: string, category?: string, subcategory?: string): Promise<WebApp[]> {
+    let dbQuery = db.select().from(webApps).$dynamic();
+    
+    const conditions = [eq(webApps.isActive, true)];
+    
+    if (query) {
+      conditions.push(
+        or(
+          ilike(webApps.name, `%${query}%`),
+          ilike(webApps.description, `%${query}%`),
+          ilike(webApps.shortDescription, `%${query}%`)
+        )!
+      );
+    }
+    
+    if (category) {
+      conditions.push(eq(webApps.category, category));
+    }
+    
+    if (subcategory) {
+      conditions.push(eq(webApps.subcategory, subcategory));
+    }
+    
+    return await dbQuery.where(and(...conditions));
+  }
+}
+
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private webApps: Map<number, WebApp>;
