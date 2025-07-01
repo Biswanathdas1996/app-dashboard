@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Switch } from "@/components/ui/switch";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { FileUpload } from "@/components/file-upload";
+import { LogoUpload } from "@/components/logo-upload";
 import { useCreateRequisition } from "@/hooks/use-requisitions";
 import { useCategories } from "@/hooks/use-categories";
 import { useToast } from "@/hooks/use-toast";
@@ -38,6 +39,7 @@ export function ProjectRequisitionForm() {
       category: "",
       expectedDelivery: "",
       attachments: [],
+      logo: "",
       isPrivate: false,
     },
   });
@@ -189,6 +191,26 @@ export function ProjectRequisitionForm() {
                               placeholder="Enter your email address"
                               className="border-gray-300 focus:border-primary focus:ring-primary"
                               {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Logo Upload */}
+                    <FormField
+                      control={form.control}
+                      name="logo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">
+                            Project Logo (Optional)
+                          </FormLabel>
+                          <FormControl>
+                            <LogoUpload
+                              logo={field.value}
+                              onChange={field.onChange}
                             />
                           </FormControl>
                           <FormMessage />
