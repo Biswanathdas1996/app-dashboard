@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { AppCard } from "@/components/app-card";
 import { ProjectRequisitionForm } from "@/components/project-requisition-form";
 import { useApps } from "@/hooks/use-apps";
-import { useCategories } from "@/hooks/use-categories";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +18,6 @@ export default function Dashboard() {
     category === "all" ? "" : category, 
     subcategory === "all" ? "" : subcategory
   );
-  const { data: categoriesData } = useCategories();
 
   const handleClearFilters = () => {
     setSearch("");
@@ -57,13 +55,10 @@ export default function Dashboard() {
             <p className="text-xl md:text-2xl mb-6 opacity-95 font-body max-w-3xl mx-auto">
               Your gateway to innovative business solutions and digital transformation tools
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex justify-center items-center">
               <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 text-white border-white/30">
                 <FileText className="h-5 w-5 mr-2" />
                 {apps?.length || 0} Digital Solutions Available
-              </Badge>
-              <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 text-white border-white/30">
-                {categoriesData?.length || 0} Industry Categories
               </Badge>
             </div>
           </div>
