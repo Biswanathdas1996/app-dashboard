@@ -10,6 +10,7 @@ import { FileText } from "lucide-react";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
 import genaiImage from "@assets/genai-story_1751387441561.webp";
+import genaiDotsImage from "@assets/gen-ai-press-page-properties2_1751387545302.png";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -321,14 +322,13 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[300px] md:h-[370px] overflow-hidden">
+        <div className="relative h-[200px] md:h-[220px] overflow-hidden bg-black">
           <div className="absolute inset-0">
             <img
-              src={projectBannerImage}
-              alt="Project innovation"
+              src={genaiDotsImage}
+              alt="GenAI Innovation"
               className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/75 via-orange-500/30 to-orange-400/5"></div>
           </div>
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
             <div className="text-white max-w-2xl">
