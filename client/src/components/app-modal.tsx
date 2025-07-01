@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { insertWebAppSchema, type WebApp, type InsertWebApp } from "@shared/schema";
 import { useCreateApp, useUpdateApp, useCategories } from "@/hooks/use-apps";
+import { RichTextEditor } from "./rich-text-editor";
+import { FileUpload } from "./file-upload";
 
 interface AppModalProps {
   isOpen: boolean;
@@ -56,6 +56,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
       subcategory: "",
       icon: "fas fa-globe",
       isActive: true,
+      attachments: [],
     },
   });
 
@@ -69,6 +70,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
         subcategory: app.subcategory,
         icon: app.icon,
         isActive: app.isActive,
+        attachments: app.attachments || [],
       });
     } else {
       form.reset({
@@ -79,6 +81,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
         subcategory: "",
         icon: "fas fa-globe",
         isActive: true,
+        attachments: [],
       });
     }
   }, [app, form]);
@@ -200,11 +203,10 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
                       placeholder="Describe the application and its features..."
-                      className="resize-none"
-                      rows={4}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -235,6 +237,24 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="attachments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Documents & Files</FormLabel>
+                  <FormControl>
+                    <FileUpload
+                      files={field.value || []}
+                      onChange={field.onChange}
+                      maxFiles={5}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

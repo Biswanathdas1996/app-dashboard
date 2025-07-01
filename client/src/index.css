@@ -78,4 +78,41 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  .prose {
+    max-width: none;
+  }
+  
+  .prose p {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .prose ul, .prose ol {
+    margin: 0 0 0.5rem 0;
+    padding-left: 1rem;
+  }
+  
+  .prose li {
+    margin: 0;
+  }
+  
+  .prose blockquote {
+    margin: 0 0 0.5rem 0;
+    padding-left: 0.75rem;
+    border-left: 2px solid #e2e8f0;
+    font-style: italic;
+  }
+  
+  .prose strong {
+    font-weight: 600;
+  }
+  
+  .prose em {
+    font-style: italic;
+  }
+  
+  .prose a {
+    color: #2563eb;
+    text-decoration: underline;
+  }
 }

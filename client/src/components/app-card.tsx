@@ -1,5 +1,7 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, FileText } from "lucide-react";
 import type { WebApp } from "@shared/schema";
+import { RichTextViewer } from "./rich-text-viewer";
+import { Badge } from "./ui/badge";
 
 interface AppCardProps {
   app: WebApp;
@@ -48,9 +50,19 @@ export function AppCard({ app, onClick }: AppCardProps) {
             </span>
           </div>
         </div>
-        <p className="text-slate-600 text-sm mb-4 line-clamp-3">
-          {app.description}
-        </p>
+        <div className="mb-4">
+          <RichTextViewer content={app.description} maxLines={3} />
+        </div>
+        
+        {app.attachments && app.attachments.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center space-x-1 text-xs text-slate-500">
+              <FileText className="h-3 w-3" />
+              <span>{app.attachments.length} file{app.attachments.length !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        )}
+        
         <div className="flex items-center justify-between">
           <span className="text-xs text-slate-500">
             {app.subcategory}

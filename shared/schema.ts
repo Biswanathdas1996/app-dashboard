@@ -17,6 +17,7 @@ export const webApps = pgTable("web_apps", {
   subcategory: text("subcategory").notNull(),
   icon: text("icon").notNull().default("fas fa-globe"),
   isActive: boolean("is_active").notNull().default(true),
+  attachments: text("attachments").array().default([]),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
