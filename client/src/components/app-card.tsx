@@ -48,118 +48,134 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-200/40 hover:shadow-xl hover:shadow-primary/8 hover:border-primary/25 hover:-translate-y-0.5 transition-all duration-250 cursor-pointer overflow-hidden"
+      className="group relative bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
       onClick={handleClick}
     >
-      {/* Subtle gradient accent */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-250"></div>
+      {/* Modern glassmorphism effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-white/50 to-accent/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Floating action button */}
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-10">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleViewDetails}
+          className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm border border-gray-200/60 hover:bg-white shadow-lg hover:shadow-xl transition-all rounded-xl"
+        >
+          <Eye className="h-4 w-4 text-gray-600" />
+        </Button>
+      </div>
       
       <div className="relative p-6">
-        {/* Compact header */}
-        <div className="flex items-center mb-4">
-          <div className={`relative w-12 h-12 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200`}>
-            <i className={`${app.icon} text-white text-lg`}></i>
+        {/* Modern app icon */}
+        <div className="mb-5">
+          <div className={`relative w-14 h-14 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-xl ${shadowClass} group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 border border-white/20`}>
+            <i className={`${app.icon} text-white text-xl`}></i>
           </div>
-          <div className="ml-4 flex-1 min-w-0">
-            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1 font-header">
-              {app.name}
-            </h3>
+        </div>
+
+        {/* App info */}
+        <div className="mb-4">
+          <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary transition-colors duration-300 leading-tight mb-3 line-clamp-2 font-header">
+            {app.name}
+          </h3>
+          <div className="flex items-center gap-2 mb-3">
             <Badge 
-              variant="secondary" 
-              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2.5 py-0.5 rounded-lg hover:scale-105 transition-transform duration-150`}
+              className={`${bgClass} ${textClass} border ${borderClass} font-semibold text-xs px-3 py-1.5 rounded-full hover:scale-105 transition-transform duration-200`}
             >
               {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
             </Badge>
+            {app.subcategory && (
+              <Badge 
+                variant="outline" 
+                className="text-xs text-gray-600 border-gray-300 px-3 py-1.5 rounded-full font-medium bg-gray-50/80"
+              >
+                {app.subcategory}
+              </Badge>
+            )}
           </div>
         </div>
         
-        {/* Compact description */}
-        <div className="mb-4">
+        {/* Modern description */}
+        <div className="mb-5">
           {app.shortDescription ? (
-            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
               {app.shortDescription}
             </p>
           ) : (
             <RichTextViewer 
               content={app.description || ""} 
-              maxLines={2} 
+              maxLines={3} 
               className="text-gray-600 text-sm leading-relaxed"
             />
           )}
         </div>
         
-        {/* File attachments */}
+        {/* Modern file attachments */}
         {app.attachments && app.attachments.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-2">
-              {app.attachments.slice(0, 2).map((filename, index) => {
-                const originalName = filename.split('-').slice(1).join('-') || filename;
-                const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
-                
-                const getFileIcon = () => {
-                  switch (fileExtension) {
-                    case 'pdf':
-                      return <FileText className="h-3 w-3 text-red-500" />;
-                    case 'doc':
-                    case 'docx':
-                      return <FileText className="h-3 w-3 text-blue-500" />;
-                    case 'txt':
-                    case 'rtf':
-                      return <FileText className="h-3 w-3 text-gray-500" />;
-                    default:
-                      return <FileText className="h-3 w-3 text-blue-500" />;
-                  }
-                };
-                
-                return (
-                  <button
-                    key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(`/api/files/${filename}`, '_blank');
-                    }}
-                    className="flex items-center space-x-1.5 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-150 group/file"
-                    title={`View ${originalName}`}
-                  >
-                    <span className="group-hover/file:scale-110 transition-transform">
-                      {getFileIcon()}
-                    </span>
-                    <span className="font-medium max-w-20 truncate">
-                      {originalName.length > 15 ? `${originalName.substring(0, 12)}...` : originalName}
-                    </span>
-                  </button>
-                );
-              })}
-              {app.attachments.length > 2 && (
-                <span className="text-xs text-gray-500 px-2 py-1 bg-gray-50 rounded-md">
-                  +{app.attachments.length - 2} more
+          <div className="mb-5">
+            <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-xl border border-blue-200/30">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="text-sm font-semibold text-gray-700">
+                  {app.attachments.length} file{app.attachments.length !== 1 ? 's' : ''}
                 </span>
-              )}
+              </div>
+              <div className="flex gap-1 ml-auto">
+                {app.attachments.slice(0, 2).map((filename, index) => {
+                  const originalName = filename.split('-').slice(1).join('-') || filename;
+                  const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
+                  
+                  const getFileColor = () => {
+                    switch (fileExtension) {
+                      case 'pdf':
+                        return 'text-red-600 bg-red-50 hover:bg-red-100';
+                      case 'doc':
+                      case 'docx':
+                        return 'text-blue-600 bg-blue-50 hover:bg-blue-100';
+                      case 'txt':
+                      case 'rtf':
+                        return 'text-gray-600 bg-gray-50 hover:bg-gray-100';
+                      default:
+                        return 'text-blue-600 bg-blue-50 hover:bg-blue-100';
+                    }
+                  };
+                  
+                  return (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      size="sm"
+                      className={`h-7 w-7 p-0 ${getFileColor()} rounded-lg transition-all hover:scale-110`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(`/api/files/${filename}`, '_blank');
+                      }}
+                      title={`View ${originalName}`}
+                    >
+                      <FileText className="h-3 w-3" />
+                    </Button>
+                  );
+                })}
+                {app.attachments.length > 2 && (
+                  <div className="flex items-center justify-center h-7 w-7 text-xs text-blue-600 bg-blue-50 rounded-lg font-semibold">
+                    +{app.attachments.length - 2}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* Compact footer */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
-            {app.subcategory}
-          </span>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleViewDetails}
-              className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-primary/5 transition-all duration-200"
-              title="View details"
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
-              <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Launch</span>
-              <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
-            </div>
-          </div>
-        </div>
+        {/* Modern launch button */}
+        <Button
+          className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-xl font-bold py-3 border-0 group-hover:shadow-2xl`}
+        >
+          <ExternalLink className="h-4 w-4 mr-2" />
+          Launch App
+        </Button>
       </div>
 
       {/* Details Modal */}
