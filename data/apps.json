@@ -1,84 +1,81 @@
 {
   "users": [],
-  "categories": [
+  "categories": [],
+  "subcategories": [],
+  "webApps": [
     {
       "id": 1,
-      "name": "Financial Services",
-      "isActive": true
+      "name": "PwC Digital Assets",
+      "description": "<p>Comprehensive digital asset management platform for financial services, providing real-time portfolio tracking, risk assessment, and regulatory compliance tools.</p>",
+      "shortDescription": "Digital asset management platform with portfolio tracking and compliance tools",
+      "url": "https://digital-assets.pwc.com",
+      "category": "Financial Services",
+      "subcategory": "Banking & Lending",
+      "icon": "fas fa-coins",
+      "isActive": true,
+      "attachments": [],
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "id": 2,
-      "name": "Healthcare",
-      "isActive": true
+      "name": "Healthcare Analytics Suite",
+      "description": "<p>Advanced healthcare analytics platform providing insights into patient outcomes, operational efficiency, and cost optimization for healthcare providers.</p>",
+      "shortDescription": "Healthcare analytics platform for patient outcomes and operational insights",
+      "url": "https://healthcare-analytics.pwc.com",
+      "category": "Healthcare & Life Sciences",
+      "subcategory": "Pharmaceuticals & Therapeutics",
+      "icon": "fas fa-heartbeat",
+      "isActive": true,
+      "attachments": [],
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "id": 3,
-      "name": "Telecommunications",
-      "isActive": false
+      "name": "GovTech Solutions",
+      "description": "<p>Modern government technology platform streamlining citizen services, permit processing, and inter-agency communication with enhanced security and transparency.</p>",
+      "shortDescription": "Government technology platform for citizen services and agency communication",
+      "url": "https://govtech.pwc.com",
+      "category": "Government & Public Services",
+      "subcategory": "Digital Government",
+      "icon": "fas fa-landmark",
+      "isActive": true,
+      "attachments": [],
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "id": 4,
-      "name": "Government & Public Services",
-      "isActive": true
+      "name": "Smart Building Manager",
+      "description": "<p>Intelligent building management system for commercial real estate, optimizing energy usage, space utilization, and tenant satisfaction through IoT integration.</p>",
+      "shortDescription": "Smart building management with energy optimization and IoT integration",
+      "url": "https://smart-buildings.pwc.com",
+      "category": "Infrastructure & Real Estate",
+      "subcategory": "Property Management",
+      "icon": "fas fa-building",
+      "isActive": true,
+      "attachments": [],
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "id": 5,
-      "name": "Infrastructure & Real Estate",
-      "isActive": true
-    }
-  ],
-  "subcategories": [
-    {
-      "id": 1,
-      "name": "Banking & Lending",
-      "categoryId": 1,
-      "isActive": true
-    },
-    {
-      "id": 2,
-      "name": "Insurance",
-      "categoryId": 1,
-      "isActive": true
-    },
-    {
-      "id": 3,
-      "name": "Capital Markets",
-      "categoryId": 1,
-      "isActive": true
-    },
-    {
-      "id": 4,
-      "name": "Pharmaceuticals & Therapeutics",
-      "categoryId": 2,
-      "isActive": true
-    }
-  ],
-  "webApps": [
-    {
-      "name": "Microsoft Azure",
-      "description": "<p>Exercitation dolor u.</p>",
-      "url": "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
-      "category": "development",
-      "subcategory": "Sit quas quidem ut d",
-      "icon": "fas fa-tasks",
+      "name": "Insurance Risk Modeler",
+      "description": "<p>Advanced risk modeling platform for insurance companies, providing predictive analytics, claims forecasting, and premium optimization capabilities.</p>",
+      "shortDescription": "Insurance risk modeling with predictive analytics and claims forecasting",
+      "url": "https://risk-modeler.pwc.com",
+      "category": "Financial Services",
+      "subcategory": "Insurance",
+      "icon": "fas fa-shield-alt",
       "isActive": true,
-      "attachments": ["1751353955611-Proposal_for_agentic_Dashboard.docx"],
-      "id": 2
-    },
-    {
-      "name": "PwC ET Labs",
-      "description": "<p>Blanditiis ducimus, .</p>",
-      "url": "https://www.pwc.com/us/en/about-us/newsroom/press-releases/brand-evolution-at-the-forefront-of-change.html",
-      "category": "marketing",
-      "subcategory": "Ex enim totam quidem",
-      "icon": "fas fa-dollar-sign",
-      "isActive": true,
-      "attachments": ["1751353955611-Proposal_for_agentic_Dashboard.docx"],
-      "id": 3
+      "attachments": [],
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
     }
   ],
   "nextUserId": 1,
-  "nextCategoryId": 6,
-  "nextSubcategoryId": 5,
-  "nextAppId": 4
+  "nextCategoryId": 1,
+  "nextSubcategoryId": 1,
+  "nextAppId": 6
 }
