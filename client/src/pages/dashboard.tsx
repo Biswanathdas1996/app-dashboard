@@ -111,28 +111,28 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Enhanced Apps Grid */}
+        {/* Compact Apps Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-8 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-center mb-6">
-                  <Skeleton className="w-14 h-14 rounded-xl" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-200/40 p-6 hover:shadow-lg transition-all duration-200">
+                <div className="flex items-center mb-4">
+                  <Skeleton className="w-12 h-12 rounded-xl" />
                   <div className="ml-4 flex-1">
-                    <Skeleton className="h-5 w-32 mb-3" />
-                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-4 w-28 mb-2" />
+                    <Skeleton className="h-3 w-16" />
                   </div>
                 </div>
-                <Skeleton className="h-20 w-full mb-6" />
+                <Skeleton className="h-12 w-full mb-4" />
                 <div className="flex items-center justify-between">
-                  <Skeleton className="h-3 w-28" />
-                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-3 w-20" />
+                  <Skeleton className="h-4 w-4" />
                 </div>
               </div>
             ))}
           </div>
         ) : apps && apps.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
             {apps.map((app) => (
               <AppCard 
                 key={app.id} 

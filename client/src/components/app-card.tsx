@@ -38,61 +38,56 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+      className="group relative bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-200/40 hover:shadow-xl hover:shadow-primary/8 hover:border-primary/25 hover:-translate-y-0.5 transition-all duration-250 cursor-pointer overflow-hidden"
       onClick={handleClick}
     >
-      {/* Gradient accent border */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* Subtle gradient accent */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-250"></div>
       
-      <div className="relative p-8">
-        {/* Header with icon and title */}
-        <div className="flex items-start mb-6">
-          <div className={`relative w-16 h-16 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-lg ${shadowClass} group-hover:scale-110 transition-transform duration-300`}>
-            <i className={`${app.icon} text-white text-xl`}></i>
-            <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="relative p-6">
+        {/* Compact header */}
+        <div className="flex items-center mb-4">
+          <div className={`relative w-12 h-12 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200`}>
+            <i className={`${app.icon} text-white text-lg`}></i>
           </div>
-          <div className="ml-5 flex-1 min-w-0">
-            <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-2">
+          <div className="ml-4 flex-1 min-w-0">
+            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1">
               {app.name}
             </h3>
             <Badge 
               variant="secondary" 
-              className={`${bgClass} ${textClass} border ${borderClass} font-semibold text-xs px-3 py-1 rounded-full hover:scale-105 transition-transform duration-200`}
+              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2.5 py-0.5 rounded-lg hover:scale-105 transition-transform duration-150`}
             >
               {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
             </Badge>
           </div>
         </div>
         
-        {/* Description */}
-        <div className="mb-6">
+        {/* Compact description */}
+        <div className="mb-4">
           <RichTextViewer 
             content={app.description} 
-            maxLines={3} 
-            className="text-gray-600 leading-relaxed"
+            maxLines={2} 
+            className="text-gray-600 text-sm leading-relaxed"
           />
         </div>
         
-        {/* File attachments indicator */}
-        {app.attachments && app.attachments.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center space-x-2 text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
-              <FileText className="h-4 w-4" />
-              <span className="font-medium">
-                {app.attachments.length} attachment{app.attachments.length !== 1 ? 's' : ''}
-              </span>
-            </div>
+        {/* Compact footer */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
+              {app.subcategory}
+            </span>
+            {app.attachments && app.attachments.length > 0 && (
+              <div className="flex items-center space-x-1 text-xs text-gray-500">
+                <FileText className="h-3 w-3" />
+                <span>{app.attachments.length}</span>
+              </div>
+            )}
           </div>
-        )}
-        
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <span className="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
-            {app.subcategory}
-          </span>
-          <div className="flex items-center space-x-2 text-primary group-hover:text-accent transition-colors">
-            <span className="text-sm font-semibold">Launch</span>
-            <ExternalLink className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+          <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
+            <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Open</span>
+            <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
           </div>
         </div>
       </div>

@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Refined application cards to be more compact with improved space utilization and PwC brand alignment
+- July 1, 2025: Updated grid layout to display more cards per row (up to 5 columns on large screens) for better content density
+- July 1, 2025: Enhanced text truncation with line-clamp utilities and optimized typography for readability
 - July 1, 2025: Enhanced application filters with modern PwC-compliant design including gradient accents and improved form controls
 - July 1, 2025: Completely redesigned application cards with contemporary styling, hover effects, and enhanced visual hierarchy
 - July 1, 2025: Modernized empty state with gradient backgrounds, improved messaging, and branded styling
