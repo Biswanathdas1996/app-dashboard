@@ -65,23 +65,9 @@ export default function Dashboard() {
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-full flex items-center">
           <div className="text-white w-full max-w-4xl relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500 rounded-lg flex items-center justify-center shadow-lg">
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M13 3v18M8 8h12M8 16h12" />
-                </svg>
-              </div>
-              <Badge className="bg-black/50 text-orange-300 border-orange-400/50 font-medium text-xs sm:text-sm backdrop-blur-sm w-fit">
-                Digital Solutions Hub
-              </Badge>
-            </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 sm:mb-3 font-header leading-tight drop-shadow-lg">
-              Business <span className="text-orange-400">Innovation</span>{" "}
-              <span className="block sm:inline">Platform</span>
+              ET Labs - <span className="text-orange-400">AI Driven</span>{" "}
+              <span className="block sm:inline">Rapid GTM</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-4 leading-relaxed max-w-full lg:max-w-3xl drop-shadow-md">
               Access enterprise-grade applications and submit project requests
@@ -93,15 +79,17 @@ export default function Dashboard() {
                 className="bg-black/50 text-white border-white/40 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs sm:text-sm shadow-lg"
               >
                 <FileText className="h-3 w-3 mr-1 sm:mr-2" />
-                <span className="hidden xs:inline">{apps?.length || 0} Applications Available</span>
+                <span className="hidden xs:inline">
+                  {apps?.length || 0} Applications Available
+                </span>
                 <span className="xs:hidden">{apps?.length || 0} Apps</span>
               </Badge>
               <Badge
                 variant="outline"
                 className="bg-black/50 text-white border-white/40 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs sm:text-sm shadow-lg"
               >
-                <span className="hidden sm:inline">Secure & Compliant</span>
-                <span className="sm:hidden">Secure</span>
+                <span className="hidden sm:inline">Fast & Compliant</span>
+                <span className="sm:hidden">Fast</span>
               </Badge>
             </div>
           </div>
@@ -122,7 +110,10 @@ export default function Dashboard() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <Badge variant="secondary" className="text-xs sm:text-sm whitespace-nowrap">
+              <Badge
+                variant="secondary"
+                className="text-xs sm:text-sm whitespace-nowrap"
+              >
                 {apps?.length || 0} Available
               </Badge>
               {(search || category !== "all" || subcategory !== "all") && (

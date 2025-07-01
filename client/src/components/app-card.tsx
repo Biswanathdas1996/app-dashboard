@@ -48,7 +48,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/60 hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/40 hover:-translate-y-2 transition-all duration-400 cursor-pointer overflow-hidden min-w-[280px]"
+      className="group relative bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/60 hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/40 hover:-translate-y-2 transition-all duration-400 cursor-pointer overflow-hidden min-w-[280px] flex flex-col h-full"
       onClick={handleClick}
     >
       {/* Enhanced glassmorphism effect */}
@@ -66,7 +66,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
         </Button>
       </div>
       
-      <div className="relative p-6">
+      <div className="relative p-6 flex flex-col flex-1">
         {/* Modern header with larger icon */}
         <div className="flex items-start gap-4 mb-4">
           <div className={`w-14 h-14 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-2xl ${shadowClass} group-hover:scale-110 group-hover:rotate-6 transition-all duration-400 border border-white/30`}>
@@ -83,39 +83,43 @@ export function AppCard({ app, onClick }: AppCardProps) {
         </div>
         
         {/* Enhanced description */}
-        {(app.shortDescription || app.description) && (
-          <div className="mb-5">
-            {app.shortDescription ? (
-              <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                {app.shortDescription}
-              </p>
-            ) : (
-              <RichTextViewer 
-                content={app.description || ""} 
-                maxLines={3} 
-                className="text-gray-600 text-sm leading-relaxed"
-              />
-            )}
-          </div>
-        )}
-        
-        {/* Enhanced file indicator */}
-        {app.attachments && app.attachments.length > 0 && (
-          <div className="flex items-center gap-2 mb-5 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
-            <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
-              <FileText className="h-4 w-4 text-blue-600" />
+        <div className="flex-1">
+          {(app.shortDescription || app.description) && (
+            <div className="mb-5">
+              {app.shortDescription ? (
+                <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                  {app.shortDescription}
+                </p>
+              ) : (
+                <RichTextViewer 
+                  content={app.description || ""} 
+                  maxLines={3} 
+                  className="text-gray-600 text-sm leading-relaxed"
+                />
+              )}
             </div>
-            <span className="text-sm font-medium text-gray-700">{app.attachments.length} files</span>
-          </div>
-        )}
+          )}
+          
+          {/* Enhanced file indicator */}
+          {app.attachments && app.attachments.length > 0 && (
+            <div className="flex items-center gap-2 mb-5 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
+              <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                <FileText className="h-4 w-4 text-blue-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-700">{app.attachments.length} files</span>
+            </div>
+          )}
+        </div>
 
-        {/* Modern launch button */}
-        <Button
-          className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
-        >
-          <ExternalLink className="h-5 w-5 mr-2" />
-          Launch Application
-        </Button>
+        {/* Modern launch button - Always at bottom */}
+        <div className="mt-auto">
+          <Button
+            className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
+          >
+            <ExternalLink className="h-5 w-5 mr-2" />
+            Launch Application
+          </Button>
+        </div>
       </div>
 
       {/* Details Modal */}
