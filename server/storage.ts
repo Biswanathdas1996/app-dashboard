@@ -142,118 +142,93 @@ export class MemStorage implements IStorage {
     return user;
   }
 
-  // Category methods - derived from webApps
+  // Category methods
   async getAllCategories(): Promise<Category[]> {
-    const apps = Array.from(this.webApps.values()).filter(app => app.isActive);
-    const categoryMap = new Map<string, Category>();
-    let id = 1;
-    
-    apps.forEach(app => {
-      if (app.category && !categoryMap.has(app.category)) {
-        categoryMap.set(app.category, {
-          id: id++,
-          name: app.category,
-          isActive: true
-        });
-      }
-    });
-    
-    return Array.from(categoryMap.values());
+    return Array.from(this.categories.values()).filter(category => category.isActive);
   }
 
   async getCategory(id: number): Promise<Category | undefined> {
-    const categories = await this.getAllCategories();
-    return categories.find(cat => cat.id === id);
+    return this.categories.get(id);
   }
 
   async createCategory(category: InsertCategory): Promise<Category> {
-    // Categories are now derived from applications, so we'll return a mock response
-    // In practice, categories should be managed by creating applications with new categories
-    const categories = await this.getAllCategories();
-    const newCategory: Category = {
-      id: categories.length + 1,
-      name: category.name,
-      isActive: true
+    const id = this.currentCategoryId++;
+    const newCategory: Category = { 
+      id, 
+      name: category.name, 
+      isActive: category.isActive ?? true 
     };
+    this.categories.set(id, newCategory);
+    await this.saveToFile();
     return newCategory;
   }
 
   async updateCategory(id: number, category: UpdateCategory): Promise<Category | undefined> {
-    // Categories are derived from applications, so updates should be done via applications
-    const existingCategory = await this.getCategory(id);
+    const existingCategory = this.categories.get(id);
     if (!existingCategory) return undefined;
     
-    return { ...existingCategory, ...category };
+    const updatedCategory: Category = { ...existingCategory, ...category };
+    this.categories.set(id, updatedCategory);
+    await this.saveToFile();
+    return updatedCategory;
   }
 
   async deleteCategory(id: number): Promise<boolean> {
-    // Categories are derived from applications, so deletion should be done via applications
-    // For now, we'll just return true to maintain API compatibility
+    const category = this.categories.get(id);
+    if (!category) return false;
+    
+    // Soft delete by setting isActive to false
+    category.isActive = false;
+    this.categories.set(id, category);
+    await this.saveToFile();
     return true;
   }
 
-  // Subcategory methods - derived from webApps
+  // Subcategory methods
   async getAllSubcategories(): Promise<Subcategory[]> {
-    const apps = Array.from(this.webApps.values()).filter(app => app.isActive);
-    const categories = await this.getAllCategories();
-    const categoryMap = new Map(categories.map(cat => [cat.name, cat.id]));
-    const subcategoryMap = new Map<string, Subcategory>();
-    let id = 1;
-    
-    apps.forEach(app => {
-      if (app.subcategory && app.category) {
-        const key = `${app.category}:${app.subcategory}`;
-        if (!subcategoryMap.has(key)) {
-          const categoryId = categoryMap.get(app.category);
-          if (categoryId) {
-            subcategoryMap.set(key, {
-              id: id++,
-              name: app.subcategory,
-              categoryId,
-              isActive: true
-            });
-          }
-        }
-      }
-    });
-    
-    return Array.from(subcategoryMap.values());
+    return Array.from(this.subcategories.values()).filter(subcategory => subcategory.isActive);
   }
 
   async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
-    const allSubcategories = await this.getAllSubcategories();
-    return allSubcategories.filter(subcategory => subcategory.categoryId === categoryId);
+    return Array.from(this.subcategories.values())
+      .filter(subcategory => subcategory.categoryId === categoryId && subcategory.isActive);
   }
 
   async getSubcategory(id: number): Promise<Subcategory | undefined> {
-    const subcategories = await this.getAllSubcategories();
-    return subcategories.find(sub => sub.id === id);
+    return this.subcategories.get(id);
   }
 
   async createSubcategory(subcategory: InsertSubcategory): Promise<Subcategory> {
-    // Subcategories are now derived from applications, so we'll return a mock response
-    // In practice, subcategories should be managed by creating applications with new subcategories
-    const subcategories = await this.getAllSubcategories();
-    const newSubcategory: Subcategory = {
-      id: subcategories.length + 1,
-      name: subcategory.name,
+    const id = this.currentSubcategoryId++;
+    const newSubcategory: Subcategory = { 
+      id, 
+      name: subcategory.name, 
       categoryId: subcategory.categoryId,
-      isActive: true
+      isActive: subcategory.isActive ?? true 
     };
+    this.subcategories.set(id, newSubcategory);
+    await this.saveToFile();
     return newSubcategory;
   }
 
   async updateSubcategory(id: number, subcategory: UpdateSubcategory): Promise<Subcategory | undefined> {
-    // Subcategories are derived from applications, so updates should be done via applications
-    const existingSubcategory = await this.getSubcategory(id);
+    const existingSubcategory = this.subcategories.get(id);
     if (!existingSubcategory) return undefined;
     
-    return { ...existingSubcategory, ...subcategory };
+    const updatedSubcategory: Subcategory = { ...existingSubcategory, ...subcategory };
+    this.subcategories.set(id, updatedSubcategory);
+    await this.saveToFile();
+    return updatedSubcategory;
   }
 
   async deleteSubcategory(id: number): Promise<boolean> {
-    // Subcategories are derived from applications, so deletion should be done via applications
-    // For now, we'll just return true to maintain API compatibility
+    const subcategory = this.subcategories.get(id);
+    if (!subcategory) return false;
+    
+    // Soft delete by setting isActive to false
+    subcategory.isActive = false;
+    this.subcategories.set(id, subcategory);
+    await this.saveToFile();
     return true;
   }
 

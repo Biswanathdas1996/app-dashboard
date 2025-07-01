@@ -1,7 +1,59 @@
 {
   "users": [],
-  "categories": [],
-  "subcategories": [],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Financial Services",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Healthcare & Life Sciences",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Government & Public Services",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Infrastructure & Real Estate",
+      "isActive": true
+    }
+  ],
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Banking & Lending",
+      "categoryId": 1,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Insurance",
+      "categoryId": 1,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Pharmaceuticals & Therapeutics",
+      "categoryId": 2,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Digital Government",
+      "categoryId": 3,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "Property Management",
+      "categoryId": 4,
+      "isActive": true
+    }
+  ],
   "webApps": [
     {
       "id": 1,
@@ -75,7 +127,7 @@
     }
   ],
   "nextUserId": 1,
-  "nextCategoryId": 1,
-  "nextSubcategoryId": 1,
+  "nextCategoryId": 5,
+  "nextSubcategoryId": 6,
   "nextAppId": 6
 }

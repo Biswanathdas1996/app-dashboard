@@ -20,6 +20,7 @@ interface CategoryFormProps {
 
 function CategoryForm({ onSuccess }: CategoryFormProps) {
   const { toast } = useToast();
+  const createCategory = useCreateCategory();
   
   const form = useForm<InsertCategory>({
     resolver: zodResolver(insertCategorySchema),
@@ -30,13 +31,21 @@ function CategoryForm({ onSuccess }: CategoryFormProps) {
   });
 
   const onSubmit = async (data: InsertCategory) => {
-    toast({
-      title: "Info",
-      description: "Categories are now automatically created when you add applications. Please create an application with this category instead.",
-      variant: "default",
-    });
-    form.reset();
-    onSuccess();
+    try {
+      await createCategory.mutateAsync(data);
+      toast({
+        title: "Success",
+        description: "Category created successfully",
+      });
+      form.reset();
+      onSuccess();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create category",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -55,8 +64,8 @@ function CategoryForm({ onSuccess }: CategoryFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">
-          Create Category
+        <Button type="submit" disabled={createCategory.isPending}>
+          {createCategory.isPending ? "Creating..." : "Create Category"}
         </Button>
       </form>
     </Form>
@@ -82,13 +91,21 @@ function SubcategoryForm({ categories, onSuccess }: SubcategoryFormProps) {
   });
 
   const onSubmit = async (data: InsertSubcategory) => {
-    toast({
-      title: "Info",
-      description: "Subcategories are now automatically created when you add applications. Please create an application with this subcategory instead.",
-      variant: "default",
-    });
-    form.reset();
-    onSuccess();
+    try {
+      await createSubcategory.mutateAsync(data);
+      toast({
+        title: "Success",
+        description: "Subcategory created successfully",
+      });
+      form.reset();
+      onSuccess();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create subcategory",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -150,19 +167,39 @@ export function CategoryManagement() {
   const { toast } = useToast();
 
   const handleDeleteCategory = async (id: number, name: string) => {
-    toast({
-      title: "Info",
-      description: "Categories are automatically managed based on applications. To remove a category, delete all applications using it.",
-      variant: "default",
-    });
+    if (window.confirm(`Are you sure you want to delete the category "${name}"?`)) {
+      try {
+        await deleteCategory.mutateAsync(id);
+        toast({
+          title: "Success",
+          description: "Category deleted successfully",
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete category",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   const handleDeleteSubcategory = async (id: number, name: string) => {
-    toast({
-      title: "Info",
-      description: "Subcategories are automatically managed based on applications. To remove a subcategory, delete all applications using it.",
-      variant: "default",
-    });
+    if (window.confirm(`Are you sure you want to delete the subcategory "${name}"?`)) {
+      try {
+        await deleteSubcategory.mutateAsync(id);
+        toast({
+          title: "Success",
+          description: "Subcategory deleted successfully",
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete subcategory",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   if (categoriesLoading || subcategoriesLoading) {
