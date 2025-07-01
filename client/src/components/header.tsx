@@ -16,7 +16,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
   const [location] = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200/30 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 shadow-lg">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
@@ -40,8 +40,8 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
           {/* Search Bar - Only show on dashboard */}
           {location === "/" && onSearchChange && (
             <div className="hidden lg:flex items-center">
-              <div className="relative w-72">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+              <div className="relative w-80">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4">
                   <Search className="text-gray-400 h-4 w-4" />
                 </div>
                 <Input
@@ -49,7 +49,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
                   placeholder="Search applications..."
                   value={searchValue || ""}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  className="pl-10 pr-4 py-2 h-9 bg-gray-50/70 border-gray-200/50 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-gray-100/50"
+                  className="pl-11 pr-4 py-2.5 h-10 bg-gradient-to-r from-gray-50/80 to-white/90 border border-gray-200/40 rounded-xl focus:bg-white focus:border-orange-400/60 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-white/90 shadow-sm hover:shadow-md backdrop-blur-sm font-medium"
                 />
               </div>
             </div>
@@ -74,7 +74,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
             
             {/* Mobile Search */}
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
                 <Search className="text-gray-400 h-4 w-4" />
               </div>
               <Input
@@ -82,7 +82,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
                 placeholder="Search applications..."
                 value={searchValue || ""}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 pr-4 py-2 h-9 bg-gray-50/70 border-gray-200/50 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-gray-100/50"
+                className="pl-11 pr-4 py-2.5 h-10 bg-gradient-to-r from-gray-50/80 to-white/90 border border-gray-200/40 rounded-xl focus:bg-white focus:border-orange-400/60 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-white/90 shadow-sm hover:shadow-md backdrop-blur-sm font-medium"
               />
             </div>
           </div>

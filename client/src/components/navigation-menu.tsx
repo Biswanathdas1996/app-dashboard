@@ -44,20 +44,23 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
   }
 
   return (
-    <nav className="flex items-center space-x-0.5 bg-gray-50/50 rounded-lg p-1 border border-gray-200/60 min-w-fit"  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <nav className="flex items-center space-x-1 bg-gradient-to-r from-white to-gray-50/80 rounded-xl p-1.5 border border-gray-200/40 shadow-sm backdrop-blur-sm min-w-fit" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {/* All Categories */}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => handleCategorySelect("all")}
         className={cn(
-          "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
+          "h-9 px-4 text-sm font-semibold rounded-lg transition-all duration-300 relative overflow-hidden",
           currentCategory === "all" 
-            ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
-            : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+            ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105" 
+            : "text-gray-700 hover:text-gray-900 hover:bg-white/80 hover:shadow-md hover:scale-102 backdrop-blur-sm"
         )}
       >
-        All
+        <span className="relative z-10">All</span>
+        {currentCategory === "all" && (
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse" />
+        )}
       </Button>
 
       {/* Category Menu Items */}
@@ -81,34 +84,46 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
+                    "h-9 px-4 text-sm font-semibold rounded-lg transition-all duration-300 relative overflow-hidden group",
                     isActive 
-                      ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
-                      : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105" 
+                      : "text-gray-700 hover:text-gray-900 hover:bg-white/80 hover:shadow-md hover:scale-102 backdrop-blur-sm"
                   )}
                 >
-                  {shortName}
-                  <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
+                  <span className="relative z-10 flex items-center">
+                    {shortName}
+                    <ChevronDown className={cn(
+                      "ml-1.5 h-3 w-3 transition-all duration-300",
+                      isActive ? "opacity-90" : "opacity-60 group-hover:opacity-80"
+                    )} />
+                  </span>
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse" />
+                  )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="min-w-48 border border-gray-200/60 shadow-lg bg-white/95 backdrop-blur-sm">
+              <DropdownMenuContent align="start" className="min-w-52 border border-gray-200/40 shadow-xl bg-white/95 backdrop-blur-md rounded-xl p-1">
                 <DropdownMenuItem 
                   onClick={() => handleCategorySelect(category.name)}
                   className={cn(
-                    "font-medium cursor-pointer text-sm",
-                    isActive && currentSubcategory === "all" && "bg-primary/10 text-primary"
+                    "font-semibold cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
+                    isActive && currentSubcategory === "all" 
+                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm" 
+                      : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                   )}
                 >
                   All {category.name}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-200/60" />
+                <DropdownMenuSeparator className="mx-2 my-1 bg-gray-200/50" />
                 {categorySubcategories.map((subcategory: any) => (
                   <DropdownMenuItem 
                     key={subcategory.id}
                     onClick={() => handleCategorySelect(category.name, subcategory.name)}
                     className={cn(
-                      "cursor-pointer text-sm",
-                      currentSubcategory === subcategory.name && "bg-primary/10 text-primary"
+                      "cursor-pointer text-sm rounded-lg mx-1 my-0.5 px-3 py-2.5 transition-all duration-200",
+                      isActive && currentSubcategory === subcategory.name 
+                        ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm" 
+                        : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
                     )}
                   >
                     {subcategory.name}
@@ -126,13 +141,16 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
               size="sm"
               onClick={() => handleCategorySelect(category.name)}
               className={cn(
-                "h-8 px-3 text-sm font-medium rounded-md transition-all duration-200",
+                "h-9 px-4 text-sm font-semibold rounded-lg transition-all duration-300 relative overflow-hidden",
                 isActive 
-                  ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" 
-                  : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105" 
+                  : "text-gray-700 hover:text-gray-900 hover:bg-white/80 hover:shadow-md hover:scale-102 backdrop-blur-sm"
               )}
             >
-              {shortName}
+              <span className="relative z-10">{shortName}</span>
+              {isActive && (
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse" />
+              )}
             </Button>
           );
         }

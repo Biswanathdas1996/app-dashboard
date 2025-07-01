@@ -177,4 +177,29 @@
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30;
   }
+  
+  /* Modern scale transforms for navigation */
+  .scale-102 {
+    transform: scale(1.02);
+  }
+  
+  .scale-105 {
+    transform: scale(1.05);
+  }
+  
+  /* Enhanced backdrop blur effects */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  /* Professional gradient shadows */
+  .shadow-orange-500\/25 {
+    box-shadow: 0 4px 14px 0 rgba(249, 115, 22, 0.25);
+  }
 }
