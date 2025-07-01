@@ -60,11 +60,13 @@ export default function Dashboard() {
             alt="GenAI Innovation"
             className="w-full h-full object-cover object-center"
           />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white max-w-4xl">
+          <div className="text-white max-w-4xl relative z-10">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center shadow-lg">
                 <svg
                   className="w-5 h-5 text-white"
                   fill="currentColor"
@@ -73,29 +75,29 @@ export default function Dashboard() {
                   <path d="M13 3v18M8 8h12M8 16h12" />
                 </svg>
               </div>
-              <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 font-medium text-sm">
+              <Badge className="bg-black/50 text-orange-300 border-orange-400/50 font-medium text-sm backdrop-blur-sm">
                 Digital Solutions Hub
               </Badge>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 font-header leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 font-header leading-tight drop-shadow-lg">
               Business <span className="text-orange-400">Innovation</span>{" "}
               Platform
             </h1>
-            <p className="text-lg md:text-xl mb-4 text-gray-200 leading-relaxed max-w-3xl">
+            <p className="text-lg md:text-xl mb-4 leading-relaxed max-w-3xl drop-shadow-md">
               Access enterprise-grade applications and submit project requests
               through our centralized digital hub.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Badge
                 variant="outline"
-                className="bg-white/10 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-sm"
+                className="bg-black/50 text-white border-white/40 px-3 py-1 backdrop-blur-sm text-sm shadow-lg"
               >
                 <FileText className="h-3 w-3 mr-2" />
                 {apps?.length || 0} Applications Available
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-white/10 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-sm"
+                className="bg-black/50 text-white border-white/40 px-3 py-1 backdrop-blur-sm text-sm shadow-lg"
               >
                 Secure & Compliant
               </Badge>
