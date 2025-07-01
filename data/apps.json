@@ -29,6 +29,18 @@
       "name": "Insurance",
       "categoryId": 1,
       "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Capital Markets",
+      "categoryId": 1,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Pharmaceuticals & Therapeutics",
+      "categoryId": 2,
+      "isActive": true
     }
   ],
   "webApps": [
@@ -61,6 +73,6 @@
   ],
   "nextUserId": 1,
   "nextCategoryId": 4,
-  "nextSubcategoryId": 3,
+  "nextSubcategoryId": 5,
   "nextAppId": 4
 }

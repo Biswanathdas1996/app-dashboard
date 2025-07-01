@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AppCard } from "@/components/app-card";
 import { useApps, useCategories } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,9 +25,24 @@ export default function Dashboard() {
     setSubcategory("all");
   };
 
+  const handleCategoryChange = (newCategory: string, newSubcategory?: string) => {
+    setCategory(newCategory);
+    if (newSubcategory) {
+      setSubcategory(newSubcategory);
+    } else {
+      setSubcategory("all");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header onSearchChange={setSearch} searchValue={search} />
+      <Header 
+        onSearchChange={setSearch} 
+        searchValue={search}
+        onCategoryChange={handleCategoryChange}
+        currentCategory={category}
+        currentSubcategory={subcategory}
+      />
       
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-accent text-white">
@@ -53,63 +67,6 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Modern Filters Section */}
-        <div className="mb-8 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 hover:shadow-xl transition-all duration-300">
-          <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
-            <div className="flex-1">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Filter & Discover</h3>
-              </div>
-              <p className="text-gray-600 font-medium">Explore applications by category and find exactly what you need</p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-semibold text-gray-700 tracking-wide">Category</label>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className="w-56 h-12 rounded-xl border-gray-200/60 bg-gray-50/50 hover:bg-white focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all duration-200 font-medium">
-                    <SelectValue placeholder="All Categories" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
-                    <SelectItem value="all" className="rounded-lg font-medium">All Categories</SelectItem>
-                    {categoriesData?.categories?.map((cat) => (
-                      <SelectItem key={cat} value={cat} className="rounded-lg font-medium">
-                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                      </SelectItem>
-                    )) || []}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-semibold text-gray-700 tracking-wide">Subcategory</label>
-                <Select value={subcategory} onValueChange={setSubcategory}>
-                  <SelectTrigger className="w-56 h-12 rounded-xl border-gray-200/60 bg-gray-50/50 hover:bg-white focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all duration-200 font-medium">
-                    <SelectValue placeholder="All Subcategories" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
-                    <SelectItem value="all" className="rounded-lg font-medium">All Subcategories</SelectItem>
-                    {categoriesData?.subcategories?.map((subcat) => (
-                      <SelectItem key={subcat} value={subcat} className="rounded-lg font-medium">
-                        {subcat}
-                      </SelectItem>
-                    )) || []}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex flex-col justify-end">
-                <Button 
-                  onClick={handleClearFilters} 
-                  variant="outline" 
-                  className="h-12 px-6 rounded-xl border-gray-300 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all duration-200 font-semibold"
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Compact Apps Grid */}
         {isLoading ? (

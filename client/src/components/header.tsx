@@ -2,13 +2,17 @@ import { useLocation } from "wouter";
 import { Search } from "lucide-react";
 import { PwCLogo } from "./pwc-logo";
 import { Input } from "./ui/input";
+import { NavigationMenu } from "./navigation-menu";
 
 interface HeaderProps {
   onSearchChange?: (search: string) => void;
   searchValue?: string;
+  onCategoryChange?: (category: string, subcategory?: string) => void;
+  currentCategory?: string;
+  currentSubcategory?: string;
 }
 
-export function Header({ onSearchChange, searchValue }: HeaderProps) {
+export function Header({ onSearchChange, searchValue, onCategoryChange, currentCategory, currentSubcategory }: HeaderProps) {
   const [location] = useLocation();
 
   return (
@@ -32,7 +36,16 @@ export function Header({ onSearchChange, searchValue }: HeaderProps) {
             </div>
           </div>
 
-
+          {/* Navigation Menu - Only show on dashboard */}
+          {location === "/" && onCategoryChange && (
+            <div className="hidden lg:flex items-center">
+              <NavigationMenu 
+                onCategoryChange={onCategoryChange}
+                currentCategory={currentCategory}
+                currentSubcategory={currentSubcategory}
+              />
+            </div>
+          )}
 
           {/* Search Bar - Only show on dashboard */}
           {location === "/" && onSearchChange && (
@@ -55,9 +68,19 @@ export function Header({ onSearchChange, searchValue }: HeaderProps) {
 
         </div>
 
-        {/* Mobile Search - Only show on dashboard */}
+        {/* Mobile Navigation and Search - Only show on dashboard */}
         {location === "/" && onSearchChange && (
-          <div className="lg:hidden px-4 pb-6">
+          <div className="lg:hidden px-4 pb-6 space-y-4">
+            {/* Mobile Navigation */}
+            {onCategoryChange && (
+              <NavigationMenu 
+                onCategoryChange={onCategoryChange}
+                currentCategory={currentCategory}
+                currentSubcategory={currentSubcategory}
+              />
+            )}
+            
+            {/* Mobile Search */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-4">
                 <Search className="text-gray-400 h-5 w-5" />
