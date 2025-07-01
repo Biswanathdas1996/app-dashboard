@@ -46,31 +46,42 @@ export default function Dashboard() {
       />
       
       {/* Hero Banner with Image */}
-      <div className="relative h-[400px] overflow-hidden">
+      <div className="relative h-[500px] lg:h-[600px] overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
             alt="Woman and robot collaboration" 
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white max-w-2xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header">
-              The Future of Business
+          <div className="text-white max-w-3xl">
+            <div className="mb-6">
+              <Badge variant="secondary" className="px-3 py-1 bg-orange-500/20 text-orange-200 border-orange-300/30 text-sm font-medium backdrop-blur-sm mb-4">
+                Innovation Hub
+              </Badge>
+            </div>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 font-header leading-tight">
+              The Future of <span className="text-orange-400">Business</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-6 opacity-95 font-body leading-relaxed">
+            <p className="text-xl md:text-2xl lg:text-3xl mb-8 opacity-95 font-body leading-relaxed max-w-2xl">
               Where innovation meets excellence. Discover cutting-edge solutions that transform how we work.
             </p>
-            <div className="flex items-center gap-4">
-              <Badge variant="secondary" className="px-4 py-2 bg-white/20 text-white border-white/30 text-sm font-medium backdrop-blur-sm">
-                <FileText className="h-4 w-4 mr-2" />
-                {apps?.length || 0} Solutions Available
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Badge variant="secondary" className="px-6 py-3 bg-white/20 text-white border-white/30 font-medium backdrop-blur-sm text-base">
+                <FileText className="h-5 w-5 mr-2" />
+                {apps?.length || 0} Digital Solutions
               </Badge>
+              <div className="hidden lg:block h-px w-12 bg-white/30"></div>
+              <span className="text-white/80 text-sm font-medium">Powered by PwC Innovation</span>
             </div>
           </div>
         </div>
+        {/* Decorative elements */}
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-orange-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full"></div>
       </div>
 
       {/* Compact Welcome Banner */}
