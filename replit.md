@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Added professional footer with PwC branding, links, and company information
+- July 1, 2025: Implemented flex layout to ensure footer stays at bottom of page
+- July 1, 2025: Created responsive footer with grid layout and proper typography
 - July 1, 2025: Redesigned app details modal with modern full-width layout and gradient header design
 - July 1, 2025: Enhanced modal with improved visual hierarchy, card-based sections, and better content organization
 - July 1, 2025: Added decorative elements and responsive grid layout for optimal viewing experience

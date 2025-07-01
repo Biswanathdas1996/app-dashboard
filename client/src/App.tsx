@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/dashboard";
 import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+import { Footer } from "@/components/footer";
 
 function Router() {
   return (
@@ -22,8 +23,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <div className="min-h-screen bg-gray-50">
-          <Router />
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <div className="flex-1">
+            <Router />
+          </div>
+          <Footer />
         </div>
       </TooltipProvider>
     </QueryClientProvider>
