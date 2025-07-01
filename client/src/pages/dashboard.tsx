@@ -32,7 +32,7 @@ export default function Dashboard() {
       
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-accent text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2 font-header">
