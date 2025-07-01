@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
+import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -269,6 +270,31 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
+      {/* Project Requisition Banner */}
+      <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={projectBannerImage} 
+            alt="Digital innovation banner" 
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 via-orange-500/60 to-transparent"></div>
+        </div>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="text-white max-w-2xl">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-header">
+              Transform Your Ideas
+            </h2>
+            <p className="text-lg md:text-xl mb-6 opacity-95 font-body leading-relaxed">
+              Submit your project requirements and let our experts bring your vision to life with cutting-edge solutions.
+            </p>
+            <Badge variant="secondary" className="px-4 py-2 bg-white/20 text-white border-white/30 text-sm font-medium backdrop-blur-sm">
+              Start Your Project Journey
+            </Badge>
+          </div>
+        </div>
+      </div>
 
       {/* Project Requisition Form Section */}
       <section className="bg-gradient-to-br from-slate-50 to-blue-50/50 border-t border-white/50">
