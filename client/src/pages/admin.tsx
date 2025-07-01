@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, Edit, Trash2, ExternalLink } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Edit, Trash2, ExternalLink, Download, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +25,8 @@ const categoryColors = {
 export default function Admin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingApp, setEditingApp] = useState<WebApp | undefined>();
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const { data: apps, isLoading } = useApps();
@@ -54,6 +56,81 @@ export default function Admin() {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingApp(undefined);
+  };
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch('/api/export');
+      if (!response.ok) throw new Error('Export failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `apps-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Success",
+        description: "Data exported successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to export data",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    try {
+      const text = await file.text();
+      const importData = JSON.parse(text);
+      
+      const response = await fetch('/api/import', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(importData),
+      });
+
+      if (!response.ok) throw new Error('Import failed');
+      
+      const result = await response.json();
+      
+      toast({
+        title: "Success",
+        description: `Import completed: ${result.imported.apps} apps, ${result.imported.categories} categories, ${result.imported.subcategories} subcategories`,
+      });
+      
+      // Refresh the page data
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to import data. Please check the file format.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsImporting(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   return (
@@ -101,17 +178,72 @@ export default function Admin() {
                   <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
                   <p className="text-gray-600 mt-1">Manage your web application directory</p>
                 </div>
-                <div className="sm:hidden">
-                  <Button 
-                    onClick={() => setIsModalOpen(true)} 
-                    size="sm"
-                    className="bg-primary hover:bg-primary/90"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add App
-                  </Button>
+                <div className="flex items-center gap-2">
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Button 
+                      onClick={handleExport}
+                      variant="outline"
+                      size="sm"
+                      className="border-gray-300 hover:bg-gray-50"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Export Data
+                    </Button>
+                    <Button 
+                      onClick={handleImportClick}
+                      variant="outline"
+                      size="sm"
+                      className="border-gray-300 hover:bg-gray-50"
+                      disabled={isImporting}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {isImporting ? "Importing..." : "Import Data"}
+                    </Button>
+                  </div>
+                  <div className="sm:hidden">
+                    <Button 
+                      onClick={() => setIsModalOpen(true)} 
+                      size="sm"
+                      className="bg-primary hover:bg-primary/90"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add App
+                    </Button>
+                  </div>
                 </div>
               </div>
+              
+              {/* Mobile export/import buttons */}
+              <div className="sm:hidden flex gap-2 mb-4">
+                <Button 
+                  onClick={handleExport}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-gray-300 hover:bg-gray-50"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Export
+                </Button>
+                <Button 
+                  onClick={handleImportClick}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-gray-300 hover:bg-gray-50"
+                  disabled={isImporting}
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {isImporting ? "Importing..." : "Import"}
+                </Button>
+              </div>
+
+              {/* Hidden file input for import */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                onChange={handleImport}
+                className="hidden"
+              />
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>

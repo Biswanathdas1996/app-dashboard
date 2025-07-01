@@ -314,6 +314,105 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Export all data endpoint
+  app.get("/api/export", async (req, res) => {
+    try {
+      const [apps, categories, subcategories] = await Promise.all([
+        storage.getAllWebApps(),
+        storage.getAllCategories(),
+        storage.getAllSubcategories()
+      ]);
+
+      const exportData = {
+        apps,
+        categories,
+        subcategories,
+        exportDate: new Date().toISOString(),
+        version: "1.0"
+      };
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename="apps-export.json"');
+      res.json(exportData);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to export data" });
+    }
+  });
+
+  // Import data endpoint
+  app.post("/api/import", async (req, res) => {
+    try {
+      const importData = req.body;
+      
+      // Validate import data structure
+      if (!importData || !importData.apps || !importData.categories || !importData.subcategories) {
+        return res.status(400).json({ message: "Invalid import data format" });
+      }
+
+      // Import categories first
+      const categoryIdMapping = new Map();
+      for (const category of importData.categories) {
+        try {
+          const newCategory = await storage.createCategory({
+            name: category.name,
+            isActive: category.isActive
+          });
+          categoryIdMapping.set(category.id, newCategory.id);
+        } catch (error) {
+          // Category might already exist, skip
+        }
+      }
+
+      // Import subcategories with updated category IDs
+      const subcategoryIdMapping = new Map();
+      for (const subcategory of importData.subcategories) {
+        try {
+          const newCategoryId = categoryIdMapping.get(subcategory.categoryId) || subcategory.categoryId;
+          const newSubcategory = await storage.createSubcategory({
+            name: subcategory.name,
+            categoryId: newCategoryId,
+            isActive: subcategory.isActive
+          });
+          subcategoryIdMapping.set(subcategory.id, newSubcategory.id);
+        } catch (error) {
+          // Subcategory might already exist, skip
+        }
+      }
+
+      // Import apps
+      let importedAppsCount = 0;
+      for (const app of importData.apps) {
+        try {
+          await storage.createWebApp({
+            name: app.name,
+            description: app.description,
+            shortDescription: app.shortDescription,
+            url: app.url,
+            category: app.category,
+            subcategory: app.subcategory,
+            icon: app.icon,
+            isActive: app.isActive,
+            attachments: app.attachments || []
+          });
+          importedAppsCount++;
+        } catch (error) {
+          // App might already exist, skip
+        }
+      }
+
+      res.json({ 
+        message: "Import completed successfully",
+        imported: {
+          apps: importedAppsCount,
+          categories: categoryIdMapping.size,
+          subcategories: subcategoryIdMapping.size
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to import data" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
