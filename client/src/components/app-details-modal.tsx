@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ExternalLink, FileText, Eye, X } from "lucide-react";
@@ -66,6 +66,9 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
           
           <div className="relative z-10">
             <DialogHeader className="space-y-0">
+              <DialogDescription className="sr-only">
+                View detailed information about {app.name} including description, documents, and launch link.
+              </DialogDescription>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                   <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-xl border border-white/20">
@@ -88,19 +91,35 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                     </div>
                   </div>
                 </div>
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.open(app.url, '_blank', 'noopener,noreferrer');
-                  }}
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-                  size="lg"
-                >
-                  <ExternalLink className="h-5 w-5 mr-2" />
-                  Launch Application
-                </Button>
+                <div className="flex items-center space-x-4">
+                  <Button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      window.open(app.url, '_blank', 'noopener,noreferrer');
+                    }}
+                    className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                    size="lg"
+                  >
+                    <ExternalLink className="h-5 w-5 mr-2" />
+                    Launch Application
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onClose();
+                    }}
+                    className="h-10 w-10 p-0 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                    title="Close modal"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </DialogHeader>
           </div>
