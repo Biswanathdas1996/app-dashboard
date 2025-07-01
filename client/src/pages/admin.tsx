@@ -9,6 +9,7 @@ import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import type { WebApp } from "@shared/schema";
 
 const categoryColors = {
@@ -55,18 +56,19 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-pwc-light flex flex-col">
       <Header />
+      <div className="flex-1">
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary to-accent text-white">
+      <div className="bg-gradient-to-r from-pwc-orange to-pwc-dark text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 text-charter">
                 Admin Panel
               </h1>
-              <p className="text-xl opacity-90">
+              <p className="text-xl opacity-90 text-helvetica">
                 Manage your web applications directory
               </p>
             </div>
@@ -248,6 +250,8 @@ export default function Admin() {
         onClose={handleModalClose}
         app={editingApp}
       />
+      </div>
+      <Footer />
     </div>
   );
 }
