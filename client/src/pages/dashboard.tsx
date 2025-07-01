@@ -140,6 +140,100 @@ export default function Dashboard() {
         )}
       </main>
 
+      {/* What's New Section */}
+      <section className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">What's new</h2>
+            <p className="text-lg text-gray-600">What's new</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Card 1 - Container Operations */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
+              <div className="aspect-video bg-gradient-to-br from-blue-500 to-orange-500 relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="grid grid-cols-4 gap-1 p-4">
+                    {Array.from({ length: 16 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-4 h-4 rounded-sm ${
+                          i % 3 === 0 ? 'bg-orange-400' : i % 3 === 1 ? 'bg-blue-400' : 'bg-teal-400'
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                  Container train operations after 20 years of deregulation
+                </h3>
+              </div>
+            </div>
+
+            {/* Card 2 - Insurance Growth */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
+              <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex space-x-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="w-8 h-16 bg-gray-400 rounded-sm opacity-70"></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                  Unlocking growth opportunities in India's insurance sector
+                </h3>
+              </div>
+            </div>
+
+            {/* Card 3 - Rural Banking */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
+              <div className="aspect-video bg-gradient-to-br from-blue-50 to-gray-100 relative overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-gray-300 rounded-full"></div>
+                    <div className="absolute top-4 left-4 w-8 h-8 bg-blue-400 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                  Perspectives on 'One State One RRB': Building a resilient and efficient rural banking system
+                </h3>
+              </div>
+            </div>
+
+            {/* Card 4 - Global Workforce Migration */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
+              <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 relative overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="grid grid-cols-6 gap-1 p-4">
+                    {Array.from({ length: 24 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full ${
+                          i % 4 === 0 ? 'bg-purple-400' : i % 4 === 1 ? 'bg-blue-400' : i % 4 === 2 ? 'bg-orange-400' : 'bg-teal-400'
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                  Making the case for global workforce migration
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Project Requisition Form Section */}
       <section className="bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
