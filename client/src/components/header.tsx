@@ -26,9 +26,14 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
               <PwCLogo size="md" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900 tracking-tight">
-                ET Labs - Ideas Hub
-              </h1>
+              <div className="flex flex-col">
+                <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none">
+                  ET Labs
+                </h1>
+                <p className="text-sm font-medium text-primary/80 tracking-wide leading-none mt-0.5">
+                  Ideas Hub
+                </p>
+              </div>
             </div>
           </div>
 
