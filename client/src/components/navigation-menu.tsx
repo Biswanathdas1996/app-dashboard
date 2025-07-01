@@ -18,11 +18,14 @@ interface NavigationMenuProps {
 }
 
 export function NavigationMenu({ onCategoryChange, currentCategory, currentSubcategory }: NavigationMenuProps) {
-  const { data: categories = [], isLoading } = useCategories();
+  const { data: allCategories = [], isLoading } = useCategories();
   const { data: allSubcategories = [] } = useSubcategories();
+  
+  // Filter to only show active categories
+  const categories = allCategories.filter((category: any) => category.isActive);
 
   const getCategorySubcategories = (categoryId: number) => {
-    return allSubcategories.filter((sub: any) => sub.categoryId === categoryId);
+    return allSubcategories.filter((sub: any) => sub.categoryId === categoryId && sub.isActive);
   };
 
   const handleCategorySelect = (categoryName: string, subcategoryName?: string) => {
