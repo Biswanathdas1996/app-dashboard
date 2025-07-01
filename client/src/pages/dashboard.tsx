@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppCard } from "@/components/app-card";
 import { ProjectRequisitionForm } from "@/components/project-requisition-form";
-import { useApps, useCategories } from "@/hooks/use-apps";
+import { useApps } from "@/hooks/use-apps";
+import { useCategories } from "@/hooks/use-categories";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
@@ -72,26 +73,7 @@ export default function Dashboard() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
       </div>
 
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary to-accent text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2 font-header">
-                Web Applications Directory
-              </h1>
-              <p className="text-xl opacity-90 font-body">
-                Discover and access your business applications
-              </p>
-            </div>
-            <div className="hidden sm:flex items-center space-x-4">
-              <Badge variant="secondary" className="text-lg px-4 py-2 bg-white/20 text-white border-white/30">
-                {apps?.length || 0} Applications
-              </Badge>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
