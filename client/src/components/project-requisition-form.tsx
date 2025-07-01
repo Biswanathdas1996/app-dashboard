@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { FileUpload } from "@/components/file-upload";
 import { useCreateRequisition } from "@/hooks/use-requisitions";
@@ -37,6 +38,7 @@ export function ProjectRequisitionForm() {
       category: "",
       expectedDelivery: "",
       attachments: [],
+      isPrivate: false,
     },
   });
 
@@ -253,6 +255,30 @@ export function ProjectRequisitionForm() {
                           />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Mark as Private Switch */}
+                  <FormField
+                    control={form.control}
+                    name="isPrivate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border border-gray-200 p-4 bg-gray-50/50">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-sm font-semibold text-gray-700">
+                            Mark as Private
+                          </FormLabel>
+                          <div className="text-xs text-gray-500">
+                            Private requests are only visible to administrators and the requester
+                          </div>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />

@@ -38,6 +38,7 @@ export const insertProjectRequisitionSchema = z.object({
   category: z.string().min(1, "Category is required"),
   expectedDelivery: z.string().optional(),
   attachments: z.array(z.string()).default([]),
+  isPrivate: z.boolean().default(false),
 });
 
 export const updateWebAppSchema = insertWebAppSchema.partial();
@@ -106,6 +107,7 @@ export type ProjectRequisition = {
   expectedDelivery?: string;
   attachments: string[];
   status: "pending" | "approved" | "rejected" | "in-progress" | "completed";
+  isPrivate: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 };
