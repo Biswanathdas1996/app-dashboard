@@ -111,11 +111,6 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
-- July 1, 2025: Implemented complete PwC branding guidelines across entire application
-- July 1, 2025: Updated color scheme to official PwC colors (#FD5108 primary, #2D2D2D dark, #FFF5ED light, #FFFFFF white)
-- July 1, 2025: Integrated PwC typography system (ITC Charter for headers, Helvetica Neue for body text)
-- July 1, 2025: Applied PwC design principles including generous white space, clean shadows, and restrained color usage
-- July 1, 2025: Enhanced landing page with authentic PwC content structure and professional styling
 - July 1, 2025: Added professional footer with PwC branding, links, and company information
 - July 1, 2025: Implemented flex layout to ensure footer stays at bottom of page
 - July 1, 2025: Created responsive footer with grid layout and proper typography
