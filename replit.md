@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Added view details modal accessible via eye icon button on each application card
+- July 1, 2025: Implemented comprehensive app details modal showing full description, documents, and launch link
+- July 1, 2025: Enhanced application cards with hover-revealed details button for better UX
 - July 1, 2025: Added document viewing functionality with clickable file attachments on application cards
 - July 1, 2025: Enhanced file upload component with improved UI, file type icons, and view/download capabilities
 - July 1, 2025: Implemented file viewing buttons on application cards with proper file type recognition and styling
