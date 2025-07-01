@@ -5,6 +5,7 @@ import { AppCard } from "@/components/app-card";
 import { useApps, useCategories } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
 
@@ -27,8 +28,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header onSearchChange={setSearch} searchValue={search} />
+      <div className="flex-1">
       
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-accent text-white">
@@ -177,6 +179,8 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+      </div>
+      <Footer />
     </div>
   );
 }
