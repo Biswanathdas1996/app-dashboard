@@ -3,6 +3,50 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertWebAppSchema, updateWebAppSchema } from "@shared/schema";
 import { z } from "zod";
+import multer from "multer";
+import path from "path";
+import fs from "fs/promises";
+
+// Configure multer for file uploads
+const uploadsDir = path.join(process.cwd(), 'uploads');
+
+// Ensure uploads directory exists
+async function ensureUploadsDirectory() {
+  try {
+    await fs.access(uploadsDir);
+  } catch {
+    await fs.mkdir(uploadsDir, { recursive: true });
+  }
+}
+
+const storage_multer = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    await ensureUploadsDirectory();
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const timestamp = Date.now();
+    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+    cb(null, `${timestamp}-${sanitizedName}`);
+  }
+});
+
+const upload = multer({ 
+  storage: storage_multer,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['.doc', '.docx', '.pdf', '.txt', '.rtf'];
+    const fileExt = path.extname(file.originalname).toLowerCase();
+    
+    if (allowedTypes.includes(fileExt)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only DOC, DOCX, PDF, TXT, RTF files are allowed.'));
+    }
+  }
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint for Kubernetes probes
@@ -118,6 +162,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  // File upload endpoint
+  app.post("/api/upload", upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      
+      res.json({
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size
+      });
+    } catch (error) {
+      res.status(500).json({ message: "File upload failed" });
+    }
+  });
+
+  // File download endpoint
+  app.get("/api/files/:filename", async (req, res) => {
+    try {
+      const filename = req.params.filename;
+      const filePath = path.join(uploadsDir, filename);
+      
+      // Check if file exists
+      await fs.access(filePath);
+      
+      // Get original filename for download
+      const parts = filename.split('-');
+      const originalName = parts.length > 1 ? parts.slice(1).join('-') : filename;
+      
+      res.download(filePath, originalName);
+    } catch (error) {
+      res.status(404).json({ message: "File not found" });
     }
   });
 

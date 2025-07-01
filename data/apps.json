@@ -2,16 +2,32 @@
   "users": [],
   "webApps": [
     {
-      "name": "Loacl LLM",
-      "description": "sbsdg h hs sgfh gsf hgfs j",
-      "url": "http://localhost:5000/",
+      "name": "Microsoft Azure",
+      "description": "<p>Exercitation dolor u.</p>",
+      "url": "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
+      "category": "development",
+      "subcategory": "Sit quas quidem ut d",
+      "icon": "fas fa-tasks",
+      "isActive": true,
+      "attachments": [
+        "1751353955611-Proposal_for_agentic_Dashboard.docx"
+      ],
+      "id": 2
+    },
+    {
+      "name": "PwC ET Labs",
+      "description": "<p>Blanditiis ducimus, .</p>",
+      "url": "https://www.pwc.com/us/en/about-us/newsroom/press-releases/brand-evolution-at-the-forefront-of-change.html",
       "category": "marketing",
-      "subcategory": "test",
+      "subcategory": "Ex enim totam quidem",
       "icon": "fas fa-dollar-sign",
       "isActive": true,
-      "id": 1
+      "attachments": [
+        "1751353955611-Proposal_for_agentic_Dashboard.docx"
+      ],
+      "id": 3
     }
   ],
   "nextUserId": 1,
-  "nextAppId": 2
+  "nextAppId": 4
 }

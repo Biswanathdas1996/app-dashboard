@@ -43,10 +43,11 @@ This is a full-stack web application directory that allows users to manage and a
 ### Data Models
 - **Users**: Basic user authentication system with username/password
 - **WebApps**: Core entity representing web applications with metadata including:
-  - Name, description, URL
+  - Name, rich text description, URL
   - Category and subcategory classification
   - Icon representation (Font Awesome classes)
   - Active status flag
+  - File attachments array (supports DOC, DOCX, PDF, TXT, RTF)
 
 ### API Endpoints
 - `GET /api/apps` - Retrieve all applications with optional search/filter parameters
@@ -54,6 +55,8 @@ This is a full-stack web application directory that allows users to manage and a
 - `POST /api/apps` - Create new application
 - `PATCH /api/apps/:id` - Update existing application
 - `DELETE /api/apps/:id` - Delete application
+- `POST /api/upload` - Upload file attachments (supports DOC, DOCX, PDF, TXT, RTF)
+- `GET /api/files/:filename` - Download uploaded files
 
 ### Frontend Pages
 - **Dashboard**: Main interface displaying application cards with search and filtering
@@ -81,6 +84,8 @@ Currently implements in-memory storage with file persistence for development. Th
 - **@radix-ui/***: Headless UI component library
 - **react-hook-form**: Form state management
 - **zod**: Schema validation
+- **@tiptap/react**: Rich text editor for descriptions
+- **multer**: File upload handling middleware
 
 ### Development Tools
 - **Vite**: Build tool and development server
@@ -106,7 +111,32 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
-- June 30, 2025. Initial setup
+- July 1, 2025: Added professional footer with PwC branding, links, and company information
+- July 1, 2025: Implemented flex layout to ensure footer stays at bottom of page
+- July 1, 2025: Created responsive footer with grid layout and proper typography
+- July 1, 2025: Redesigned app details modal with modern full-width layout and gradient header design
+- July 1, 2025: Enhanced modal with improved visual hierarchy, card-based sections, and better content organization
+- July 1, 2025: Added decorative elements and responsive grid layout for optimal viewing experience
+- July 1, 2025: Added view details modal accessible via eye icon button on each application card
+- July 1, 2025: Implemented comprehensive app details modal showing full description, documents, and launch link
+- July 1, 2025: Enhanced application cards with hover-revealed details button for better UX
+- July 1, 2025: Added document viewing functionality with clickable file attachments on application cards
+- July 1, 2025: Enhanced file upload component with improved UI, file type icons, and view/download capabilities
+- July 1, 2025: Implemented file viewing buttons on application cards with proper file type recognition and styling
+- July 1, 2025: Refined application cards to be more compact with improved space utilization and PwC brand alignment
+- July 1, 2025: Updated grid layout to display more cards per row (up to 5 columns on large screens) for better content density
+- July 1, 2025: Enhanced text truncation with line-clamp utilities and optimized typography for readability
+- July 1, 2025: Enhanced application filters with modern PwC-compliant design including gradient accents and improved form controls
+- July 1, 2025: Completely redesigned application cards with contemporary styling, hover effects, and enhanced visual hierarchy
+- July 1, 2025: Modernized empty state with gradient backgrounds, improved messaging, and branded styling
+- July 1, 2025: Updated UI to modern PwC branding with orange color scheme and removed sidebar
+- July 1, 2025: Implemented new header navigation with PwC logo and responsive design
+- July 1, 2025: Added gradient hero sections with PwC orange-to-dark orange styling
+- January 1, 2025: Added rich text editor for descriptions using TipTap
+- January 1, 2025: Added file upload functionality for DOC, DOCX, PDF, TXT, RTF files
+- January 1, 2025: Enhanced app cards to display rich text content and file attachment counts
+- January 1, 2025: Restricted app creation/editing to Admin Panel only
+- June 30, 2025: Initial setup
 
 ## User Preferences
 

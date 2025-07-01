@@ -8,6 +8,7 @@ import { AppModal } from "@/components/app-modal";
 import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Header } from "@/components/header";
 import type { WebApp } from "@shared/schema";
 
 const categoryColors = {
@@ -54,24 +55,54 @@ export default function Admin() {
   };
 
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200 px-8 py-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-800">Admin Panel</h2>
-            <p className="text-slate-600 mt-1">Manage your web applications</p>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-primary to-accent text-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                Admin Panel
+              </h1>
+              <p className="text-xl opacity-90">
+                Manage your web applications directory
+              </p>
+            </div>
+            <div className="hidden sm:block">
+              <Button 
+                onClick={() => setIsModalOpen(true)} 
+                size="lg"
+                className="bg-white text-primary hover:bg-gray-100 font-semibold"
+              >
+                <Plus className="mr-2 h-5 w-5" />
+                Add New App
+              </Button>
+            </div>
           </div>
-          <Button onClick={() => setIsModalOpen(true)} className="bg-emerald-600 hover:bg-emerald-700">
-            <Plus className="mr-2 h-4 w-4" />
-            Add New App
-          </Button>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
+              <p className="text-gray-600 mt-1">Manage your web application directory</p>
+            </div>
+            <div className="sm:hidden">
+              <Button 
+                onClick={() => setIsModalOpen(true)} 
+                size="sm"
+                className="bg-primary hover:bg-primary/90"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add App
+              </Button>
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
