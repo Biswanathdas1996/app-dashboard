@@ -3,28 +3,23 @@
   "categories": [
     {
       "id": 1,
-      "name": "Financial Services",
+      "name": "Financial",
       "isActive": true
     },
     {
       "id": 2,
-      "name": "Healthcare & Life Sciences",
+      "name": "Healthcare",
       "isActive": true
     },
     {
       "id": 3,
-      "name": "Government & Public Services",
+      "name": "Government",
       "isActive": true
     },
     {
       "id": 4,
-      "name": "Infrastructure & Real Estate",
+      "name": "Infrastructure",
       "isActive": true
-    },
-    {
-      "id": 7,
-      "name": "dfgdfh",
-      "isActive": false
     }
   ],
   "subcategories": [
@@ -140,5 +135,5 @@
   "nextUserId": 1,
   "nextCategoryId": 8,
   "nextSubcategoryId": 7,
-  "nextAppId": 6
+  "nextAppId": 7
 }

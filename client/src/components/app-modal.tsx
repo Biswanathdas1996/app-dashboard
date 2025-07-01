@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { insertWebAppSchema, type WebApp, type InsertWebApp } from "@shared/schema";
-import { useCreateApp, useUpdateApp, useCategories } from "@/hooks/use-apps";
+import { insertWebAppSchema, type WebApp, type InsertWebApp, type Category } from "@shared/schema";
+import { useCreateApp, useUpdateApp } from "@/hooks/use-apps";
+import { useCategories } from "@/hooks/use-categories";
 import { RichTextEditor } from "./rich-text-editor";
 import { FileUpload } from "./file-upload";
 
@@ -31,14 +32,7 @@ const iconOptions = [
   { value: "fas fa-palette", label: "Palette" },
 ];
 
-const categoryOptions = [
-  "productivity",
-  "development", 
-  "marketing",
-  "finance",
-  "design",
-  "analytics"
-];
+// Remove hard-coded categories - now using dynamic categories from API
 
 export function AppModal({ isOpen, onClose, app }: AppModalProps) {
   const { toast } = useToast();
@@ -91,6 +85,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
 
   const onSubmit = async (data: InsertWebApp) => {
     try {
+      console.log("Submitting app data:", data);
       if (app) {
         await updateApp.mutateAsync({ id: app.id, app: data });
         toast({
@@ -106,6 +101,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
       }
       onClose();
     } catch (error) {
+      console.error("App submission error:", error);
       toast({
         title: "Error",
         description: app ? "Failed to update app" : "Failed to create app",
@@ -196,9 +192,9 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categoryOptions.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                        {categoriesData?.map((category: Category) => (
+                          <SelectItem key={category.id} value={category.name}>
+                            {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -294,6 +290,10 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
               <Button 
                 type="submit" 
                 disabled={createApp.isPending || updateApp.isPending}
+                onClick={() => {
+                  console.log("Form validation errors:", form.formState.errors);
+                  console.log("Form values:", form.getValues());
+                }}
               >
                 {createApp.isPending || updateApp.isPending 
                   ? (app ? "Updating..." : "Creating...") 
