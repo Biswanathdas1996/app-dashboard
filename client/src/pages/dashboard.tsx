@@ -45,6 +45,33 @@ export default function Dashboard() {
         currentSubcategory={subcategory}
       />
       
+      {/* Welcome Banner */}
+      <div className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header">
+              Welcome to PwC Digital Hub
+            </h1>
+            <p className="text-xl md:text-2xl mb-6 opacity-95 font-body max-w-3xl mx-auto">
+              Your gateway to innovative business solutions and digital transformation tools
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 text-white border-white/30">
+                <FileText className="h-5 w-5 mr-2" />
+                {apps?.length || 0} Digital Solutions Available
+              </Badge>
+              <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 text-white border-white/30">
+                {categoriesData?.length || 0} Industry Categories
+              </Badge>
+            </div>
+          </div>
+        </div>
+        {/* Decorative Elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+      </div>
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-accent text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
