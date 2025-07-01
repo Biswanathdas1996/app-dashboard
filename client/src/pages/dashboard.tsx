@@ -11,6 +11,7 @@ import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
 import genaiImage from "@assets/genai-story_1751387441561.webp";
 import genaiDotsImage from "@assets/gen-ai-press-page-properties2_1751387545302.png";
+import genaiCircleImage from "@assets/generative-ai-page_1751387666221.webp";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -325,14 +326,16 @@ export default function Dashboard() {
         <div className="relative h-[200px] md:h-[220px] overflow-hidden bg-black">
           <div className="absolute inset-0">
             <img
-              src={genaiDotsImage}
+              src={genaiCircleImage}
               alt="GenAI Innovation"
               className="w-full h-full object-cover object-center"
             />
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black/40"></div>
           </div>
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-            <div className="text-white max-w-2xl">
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 mb-3 w-fit">
+            <div className="text-white max-w-2xl relative z-10">
+              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 mb-3 w-fit border border-white/20">
                 <svg
                   className="w-3 h-3"
                   fill="currentColor"
@@ -342,21 +345,21 @@ export default function Dashboard() {
                 </svg>
                 <span className="text-xs font-medium">Project Services</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold mb-3 drop-shadow-lg">
                 Ready to Start Your Project?
               </h2>
-              <p className="text-base md:text-lg mb-4 opacity-95 leading-relaxed">
+              <p className="text-base md:text-lg mb-4 leading-relaxed drop-shadow-md">
                 Submit your requirements and connect with our expert team to
                 bring your digital transformation ideas to life.
               </p>
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Fast Response
                 </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Expert Review
                 </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Tailored Solutions
                 </Badge>
               </div>
