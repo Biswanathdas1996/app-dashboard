@@ -1,5 +1,5 @@
 import { useLocation, Link } from "wouter";
-import { Search, Settings, FileText } from "lucide-react";
+import { Search, Settings } from "lucide-react";
 import { PwCLogo } from "./pwc-logo";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -57,18 +57,6 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
                 </div>
               </div>
             )}
-
-            {/* Project Requisition Link */}
-            <Link href="/app-dashboard/project-requisition">
-              <Button 
-                variant={location.includes("/project-requisition") ? "default" : "outline"}
-                size="sm"
-                className="font-semibold"
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                Request Project
-              </Button>
-            </Link>
 
             {/* Admin Link */}
             <Link href="/app-dashboard/admin">

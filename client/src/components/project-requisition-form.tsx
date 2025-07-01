@@ -61,21 +61,20 @@ export function ProjectRequisitionForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="shadow-xl border-0">
-            <CardHeader className="bg-gradient-to-r from-primary to-accent text-white p-8">
-              <CardTitle className="text-3xl font-bold font-header">
-                Project Requisition
-              </CardTitle>
-              <CardDescription className="text-white/90 text-lg">
-                Submit your project plan and requirements for review
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-8">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <div className="py-12">
+      <div className="max-w-4xl mx-auto">
+        <Card className="shadow-xl border-0">
+          <CardHeader className="bg-gradient-to-r from-primary to-accent text-white p-8">
+            <CardTitle className="text-3xl font-bold font-header">
+              Project Requisition
+            </CardTitle>
+            <CardDescription className="text-white/90 text-lg">
+              Submit your project plan and requirements for review
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-8">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                   {/* Basic Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -272,11 +271,10 @@ export function ProjectRequisitionForm() {
                       {isSubmitting ? "Submitting..." : "Submit Project Requisition"}
                     </Button>
                   </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

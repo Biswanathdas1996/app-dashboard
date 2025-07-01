@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppCard } from "@/components/app-card";
+import { ProjectRequisitionForm } from "@/components/project-requisition-form";
 import { useApps, useCategories } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
@@ -134,6 +135,13 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      {/* Project Requisition Form Section */}
+      <section className="bg-white border-t border-gray-200">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <ProjectRequisitionForm />
+        </div>
+      </section>
     </div>
   );
 }
