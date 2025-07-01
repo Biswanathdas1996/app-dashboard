@@ -320,7 +320,7 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[200px] md:h-[220px] overflow-hidden">
+        <div className="relative h-[200px] md:h-[370px] overflow-hidden">
           <div className="absolute inset-0">
             <img
               src={projectBannerImage}
@@ -364,8 +364,10 @@ export default function Dashboard() {
         </div>
 
         {/* Form Section */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <ProjectRequisitionForm />
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto">
+            <ProjectRequisitionForm />
+          </div>
         </div>
       </section>
     </div>

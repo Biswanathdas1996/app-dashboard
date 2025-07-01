@@ -61,22 +61,22 @@ export function ProjectRequisitionForm() {
   };
 
   return (
-    <div className="py-8">
-      <div className="max-w-4xl mx-auto">
-        <Card className="shadow-lg border border-white/50 bg-white/80 backdrop-blur-md">
-          <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6">
-            <CardTitle className="text-2xl font-bold font-header">
+    <div>
+      <div className="w-full">
+        <Card className="shadow-lg border border-gray-200 bg-white">
+          <CardHeader className="bg-gradient-to-r from-orange-600 to-orange-500 text-white p-4">
+            <CardTitle className="text-xl font-bold">
               Project Requisition
             </CardTitle>
-            <CardDescription className="text-white/90">
+            <CardDescription className="text-white/90 text-sm">
               Submit your project requirements for review
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-4">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   {/* Basic Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="title"
@@ -123,10 +123,36 @@ export function ProjectRequisitionForm() {
                         </FormItem>
                       )}
                     />
+
+                    <FormField
+                      control={form.control}
+                      name="priority"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">
+                            Priority *
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
+                                <SelectValue placeholder="Select priority" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="low">Low</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="high">High</SelectItem>
+                              <SelectItem value="urgent">Urgent</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
                   {/* Requester Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="requesterName"
@@ -163,35 +189,6 @@ export function ProjectRequisitionForm() {
                               {...field} 
                             />
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Priority and Expected Delivery */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="priority"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Priority *
-                          </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
-                                <SelectValue placeholder="Select priority" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="low">Low</SelectItem>
-                              <SelectItem value="medium">Medium</SelectItem>
-                              <SelectItem value="high">High</SelectItem>
-                              <SelectItem value="urgent">Urgent</SelectItem>
-                            </SelectContent>
-                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -261,11 +258,11 @@ export function ProjectRequisitionForm() {
                   />
 
                   {/* Submit Button */}
-                  <div className="flex justify-end pt-4">
+                  <div className="flex justify-end pt-2">
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 py-2 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                      className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white px-6 py-2 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
                     >
                       {isSubmitting ? "Submitting..." : "Submit Request"}
                     </Button>
