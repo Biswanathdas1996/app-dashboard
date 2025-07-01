@@ -29,18 +29,34 @@ export const insertWebAppSchema = z.object({
   attachments: z.array(z.string()).default([]),
 });
 
+export const insertProjectRequisitionSchema = z.object({
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  requesterName: z.string().min(1, "Requester name is required").max(100, "Name must be less than 100 characters"),
+  requesterEmail: z.string().email("Invalid email address"),
+  priority: z.enum(["low", "medium", "high", "urgent"]),
+  category: z.string().min(1, "Category is required"),
+  expectedDelivery: z.string().optional(),
+  attachments: z.array(z.string()).default([]),
+});
+
 export const updateWebAppSchema = insertWebAppSchema.partial();
 export const updateCategorySchema = insertCategorySchema.partial();
 export const updateSubcategorySchema = insertSubcategorySchema.partial();
+export const updateProjectRequisitionSchema = insertProjectRequisitionSchema.partial().extend({
+  status: z.enum(["pending", "approved", "rejected", "in-progress", "completed"]).optional(),
+});
 
 // TypeScript types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertSubcategory = z.infer<typeof insertSubcategorySchema>;
 export type InsertWebApp = z.infer<typeof insertWebAppSchema>;
+export type InsertProjectRequisition = z.infer<typeof insertProjectRequisitionSchema>;
 export type UpdateCategory = z.infer<typeof updateCategorySchema>;
 export type UpdateSubcategory = z.infer<typeof updateSubcategorySchema>;
 export type UpdateWebApp = z.infer<typeof updateWebAppSchema>;
+export type UpdateProjectRequisition = z.infer<typeof updateProjectRequisitionSchema>;
 
 export type User = {
   id: number;
@@ -75,6 +91,21 @@ export type WebApp = {
   icon: string;
   isActive: boolean;
   attachments: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type ProjectRequisition = {
+  id: number;
+  title: string;
+  description: string;
+  requesterName: string;
+  requesterEmail: string;
+  priority: "low" | "medium" | "high" | "urgent";
+  category: string;
+  expectedDelivery?: string;
+  attachments: string[];
+  status: "pending" | "approved" | "rejected" | "in-progress" | "completed";
   createdAt?: Date;
   updatedAt?: Date;
 };

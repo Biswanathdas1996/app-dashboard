@@ -1,4 +1,4 @@
-import { type User, type Category, type Subcategory, type WebApp, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp } from "@shared/schema";
+import { type User, type Category, type Subcategory, type WebApp, type ProjectRequisition, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type InsertProjectRequisition, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp, type UpdateProjectRequisition } from "@shared/schema";
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -41,6 +41,13 @@ export interface IStorage {
   updateWebApp(id: number, app: UpdateWebApp): Promise<WebApp | undefined>;
   deleteWebApp(id: number): Promise<boolean>;
   searchWebApps(query: string, category?: string, subcategory?: string): Promise<WebApp[]>;
+  
+  // Project Requisitions methods
+  getAllProjectRequisitions(): Promise<ProjectRequisition[]>;
+  getProjectRequisition(id: number): Promise<ProjectRequisition | undefined>;
+  createProjectRequisition(requisition: InsertProjectRequisition): Promise<ProjectRequisition>;
+  updateProjectRequisition(id: number, requisition: UpdateProjectRequisition): Promise<ProjectRequisition | undefined>;
+  deleteProjectRequisition(id: number): Promise<boolean>;
 }
 
 interface StorageData {
@@ -48,10 +55,12 @@ interface StorageData {
   categories: Category[];
   subcategories: Subcategory[];
   webApps: WebApp[];
+  projectRequisitions: ProjectRequisition[];
   nextUserId: number;
   nextCategoryId: number;
   nextSubcategoryId: number;
   nextAppId: number;
+  nextRequisitionId: number;
 }
 
 
@@ -61,20 +70,24 @@ export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
   private subcategories: Map<number, Subcategory>;
   private webApps: Map<number, WebApp>;
+  private projectRequisitions: Map<number, ProjectRequisition>;
   private currentUserId: number;
   private currentCategoryId: number;
   private currentSubcategoryId: number;
   private currentAppId: number;
+  private currentRequisitionId: number;
 
   constructor() {
     this.users = new Map();
     this.categories = new Map();
     this.subcategories = new Map();
     this.webApps = new Map();
+    this.projectRequisitions = new Map();
     this.currentUserId = 1;
     this.currentCategoryId = 1;
     this.currentSubcategoryId = 1;
     this.currentAppId = 1;
+    this.currentRequisitionId = 1;
     this.loadFromFile();
   }
 
@@ -99,6 +112,10 @@ export class MemStorage implements IStorage {
       // Load web apps
       storageData.webApps?.forEach(app => this.webApps.set(app.id, app));
       this.currentAppId = storageData.nextAppId || 1;
+      
+      // Load project requisitions
+      storageData.projectRequisitions?.forEach(requisition => this.projectRequisitions.set(requisition.id, requisition));
+      this.currentRequisitionId = storageData.nextRequisitionId || 1;
     } catch (error) {
       // File doesn't exist or is corrupted, start with empty data
       console.log('No existing data file found, starting with empty data');
@@ -113,10 +130,12 @@ export class MemStorage implements IStorage {
         categories: Array.from(this.categories.values()),
         subcategories: Array.from(this.subcategories.values()),
         webApps: Array.from(this.webApps.values()),
+        projectRequisitions: Array.from(this.projectRequisitions.values()),
         nextUserId: this.currentUserId,
         nextCategoryId: this.currentCategoryId,
         nextSubcategoryId: this.currentSubcategoryId,
         nextAppId: this.currentAppId,
+        nextRequisitionId: this.currentRequisitionId,
       };
       await fs.writeFile(DATA_FILE, JSON.stringify(storageData, null, 2));
     } catch (error) {
@@ -291,6 +310,53 @@ export class MemStorage implements IStorage {
       
       return matchesQuery && matchesCategory && matchesSubcategory;
     });
+  }
+
+  // Project Requisitions methods
+  async getAllProjectRequisitions(): Promise<ProjectRequisition[]> {
+    return Array.from(this.projectRequisitions.values());
+  }
+
+  async getProjectRequisition(id: number): Promise<ProjectRequisition | undefined> {
+    return this.projectRequisitions.get(id);
+  }
+
+  async createProjectRequisition(insertRequisition: InsertProjectRequisition): Promise<ProjectRequisition> {
+    const id = this.currentRequisitionId++;
+    const requisition: ProjectRequisition = { 
+      ...insertRequisition, 
+      id, 
+      status: "pending",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.projectRequisitions.set(id, requisition);
+    await this.saveToFile();
+    return requisition;
+  }
+
+  async updateProjectRequisition(id: number, updateRequisition: UpdateProjectRequisition): Promise<ProjectRequisition | undefined> {
+    const existingRequisition = this.projectRequisitions.get(id);
+    if (!existingRequisition) {
+      return undefined;
+    }
+
+    const updatedRequisition: ProjectRequisition = { 
+      ...existingRequisition, 
+      ...updateRequisition,
+      updatedAt: new Date()
+    };
+    this.projectRequisitions.set(id, updatedRequisition);
+    await this.saveToFile();
+    return updatedRequisition;
+  }
+
+  async deleteProjectRequisition(id: number): Promise<boolean> {
+    const deleted = this.projectRequisitions.delete(id);
+    if (deleted) {
+      await this.saveToFile();
+    }
+    return deleted;
   }
 }
 

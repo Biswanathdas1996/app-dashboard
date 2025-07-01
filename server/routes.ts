@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertWebAppSchema, updateWebAppSchema, insertCategorySchema, updateCategorySchema, insertSubcategorySchema, updateSubcategorySchema } from "@shared/schema";
+import { insertWebAppSchema, updateWebAppSchema, insertCategorySchema, updateCategorySchema, insertSubcategorySchema, updateSubcategorySchema, insertProjectRequisitionSchema, updateProjectRequisitionSchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -314,19 +314,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Project Requisition routes
+  app.get("/api/requisitions", async (req, res) => {
+    try {
+      const requisitions = await storage.getAllProjectRequisitions();
+      res.json(requisitions);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch requisitions" });
+    }
+  });
+
+  app.get("/api/requisitions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const requisition = await storage.getProjectRequisition(id);
+      
+      if (!requisition) {
+        return res.status(404).json({ message: "Requisition not found" });
+      }
+      
+      res.json(requisition);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch requisition" });
+    }
+  });
+
+  app.post("/api/requisitions", async (req, res) => {
+    try {
+      const validatedRequisition = insertProjectRequisitionSchema.parse(req.body);
+      const requisition = await storage.createProjectRequisition(validatedRequisition);
+      res.status(201).json(requisition);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid requisition data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create requisition" });
+    }
+  });
+
+  app.patch("/api/requisitions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedRequisition = updateProjectRequisitionSchema.parse(req.body);
+      const requisition = await storage.updateProjectRequisition(id, validatedRequisition);
+
+      if (!requisition) {
+        return res.status(404).json({ message: "Requisition not found" });
+      }
+
+      res.json(requisition);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid requisition data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update requisition" });
+    }
+  });
+
+  app.delete("/api/requisitions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteProjectRequisition(id);
+
+      if (!deleted) {
+        return res.status(404).json({ message: "Requisition not found" });
+      }
+
+      res.json({ message: "Requisition deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete requisition" });
+    }
+  });
+
   // Export all data endpoint
   app.get("/api/export", async (req, res) => {
     try {
-      const [apps, categories, subcategories] = await Promise.all([
+      const [apps, categories, subcategories, requisitions] = await Promise.all([
         storage.getAllWebApps(),
         storage.getAllCategories(),
-        storage.getAllSubcategories()
+        storage.getAllSubcategories(),
+        storage.getAllProjectRequisitions()
       ]);
 
       const exportData = {
         apps,
         categories,
         subcategories,
+        projectRequisitions: requisitions,
         exportDate: new Date().toISOString(),
         version: "1.0"
       };
@@ -400,12 +478,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      // Import project requisitions
+      let importedRequisitionsCount = 0;
+      if (importData.projectRequisitions) {
+        for (const requisition of importData.projectRequisitions) {
+          try {
+            await storage.createProjectRequisition({
+              title: requisition.title,
+              description: requisition.description,
+              requesterName: requisition.requesterName,
+              requesterEmail: requisition.requesterEmail,
+              priority: requisition.priority,
+              category: requisition.category,
+              expectedDelivery: requisition.expectedDelivery,
+              attachments: requisition.attachments || []
+            });
+            importedRequisitionsCount++;
+          } catch (error) {
+            // Requisition might already exist, skip
+          }
+        }
+      }
+
       res.json({ 
         message: "Import completed successfully",
         imported: {
           apps: importedAppsCount,
           categories: categoryIdMapping.size,
-          subcategories: subcategoryIdMapping.size
+          subcategories: subcategoryIdMapping.size,
+          requisitions: importedRequisitionsCount
         }
       });
     } catch (error) {

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { AppModal } from "@/components/app-modal";
 import { CategoryManagement } from "@/components/category-management";
+import { RequisitionManagement } from "@/components/requisition-management";
 import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -167,9 +168,10 @@ export default function Admin() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
           <Tabs defaultValue="applications" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="applications">Applications</TabsTrigger>
               <TabsTrigger value="categories">Categories</TabsTrigger>
+              <TabsTrigger value="requisitions">Project Requests</TabsTrigger>
             </TabsList>
 
             <TabsContent value="applications" className="space-y-6">
@@ -385,6 +387,10 @@ export default function Admin() {
 
             <TabsContent value="categories" className="space-y-6">
               <CategoryManagement />
+            </TabsContent>
+
+            <TabsContent value="requisitions" className="space-y-6">
+              <RequisitionManagement />
             </TabsContent>
           </Tabs>
         </div>
