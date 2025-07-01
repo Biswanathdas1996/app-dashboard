@@ -28,12 +28,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-pwc-light flex flex-col">
       <Header onSearchChange={setSearch} searchValue={search} />
       <div className="flex-1">
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary to-accent text-white">
+      <div className="bg-gradient-to-r from-pwc-orange to-pwc-dark text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex justify-between items-center">
             <div>

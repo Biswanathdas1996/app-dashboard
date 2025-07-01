@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=ITC+Charter:wght@400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 @tailwind base;
@@ -6,58 +7,58 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(222.2, 84%, 4.9%);
-  --muted: hsl(210, 40%, 98%);
-  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+  --background: hsl(0, 0%, 100%); /* #FFFFFF */
+  --foreground: hsl(0, 0%, 18%); /* #2D2D2D */
+  --muted: hsl(33, 100%, 97%); /* #FFF5ED */
+  --muted-foreground: hsl(0, 0%, 45%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(0, 0%, 18%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222.2, 84%, 4.9%);
-  --border: hsl(214.3, 31.8%, 91.4%);
-  --input: hsl(214.3, 31.8%, 91.4%);
-  --primary: hsl(18, 97%, 51%);
+  --card-foreground: hsl(0, 0%, 18%);
+  --border: hsl(33, 100%, 95%);
+  --input: hsl(33, 100%, 95%);
+  --primary: hsl(18, 97%, 51%); /* #FD5108 */
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --secondary: hsl(33, 100%, 97%); /* #FFF5ED */
+  --secondary-foreground: hsl(0, 0%, 18%);
   --accent: hsl(18, 85%, 45%);
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(18, 97%, 51%);
   --radius: 0.5rem;
-  --chart-1: hsl(12, 76%, 61%);
-  --chart-2: hsl(173, 58%, 39%);
-  --chart-3: hsl(197, 37%, 24%);
-  --chart-4: hsl(43, 74%, 66%);
-  --chart-5: hsl(27, 87%, 67%);
+  --chart-1: hsl(18, 97%, 51%);
+  --chart-2: hsl(0, 0%, 18%);
+  --chart-3: hsl(33, 100%, 97%);
+  --chart-4: hsl(0, 0%, 100%);
+  --chart-5: hsl(18, 85%, 45%);
 }
 
 .dark {
-  --background: hsl(222.2, 84%, 4.9%);
-  --foreground: hsl(210, 40%, 98%);
-  --muted: hsl(217.2, 32.6%, 17.5%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --popover: hsl(222.2, 84%, 4.9%);
-  --popover-foreground: hsl(210, 40%, 98%);
-  --card: hsl(222.2, 84%, 4.9%);
-  --card-foreground: hsl(210, 40%, 98%);
-  --border: hsl(217.2, 32.6%, 17.5%);
-  --input: hsl(217.2, 32.6%, 17.5%);
-  --primary: hsl(18, 97%, 51%);
-  --primary-foreground: hsl(0, 0%, 0%);
-  --secondary: hsl(217.2, 32.6%, 17.5%);
-  --secondary-foreground: hsl(210, 40%, 98%);
+  --background: hsl(0, 0%, 18%); /* #2D2D2D */
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(0, 0%, 25%);
+  --muted-foreground: hsl(0, 0%, 70%);
+  --popover: hsl(0, 0%, 18%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 18%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 30%);
+  --input: hsl(0, 0%, 30%);
+  --primary: hsl(18, 97%, 51%); /* #FD5108 */
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 25%);
+  --secondary-foreground: hsl(0, 0%, 100%);
   --accent: hsl(18, 85%, 45%);
-  --accent-foreground: hsl(210, 40%, 98%);
+  --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(210, 40%, 98%);
+  --destructive-foreground: hsl(0, 0%, 100%);
   --ring: hsl(18, 97%, 51%);
-  --chart-1: hsl(220, 70%, 50%);
-  --chart-2: hsl(160, 60%, 45%);
-  --chart-3: hsl(30, 80%, 55%);
-  --chart-4: hsl(280, 65%, 60%);
-  --chart-5: hsl(340, 75%, 55%);
+  --chart-1: hsl(18, 97%, 51%);
+  --chart-2: hsl(0, 0%, 100%);
+  --chart-3: hsl(0, 0%, 25%);
+  --chart-4: hsl(0, 0%, 18%);
+  --chart-5: hsl(18, 85%, 45%);
 }
 
 @layer base {
@@ -67,11 +68,80 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* PwC Font System */
+  .font-charter {
+    font-family: 'ITC Charter', Georgia, serif;
+  }
+  
+  .font-helvetica {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* Typography Scale - PwC Headers */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'ITC Charter', Georgia, serif;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+  
+  /* Body text uses Helvetica Neue */
+  p, span, div, li, td, th {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
 @layer utilities {
+  /* PwC Brand Typography */
+  .text-charter {
+    font-family: 'ITC Charter', Georgia, serif;
+  }
+  
+  .text-helvetica {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* PwC Brand Colors */
+  .text-pwc-orange {
+    color: #FD5108;
+  }
+  
+  .bg-pwc-orange {
+    background-color: #FD5108;
+  }
+  
+  .text-pwc-dark {
+    color: #2D2D2D;
+  }
+  
+  .bg-pwc-dark {
+    background-color: #2D2D2D;
+  }
+  
+  .bg-pwc-light {
+    background-color: #FFF5ED;
+  }
+  
+  /* PwC Brand Spacing - Generous White Space */
+  .pwc-section-spacing {
+    padding: 4rem 0;
+  }
+  
+  .pwc-container-spacing {
+    padding: 2rem 1rem;
+  }
+  
+  /* PwC Brand Shadows - Clean and Minimal */
+  .pwc-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .pwc-shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
   .line-clamp-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;
