@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Updated UI to modern PwC branding with orange color scheme and removed sidebar
+- July 1, 2025: Implemented new header navigation with PwC logo and responsive design
+- July 1, 2025: Added gradient hero sections with PwC orange-to-dark orange styling
 - January 1, 2025: Added rich text editor for descriptions using TipTap
 - January 1, 2025: Added file upload functionality for DOC, DOCX, PDF, TXT, RTF files
 - January 1, 2025: Enhanced app cards to display rich text content and file attachment counts

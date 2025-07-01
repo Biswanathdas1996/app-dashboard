@@ -33,7 +33,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 cursor-pointer group"
+      className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-primary/20 transition-all duration-200 cursor-pointer group"
       onClick={handleClick}
     >
       <div className="p-6">
@@ -42,7 +42,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
             <i className={`${app.icon} text-white text-lg`}></i>
           </div>
           <div className="ml-4 flex-1">
-            <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+            <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
               {app.name}
             </h3>
             <span className={`text-xs bg-${badgeClasses} px-2 py-1 rounded-full`}>
@@ -56,7 +56,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
         
         {app.attachments && app.attachments.length > 0 && (
           <div className="mb-4">
-            <div className="flex items-center space-x-1 text-xs text-slate-500">
+            <div className="flex items-center space-x-1 text-xs text-gray-500">
               <FileText className="h-3 w-3" />
               <span>{app.attachments.length} file{app.attachments.length !== 1 ? 's' : ''}</span>
             </div>
@@ -64,10 +64,10 @@ export function AppCard({ app, onClick }: AppCardProps) {
         )}
         
         <div className="flex items-center justify-between">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-gray-500">
             {app.subcategory}
           </span>
-          <ExternalLink className="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+          <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-primary transition-colors" />
         </div>
       </div>
     </div>
