@@ -73,7 +73,8 @@
       "isActive": true,
       "attachments": [],
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "rating": 3
     },
     {
       "id": 2,
@@ -87,7 +88,8 @@
       "isActive": true,
       "attachments": [],
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "rating": 4
     },
     {
       "id": 3,
@@ -101,7 +103,8 @@
       "isActive": true,
       "attachments": [],
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "rating": 4
     },
     {
       "id": 4,
@@ -115,7 +118,8 @@
       "isActive": true,
       "attachments": [],
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "rating": 3
     },
     {
       "id": 5,
@@ -129,7 +133,8 @@
       "isActive": true,
       "attachments": [],
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "rating": 4
     }
   ],
   "projectRequisitions": [

@@ -5,9 +5,28 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { FileUpload } from "@/components/file-upload";
@@ -78,181 +97,25 @@ export function ProjectRequisitionForm() {
           </CardHeader>
           <CardContent className="p-3">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                  {/* Basic Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Project Title *
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter project title"
-                              className="border-gray-300 focus:border-primary focus:ring-primary"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Category *
-                          </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
-                                <SelectValue placeholder="Select a category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {categories?.map((category) => (
-                                <SelectItem key={category.id} value={category.name}>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="priority"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Priority *
-                          </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
-                                <SelectValue placeholder="Select priority" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="low">Low</SelectItem>
-                              <SelectItem value="medium">Medium</SelectItem>
-                              <SelectItem value="high">High</SelectItem>
-                              <SelectItem value="urgent">Urgent</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Requester Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <FormField
-                      control={form.control}
-                      name="requesterName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Your Name *
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your full name"
-                              className="border-gray-300 focus:border-primary focus:ring-primary"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="requesterEmail"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Email Address *
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="email"
-                              placeholder="Enter your email address"
-                              className="border-gray-300 focus:border-primary focus:ring-primary"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Logo Upload */}
-                    <FormField
-                      control={form.control}
-                      name="logo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Project Logo (Optional)
-                          </FormLabel>
-                          <FormControl>
-                            <LogoUpload
-                              logo={field.value}
-                              onChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="expectedDelivery"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Expected Delivery
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="date"
-                              className="border-gray-300 focus:border-primary focus:ring-primary"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Project Description */}
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-3"
+              >
+                {/* Basic Information */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <FormField
                     control={form.control}
-                    name="description"
+                    name="title"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700">
-                          Project Description *
+                          Project Title *
                         </FormLabel>
                         <FormControl>
-                          <RichTextEditor
-                            content={field.value}
-                            onChange={field.onChange}
-                            placeholder="Describe your project requirements, objectives, and expected outcomes..."
+                          <Input
+                            placeholder="Enter project title"
+                            className="border-gray-300 focus:border-primary focus:ring-primary"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -260,20 +123,84 @@ export function ProjectRequisitionForm() {
                     )}
                   />
 
-                  {/* File Attachments */}
                   <FormField
                     control={form.control}
-                    name="attachments"
+                    name="category"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-semibold text-gray-700">
-                          Supporting Documents
+                          Industry *
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories?.map((category) => (
+                              <SelectItem
+                                key={category.id}
+                                value={category.name}
+                              >
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="priority"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Priority *
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
+                              <SelectValue placeholder="Select priority" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="low">Low</SelectItem>
+                            <SelectItem value="medium">Medium</SelectItem>
+                            <SelectItem value="high">High</SelectItem>
+                            <SelectItem value="urgent">Urgent</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Requester Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <FormField
+                    control={form.control}
+                    name="requesterName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Your Name *
                         </FormLabel>
                         <FormControl>
-                          <FileUpload
-                            files={field.value}
-                            onChange={field.onChange}
-                            maxFiles={10}
+                          <Input
+                            placeholder="Enter your full name"
+                            className="border-gray-300 focus:border-primary focus:ring-primary"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -281,40 +208,145 @@ export function ProjectRequisitionForm() {
                     )}
                   />
 
-                  {/* Mark as Private Switch */}
                   <FormField
                     control={form.control}
-                    name="isPrivate"
+                    name="requesterEmail"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border border-gray-200 p-4 bg-gray-50/50">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-sm font-semibold text-gray-700">
-                            Mark as Private
-                          </FormLabel>
-                          <div className="text-xs text-gray-500">
-                            Private requests are only visible to administrators and the requester
-                          </div>
+                      <FormItem>
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Email Address *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email address"
+                            className="border-gray-300 focus:border-primary focus:ring-primary"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Logo Upload */}
+                  <FormField
+                    control={form.control}
+                    name="logo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Project Logo (Optional)
+                        </FormLabel>
+                        <FormControl>
+                          <LogoUpload
+                            logo={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="expectedDelivery"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Expected Delivery
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            className="border-gray-300 focus:border-primary focus:ring-primary"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Project Description */}
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-semibold text-gray-700">
+                        Project Description *
+                      </FormLabel>
+                      <FormControl>
+                        <RichTextEditor
+                          content={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe your project requirements, objectives, and expected outcomes..."
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* File Attachments */}
+                <FormField
+                  control={form.control}
+                  name="attachments"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-semibold text-gray-700">
+                        Supporting Documents
+                      </FormLabel>
+                      <FormControl>
+                        <FileUpload
+                          files={field.value}
+                          onChange={field.onChange}
+                          maxFiles={10}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Mark as Private Switch */}
+                <FormField
+                  control={form.control}
+                  name="isPrivate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border border-gray-200 p-4 bg-gray-50/50">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-sm font-semibold text-gray-700">
+                          Mark as Private
+                        </FormLabel>
+                        <div className="text-xs text-gray-500">
+                          Private requests are only visible to administrators
+                          and the requester
                         </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
 
-                  {/* Submit Button */}
-                  <div className="flex justify-end pt-1">
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white px-5 py-1.5 font-semibold shadow-md hover:shadow-lg transition-all duration-200 text-sm"
-                    >
-                      {isSubmitting ? "Submitting..." : "Submit Request"}
-                    </Button>
-                  </div>
+                {/* Submit Button */}
+                <div className="flex justify-end pt-1">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white px-5 py-1.5 font-semibold shadow-md hover:shadow-lg transition-all duration-200 text-sm"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Request"}
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
