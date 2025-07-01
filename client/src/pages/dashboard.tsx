@@ -16,9 +16,9 @@ export default function Dashboard() {
   const [subcategory, setSubcategory] = useState("all");
 
   const { data: apps, isLoading } = useApps(
-    search, 
-    category === "all" ? "" : category, 
-    subcategory === "all" ? "" : subcategory
+    search,
+    category === "all" ? "" : category,
+    subcategory === "all" ? "" : subcategory,
   );
 
   const handleClearFilters = () => {
@@ -27,7 +27,10 @@ export default function Dashboard() {
     setSubcategory("all");
   };
 
-  const handleCategoryChange = (newCategory: string, newSubcategory?: string) => {
+  const handleCategoryChange = (
+    newCategory: string,
+    newSubcategory?: string,
+  ) => {
     setCategory(newCategory);
     if (newSubcategory) {
       setSubcategory(newSubcategory);
@@ -38,20 +41,20 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header 
-        onSearchChange={setSearch} 
+      <Header
+        onSearchChange={setSearch}
         searchValue={search}
         onCategoryChange={handleCategoryChange}
         currentCategory={category}
         currentSubcategory={subcategory}
       />
-      
+
       {/* Compact Professional Hero */}
       <div className="relative h-[350px] md:h-[450px] overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900">
         <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="Digital transformation" 
+          <img
+            src={heroImage}
+            alt="Digital transformation"
             className="w-full h-full object-cover object-center opacity-40 mix-blend-overlay"
           />
         </div>
@@ -59,8 +62,12 @@ export default function Dashboard() {
           <div className="text-white max-w-4xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M13 3v18M8 8h12M8 16h12"/>
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M13 3v18M8 8h12M8 16h12" />
                 </svg>
               </div>
               <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 font-medium">
@@ -68,17 +75,25 @@ export default function Dashboard() {
               </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header leading-tight">
-              Business <span className="text-orange-400">Innovation</span> Platform
+              Business <span className="text-orange-400">Innovation</span>{" "}
+              Platform
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-200 leading-relaxed max-w-3xl">
-              Access enterprise-grade applications and submit project requests through our centralized digital hub.
+              Access enterprise-grade applications and submit project requests
+              through our centralized digital hub.
             </p>
             <div className="flex flex-wrap items-center gap-4">
-              <Badge variant="outline" className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+              <Badge
+                variant="outline"
+                className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm"
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 {apps?.length || 0} Applications Available
               </Badge>
-              <Badge variant="outline" className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+              <Badge
+                variant="outline"
+                className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm"
+              >
                 Secure & Compliant
               </Badge>
             </div>
@@ -86,16 +101,18 @@ export default function Dashboard() {
         </div>
       </div>
 
-
-
       {/* Main Applications Section */}
       <main className="bg-gray-50/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Business Applications</h2>
-              <p className="text-gray-600">Access your enterprise tools and digital solutions</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Business Applications
+              </h2>
+              <p className="text-gray-600">
+                Access your enterprise tools and digital solutions
+              </p>
             </div>
             <div className="flex items-center gap-2 mt-4 sm:mt-0">
               <Badge variant="secondary" className="text-sm">
@@ -118,7 +135,10 @@ export default function Dashboard() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-sm transition-shadow">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-sm transition-shadow"
+                >
                   <div className="flex items-start gap-3 mb-4">
                     <Skeleton className="w-12 h-12 rounded-lg flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -137,10 +157,12 @@ export default function Dashboard() {
           ) : apps && apps.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {apps.map((app) => (
-                <AppCard 
-                  key={app.id} 
-                  app={app} 
-                  onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
+                <AppCard
+                  key={app.id}
+                  app={app}
+                  onClick={() =>
+                    window.open(app.url, "_blank", "noopener,noreferrer")
+                  }
                 />
               ))}
             </div>
@@ -152,9 +174,13 @@ export default function Dashboard() {
                 </div>
                 {search || category !== "all" || subcategory !== "all" ? (
                   <>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
-                    <p className="text-gray-600 mb-4">No applications match your current filters</p>
-                    <Button 
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No Results Found
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      No applications match your current filters
+                    </p>
+                    <Button
                       onClick={handleClearFilters}
                       className="bg-orange-500 hover:bg-orange-600 text-white"
                     >
@@ -163,8 +189,13 @@ export default function Dashboard() {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Applications</h3>
-                    <p className="text-gray-600">Applications will appear here once they're added through the Admin Panel</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No Applications
+                    </h3>
+                    <p className="text-gray-600">
+                      Applications will appear here once they're added through
+                      the Admin Panel
+                    </p>
                   </>
                 )}
               </div>
@@ -177,12 +208,15 @@ export default function Dashboard() {
       <section className="bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Industry Insights</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              Industry Insights
+            </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Stay informed with the latest trends, research, and thought leadership from PwC experts
+              Stay informed with the latest trends, research, and thought
+              leadership from PwC experts
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1 - Container Operations */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
@@ -194,7 +228,11 @@ export default function Dashboard() {
                       <div
                         key={i}
                         className={`w-4 h-4 rounded-sm ${
-                          i % 3 === 0 ? 'bg-orange-400' : i % 3 === 1 ? 'bg-blue-400' : 'bg-teal-400'
+                          i % 3 === 0
+                            ? "bg-orange-400"
+                            : i % 3 === 1
+                              ? "bg-blue-400"
+                              : "bg-teal-400"
                         }`}
                       ></div>
                     ))}
@@ -214,7 +252,10 @@ export default function Dashboard() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="flex space-x-2">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <div key={i} className="w-8 h-16 bg-gray-400 rounded-sm opacity-70"></div>
+                      <div
+                        key={i}
+                        className="w-8 h-16 bg-gray-400 rounded-sm opacity-70"
+                      ></div>
                     ))}
                   </div>
                 </div>
@@ -238,7 +279,8 @@ export default function Dashboard() {
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
-                  Perspectives on 'One State One RRB': Building a resilient and efficient rural banking system
+                  Perspectives on 'One State One RRB': Building a resilient and
+                  efficient rural banking system
                 </h3>
               </div>
             </div>
@@ -252,7 +294,13 @@ export default function Dashboard() {
                       <div
                         key={i}
                         className={`w-2 h-2 rounded-full ${
-                          i % 4 === 0 ? 'bg-purple-400' : i % 4 === 1 ? 'bg-blue-400' : i % 4 === 2 ? 'bg-orange-400' : 'bg-teal-400'
+                          i % 4 === 0
+                            ? "bg-purple-400"
+                            : i % 4 === 1
+                              ? "bg-blue-400"
+                              : i % 4 === 2
+                                ? "bg-orange-400"
+                                : "bg-teal-400"
                         }`}
                       ></div>
                     ))}
@@ -272,37 +320,42 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[280px] md:h-[320px] overflow-hidden">
+        <div className="relative h-[200px] md:h-[220px] overflow-hidden">
           <div className="absolute inset-0">
-            <img 
-              src={projectBannerImage} 
-              alt="Project innovation" 
+            <img
+              src={projectBannerImage}
+              alt="Project innovation"
               className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/75 via-orange-500/60 to-orange-400/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/75 via-orange-500/30 to-orange-400/5"></div>
           </div>
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-            <div className="text-white max-w-3xl text-center mx-auto">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            <div className="text-white max-w-2xl">
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 mb-3 w-fit">
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
-                <span className="text-sm font-medium">Project Services</span>
+                <span className="text-xs font-medium">Project Services</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 Ready to Start Your Project?
               </h2>
-              <p className="text-lg md:text-xl mb-6 opacity-95 leading-relaxed">
-                Submit your requirements and connect with our expert team to bring your digital transformation ideas to life.
+              <p className="text-base md:text-lg mb-4 opacity-95 leading-relaxed">
+                Submit your requirements and connect with our expert team to
+                bring your digital transformation ideas to life.
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Fast Response
                 </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Expert Review
                 </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
                   Tailored Solutions
                 </Badge>
               </div>
