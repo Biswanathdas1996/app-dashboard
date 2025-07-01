@@ -1,12 +1,6 @@
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
-import { eq, and, ilike, or } from "drizzle-orm";
 import { users, categories, subcategories, webApps, type User, type Category, type Subcategory, type WebApp, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp } from "@shared/schema";
 import fs from 'fs/promises';
 import path from 'path';
-
-const sql = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql);
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'apps.json');
 
@@ -51,145 +45,35 @@ export interface IStorage {
 
 interface StorageData {
   users: User[];
+  categories: Category[];
+  subcategories: Subcategory[];
   webApps: WebApp[];
   nextUserId: number;
+  nextCategoryId: number;
+  nextSubcategoryId: number;
   nextAppId: number;
 }
 
-export class DatabaseStorage implements IStorage {
-  // User methods
-  async getUser(id: number): Promise<User | undefined> {
-    const result = await db.select().from(users).where(eq(users.id, id));
-    return result[0];
-  }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const result = await db.select().from(users).where(eq(users.username, username));
-    return result[0];
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const result = await db.insert(users).values(insertUser).returning();
-    return result[0];
-  }
-
-  // Category methods
-  async getAllCategories(): Promise<Category[]> {
-    return await db.select().from(categories).where(eq(categories.isActive, true));
-  }
-
-  async getCategory(id: number): Promise<Category | undefined> {
-    const result = await db.select().from(categories).where(eq(categories.id, id));
-    return result[0];
-  }
-
-  async createCategory(category: InsertCategory): Promise<Category> {
-    const result = await db.insert(categories).values(category).returning();
-    return result[0];
-  }
-
-  async updateCategory(id: number, category: UpdateCategory): Promise<Category | undefined> {
-    const result = await db.update(categories).set(category).where(eq(categories.id, id)).returning();
-    return result[0];
-  }
-
-  async deleteCategory(id: number): Promise<boolean> {
-    const result = await db.update(categories).set({ isActive: false }).where(eq(categories.id, id));
-    return result.rowCount > 0;
-  }
-
-  // Subcategory methods
-  async getAllSubcategories(): Promise<Subcategory[]> {
-    return await db.select().from(subcategories).where(eq(subcategories.isActive, true));
-  }
-
-  async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
-    return await db.select().from(subcategories)
-      .where(and(eq(subcategories.categoryId, categoryId), eq(subcategories.isActive, true)));
-  }
-
-  async getSubcategory(id: number): Promise<Subcategory | undefined> {
-    const result = await db.select().from(subcategories).where(eq(subcategories.id, id));
-    return result[0];
-  }
-
-  async createSubcategory(subcategory: InsertSubcategory): Promise<Subcategory> {
-    const result = await db.insert(subcategories).values(subcategory).returning();
-    return result[0];
-  }
-
-  async updateSubcategory(id: number, subcategory: UpdateSubcategory): Promise<Subcategory | undefined> {
-    const result = await db.update(subcategories).set(subcategory).where(eq(subcategories.id, id)).returning();
-    return result[0];
-  }
-
-  async deleteSubcategory(id: number): Promise<boolean> {
-    const result = await db.update(subcategories).set({ isActive: false }).where(eq(subcategories.id, id));
-    return result.rowCount > 0;
-  }
-
-  // Web Apps methods
-  async getAllWebApps(): Promise<WebApp[]> {
-    return await db.select().from(webApps).where(eq(webApps.isActive, true));
-  }
-
-  async getWebApp(id: number): Promise<WebApp | undefined> {
-    const result = await db.select().from(webApps).where(eq(webApps.id, id));
-    return result[0];
-  }
-
-  async createWebApp(app: InsertWebApp): Promise<WebApp> {
-    const result = await db.insert(webApps).values(app).returning();
-    return result[0];
-  }
-
-  async updateWebApp(id: number, app: UpdateWebApp): Promise<WebApp | undefined> {
-    const result = await db.update(webApps).set(app).where(eq(webApps.id, id)).returning();
-    return result[0];
-  }
-
-  async deleteWebApp(id: number): Promise<boolean> {
-    const result = await db.update(webApps).set({ isActive: false }).where(eq(webApps.id, id));
-    return result.rowCount > 0;
-  }
-
-  async searchWebApps(query: string, category?: string, subcategory?: string): Promise<WebApp[]> {
-    let dbQuery = db.select().from(webApps).$dynamic();
-    
-    const conditions = [eq(webApps.isActive, true)];
-    
-    if (query) {
-      conditions.push(
-        or(
-          ilike(webApps.name, `%${query}%`),
-          ilike(webApps.description, `%${query}%`),
-          ilike(webApps.shortDescription, `%${query}%`)
-        )!
-      );
-    }
-    
-    if (category) {
-      conditions.push(eq(webApps.category, category));
-    }
-    
-    if (subcategory) {
-      conditions.push(eq(webApps.subcategory, subcategory));
-    }
-    
-    return await dbQuery.where(and(...conditions));
-  }
-}
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
+  private categories: Map<number, Category>;
+  private subcategories: Map<number, Subcategory>;
   private webApps: Map<number, WebApp>;
   private currentUserId: number;
+  private currentCategoryId: number;
+  private currentSubcategoryId: number;
   private currentAppId: number;
 
   constructor() {
     this.users = new Map();
+    this.categories = new Map();
+    this.subcategories = new Map();
     this.webApps = new Map();
     this.currentUserId = 1;
+    this.currentCategoryId = 1;
+    this.currentSubcategoryId = 1;
     this.currentAppId = 1;
     this.loadFromFile();
   }
@@ -201,15 +85,24 @@ export class MemStorage implements IStorage {
       const storageData: StorageData = JSON.parse(data);
       
       // Load users
-      storageData.users.forEach(user => this.users.set(user.id, user));
+      storageData.users?.forEach(user => this.users.set(user.id, user));
       this.currentUserId = storageData.nextUserId || 1;
       
+      // Load categories
+      storageData.categories?.forEach(category => this.categories.set(category.id, category));
+      this.currentCategoryId = storageData.nextCategoryId || 1;
+      
+      // Load subcategories
+      storageData.subcategories?.forEach(subcategory => this.subcategories.set(subcategory.id, subcategory));
+      this.currentSubcategoryId = storageData.nextSubcategoryId || 1;
+      
       // Load web apps
-      storageData.webApps.forEach(app => this.webApps.set(app.id, app));
+      storageData.webApps?.forEach(app => this.webApps.set(app.id, app));
       this.currentAppId = storageData.nextAppId || 1;
     } catch (error) {
-      // File doesn't exist or is corrupted, start with empty data
-      console.log('No existing data file found, starting with empty storage');
+      // File doesn't exist or is corrupted, start with default data
+      console.log('No existing data file found, initializing with default categories');
+      await this.initializeDefaultCategories();
     }
   }
 
@@ -218,14 +111,61 @@ export class MemStorage implements IStorage {
       await ensureDataDirectory();
       const storageData: StorageData = {
         users: Array.from(this.users.values()),
+        categories: Array.from(this.categories.values()),
+        subcategories: Array.from(this.subcategories.values()),
         webApps: Array.from(this.webApps.values()),
         nextUserId: this.currentUserId,
+        nextCategoryId: this.currentCategoryId,
+        nextSubcategoryId: this.currentSubcategoryId,
         nextAppId: this.currentAppId,
       };
       await fs.writeFile(DATA_FILE, JSON.stringify(storageData, null, 2));
     } catch (error) {
       console.error('Failed to save data to file:', error);
     }
+  }
+
+  private async initializeDefaultCategories() {
+    // Initialize default categories and subcategories
+    const defaultCategories = [
+      { name: "Financial Services", isActive: true },
+      { name: "Healthcare & Life Sciences", isActive: true },
+      { name: "Telecommunications", isActive: true },
+      { name: "Government & Public Services", isActive: true },
+      { name: "Infrastructure & Real Estate", isActive: true }
+    ];
+
+    const defaultSubcategories = [
+      // Financial Services
+      { name: "Banking & Lending", categoryId: 1, isActive: true },
+      { name: "Insurance", categoryId: 1, isActive: true },
+      { name: "Capital Markets", categoryId: 1, isActive: true },
+      { name: "Non-Banking Financial Companies (NBFCs) & FinTech", categoryId: 1, isActive: true },
+      { name: "Payments & Financial Infrastructure", categoryId: 1, isActive: true },
+      { name: "Regulatory, Risk & Compliance", categoryId: 1, isActive: true },
+      
+      // Healthcare & Life Sciences
+      { name: "Pharmaceuticals & Therapeutics", categoryId: 2, isActive: true },
+      { name: "Biotechnology & Genomics", categoryId: 2, isActive: true },
+      { name: "Healthcare Providers & Systems", categoryId: 2, isActive: true },
+      { name: "Medical Devices & Diagnostics", categoryId: 2, isActive: true }
+    ];
+
+    // Add categories
+    for (const category of defaultCategories) {
+      const id = this.currentCategoryId++;
+      const newCategory: Category = { ...category, id };
+      this.categories.set(id, newCategory);
+    }
+
+    // Add subcategories
+    for (const subcategory of defaultSubcategories) {
+      const id = this.currentSubcategoryId++;
+      const newSubcategory: Subcategory = { ...subcategory, id };
+      this.subcategories.set(id, newSubcategory);
+    }
+
+    await this.saveToFile();
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -244,6 +184,96 @@ export class MemStorage implements IStorage {
     this.users.set(id, user);
     await this.saveToFile();
     return user;
+  }
+
+  // Category methods
+  async getAllCategories(): Promise<Category[]> {
+    return Array.from(this.categories.values()).filter(category => category.isActive);
+  }
+
+  async getCategory(id: number): Promise<Category | undefined> {
+    return this.categories.get(id);
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const id = this.currentCategoryId++;
+    const newCategory: Category = { 
+      id, 
+      name: category.name, 
+      isActive: category.isActive ?? true 
+    };
+    this.categories.set(id, newCategory);
+    await this.saveToFile();
+    return newCategory;
+  }
+
+  async updateCategory(id: number, category: UpdateCategory): Promise<Category | undefined> {
+    const existingCategory = this.categories.get(id);
+    if (!existingCategory) return undefined;
+    
+    const updatedCategory: Category = { ...existingCategory, ...category };
+    this.categories.set(id, updatedCategory);
+    await this.saveToFile();
+    return updatedCategory;
+  }
+
+  async deleteCategory(id: number): Promise<boolean> {
+    const category = this.categories.get(id);
+    if (!category) return false;
+    
+    // Soft delete by setting isActive to false
+    category.isActive = false;
+    this.categories.set(id, category);
+    await this.saveToFile();
+    return true;
+  }
+
+  // Subcategory methods
+  async getAllSubcategories(): Promise<Subcategory[]> {
+    return Array.from(this.subcategories.values()).filter(subcategory => subcategory.isActive);
+  }
+
+  async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
+    return Array.from(this.subcategories.values())
+      .filter(subcategory => subcategory.categoryId === categoryId && subcategory.isActive);
+  }
+
+  async getSubcategory(id: number): Promise<Subcategory | undefined> {
+    return this.subcategories.get(id);
+  }
+
+  async createSubcategory(subcategory: InsertSubcategory): Promise<Subcategory> {
+    const id = this.currentSubcategoryId++;
+    const newSubcategory: Subcategory = { 
+      id, 
+      name: subcategory.name, 
+      categoryId: subcategory.categoryId,
+      isActive: subcategory.isActive ?? true 
+    };
+    this.subcategories.set(id, newSubcategory);
+    await this.saveToFile();
+    return newSubcategory;
+  }
+
+  async updateSubcategory(id: number, subcategory: UpdateSubcategory): Promise<Subcategory | undefined> {
+    const existingSubcategory = this.subcategories.get(id);
+    if (!existingSubcategory) return undefined;
+    
+    const updatedSubcategory: Subcategory = { ...existingSubcategory, ...subcategory };
+    this.subcategories.set(id, updatedSubcategory);
+    await this.saveToFile();
+    return updatedSubcategory;
+  }
+
+  async deleteSubcategory(id: number): Promise<boolean> {
+    const subcategory = this.subcategories.get(id);
+    if (!subcategory) return false;
+    
+    // Soft delete by setting isActive to false
+    subcategory.isActive = false;
+    this.subcategories.set(id, subcategory);
+    await this.saveToFile();
+    return true;
   }
 
   async getAllWebApps(): Promise<WebApp[]> {

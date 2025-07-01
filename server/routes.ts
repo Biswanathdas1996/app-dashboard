@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertWebAppSchema, updateWebAppSchema } from "@shared/schema";
+import { insertWebAppSchema, updateWebAppSchema, insertCategorySchema, updateCategorySchema, insertSubcategorySchema, updateSubcategorySchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -149,19 +149,132 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get available categories and subcategories
+  // Category routes
   app.get("/api/categories", async (req, res) => {
     try {
-      const apps = await storage.getAllWebApps();
-      const categories = new Set(apps.map((app) => app.category));
-      const subcategories = new Set(apps.map((app) => app.subcategory));
-
-      res.json({
-        categories: Array.from(categories).sort(),
-        subcategories: Array.from(subcategories).sort(),
-      });
+      const categories = await storage.getAllCategories();
+      res.json(categories);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  app.post("/api/categories", async (req, res) => {
+    try {
+      const validatedCategory = insertCategorySchema.parse(req.body);
+      const category = await storage.createCategory(validatedCategory);
+      res.status(201).json(category);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid category data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create category" });
+    }
+  });
+
+  app.patch("/api/categories/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedCategory = updateCategorySchema.parse(req.body);
+      const category = await storage.updateCategory(id, validatedCategory);
+
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+
+      res.json(category);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid category data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.delete("/api/categories/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteCategory(id);
+
+      if (!deleted) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+
+      res.json({ message: "Category deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete category" });
+    }
+  });
+
+  // Subcategory routes
+  app.get("/api/subcategories", async (req, res) => {
+    try {
+      const { categoryId } = req.query;
+      
+      if (categoryId) {
+        const subcategories = await storage.getSubcategoriesByCategory(parseInt(categoryId as string));
+        res.json(subcategories);
+      } else {
+        const subcategories = await storage.getAllSubcategories();
+        res.json(subcategories);
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch subcategories" });
+    }
+  });
+
+  app.post("/api/subcategories", async (req, res) => {
+    try {
+      const validatedSubcategory = insertSubcategorySchema.parse(req.body);
+      const subcategory = await storage.createSubcategory(validatedSubcategory);
+      res.status(201).json(subcategory);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid subcategory data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create subcategory" });
+    }
+  });
+
+  app.patch("/api/subcategories/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedSubcategory = updateSubcategorySchema.parse(req.body);
+      const subcategory = await storage.updateSubcategory(id, validatedSubcategory);
+
+      if (!subcategory) {
+        return res.status(404).json({ message: "Subcategory not found" });
+      }
+
+      res.json(subcategory);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid subcategory data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update subcategory" });
+    }
+  });
+
+  app.delete("/api/subcategories/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteSubcategory(id);
+
+      if (!deleted) {
+        return res.status(404).json({ message: "Subcategory not found" });
+      }
+
+      res.json({ message: "Subcategory deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete subcategory" });
     }
   });
 

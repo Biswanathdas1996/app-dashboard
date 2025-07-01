@@ -3,8 +3,10 @@ import { Plus, Edit, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { AppModal } from "@/components/app-modal";
+import { CategoryManagement } from "@/components/category-management";
 import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -87,22 +89,29 @@ export default function Admin() {
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
-              <p className="text-gray-600 mt-1">Manage your web application directory</p>
-            </div>
-            <div className="sm:hidden">
-              <Button 
-                onClick={() => setIsModalOpen(true)} 
-                size="sm"
-                className="bg-primary hover:bg-primary/90"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add App
-              </Button>
-            </div>
-          </div>
+          <Tabs defaultValue="applications" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="applications">Applications</TabsTrigger>
+              <TabsTrigger value="categories">Categories</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="applications" className="space-y-6">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
+                  <p className="text-gray-600 mt-1">Manage your web application directory</p>
+                </div>
+                <div className="sm:hidden">
+                  <Button 
+                    onClick={() => setIsModalOpen(true)} 
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add App
+                  </Button>
+                </div>
+              </div>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -240,6 +249,12 @@ export default function Admin() {
               </TableBody>
             </Table>
           </div>
+            </TabsContent>
+
+            <TabsContent value="categories" className="space-y-6">
+              <CategoryManagement />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
 

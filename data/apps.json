@@ -1,5 +1,36 @@
 {
   "users": [],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Financial Services",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Healthcare & Life Sciences",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Telecommunications",
+      "isActive": true
+    }
+  ],
+  "subcategories": [
+    {
+      "id": 1,
+      "name": "Banking & Lending",
+      "categoryId": 1,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Insurance",
+      "categoryId": 1,
+      "isActive": true
+    }
+  ],
   "webApps": [
     {
       "name": "Microsoft Azure",
@@ -29,5 +60,7 @@
     }
   ],
   "nextUserId": 1,
+  "nextCategoryId": 4,
+  "nextSubcategoryId": 3,
   "nextAppId": 4
 }
