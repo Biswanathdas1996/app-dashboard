@@ -11,7 +11,7 @@ export function Footer() {
               <PwCLogo size="md" className="text-white" />
               <div>
                 <h3 className="text-xl font-bold text-white font-header">
-                  Application Portfolio
+                  ET Labs Ideas Hub
                 </h3>
                 <p className="text-gray-400 text-sm font-body">
                   Powered by PwC Innovation
@@ -51,7 +51,9 @@ export function Footer() {
 
           {/* Support & Resources */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4 font-header">Support</h4>
+            <h4 className="text-lg font-semibold text-white mb-4 font-header">
+              Support
+            </h4>
             <ul className="space-y-3">
               <li>
                 <span className="text-gray-300">Help Center</span>

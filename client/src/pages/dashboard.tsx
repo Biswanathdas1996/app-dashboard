@@ -70,8 +70,7 @@ export default function Dashboard() {
               <span className="block sm:inline">Rapid GTM</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-4 leading-relaxed max-w-full lg:max-w-3xl drop-shadow-md">
-              Access enterprise-grade applications and submit project requests
-              through our centralized digital hub.
+              Acting as a bridge between ideas and tangible working prototypes.
             </p>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <Badge
@@ -317,7 +316,7 @@ export default function Dashboard() {
       </section>
 
       {/* Project Requisition Section */}
-      <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
+      <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
         <div className="relative h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] overflow-hidden bg-black">
           <div className="absolute inset-0">

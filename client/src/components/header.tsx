@@ -74,9 +74,16 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
               size="sm"
               className="font-semibold"
               onClick={() => {
+                console.log('New Request button clicked'); // Debug log
                 const requisitionSection = document.getElementById('project-requisition');
+                console.log('Found section:', requisitionSection); // Debug log
                 if (requisitionSection) {
-                  requisitionSection.scrollIntoView({ behavior: 'smooth' });
+                  requisitionSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                } else {
+                  console.error('Project requisition section not found');
                 }
               }}
             >
