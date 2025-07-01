@@ -8,13 +8,13 @@
     },
     {
       "id": 2,
-      "name": "Healthcare & Life Sciences",
+      "name": "Healthcare",
       "isActive": true
     },
     {
       "id": 3,
       "name": "Telecommunications",
-      "isActive": true
+      "isActive": false
     },
     {
       "id": 4,
@@ -62,9 +62,7 @@
       "subcategory": "Sit quas quidem ut d",
       "icon": "fas fa-tasks",
       "isActive": true,
-      "attachments": [
-        "1751353955611-Proposal_for_agentic_Dashboard.docx"
-      ],
+      "attachments": ["1751353955611-Proposal_for_agentic_Dashboard.docx"],
       "id": 2
     },
     {
@@ -75,9 +73,7 @@
       "subcategory": "Ex enim totam quidem",
       "icon": "fas fa-dollar-sign",
       "isActive": true,
-      "attachments": [
-        "1751353955611-Proposal_for_agentic_Dashboard.docx"
-      ],
+      "attachments": ["1751353955611-Proposal_for_agentic_Dashboard.docx"],
       "id": 3
     }
   ],
