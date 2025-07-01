@@ -15,21 +15,26 @@ export function Header({ onSearchChange, searchValue }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
+          {/* Logo and Navigation */}
           <div className="flex items-center space-x-6">
-            <div className="transition-transform hover:scale-105 duration-200">
+            <a href="/" className="transition-transform hover:scale-105 duration-200">
               <PwCLogo size="md" />
-            </div>
+            </a>
             <div className="hidden md:block">
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-xl font-bold text-pwc-dark tracking-tight text-charter">
                   Web Application Directory
                 </h1>
-                <p className="text-sm text-gray-500 font-medium">
+                <p className="text-sm text-pwc-dark/70 font-medium text-helvetica">
                   Powered by PwC
                 </p>
               </div>
             </div>
+            <nav className="hidden lg:flex items-center space-x-6 ml-8">
+              <a href="/" className="text-sm font-medium text-gray-600 hover:text-pwc-orange transition-colors text-helvetica">Home</a>
+              <a href="/dashboard" className="text-sm font-medium text-pwc-orange hover:text-pwc-dark transition-colors text-helvetica font-semibold">Applications</a>
+              <a href="/admin" className="text-sm font-medium text-gray-600 hover:text-pwc-orange transition-colors text-helvetica">Admin</a>
+            </nav>
           </div>
 
 

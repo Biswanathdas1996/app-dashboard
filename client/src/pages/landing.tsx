@@ -15,6 +15,7 @@ export default function Landing() {
             <div className="flex items-center space-x-8">
               <PwCLogo size="sm" />
               <nav className="hidden md:flex space-x-8">
+                <a href="/dashboard" className="text-sm font-medium text-pwc-orange hover:text-pwc-dark transition-colors font-semibold">Applications</a>
                 <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Industries</a>
                 <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Services</a>
                 <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Research and Insights</a>
@@ -47,8 +48,8 @@ export default function Landing() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-pwc-orange hover:bg-pwc-orange/90 text-white px-8 py-3 text-helvetica font-semibold">
-                  Get Started
+                <Button size="lg" className="bg-pwc-orange hover:bg-pwc-orange/90 text-white px-8 py-3 text-helvetica font-semibold" onClick={() => window.location.href = '/dashboard'}>
+                  View Applications
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="lg" className="px-8 py-3 text-helvetica font-semibold border-pwc-orange text-pwc-orange hover:bg-pwc-orange hover:text-white">
