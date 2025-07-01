@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
+import genaiImage from "@assets/genai-story_1751387441561.webp";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -50,49 +51,49 @@ export default function Dashboard() {
       />
 
       {/* Compact Professional Hero */}
-      <div className="relative h-[350px] md:h-[450px] overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900">
+      <div className="relative h-[280px] md:h-[320px] overflow-hidden bg-black">
         <div className="absolute inset-0">
           <img
-            src={heroImage}
-            alt="Digital transformation"
-            className="w-full h-full object-cover object-center opacity-40 mix-blend-overlay"
+            src={genaiImage}
+            alt="GenAI Innovation"
+            className="w-full h-full object-cover object-center"
           />
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <div className="text-white max-w-4xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                 <svg
-                  className="w-6 h-6 text-white"
+                  className="w-5 h-5 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path d="M13 3v18M8 8h12M8 16h12" />
                 </svg>
               </div>
-              <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 font-medium">
+              <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 font-medium text-sm">
                 Digital Solutions Hub
               </Badge>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 font-header leading-tight">
               Business <span className="text-orange-400">Innovation</span>{" "}
               Platform
             </h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-200 leading-relaxed max-w-3xl">
+            <p className="text-lg md:text-xl mb-4 text-gray-200 leading-relaxed max-w-3xl">
               Access enterprise-grade applications and submit project requests
               through our centralized digital hub.
             </p>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               <Badge
                 variant="outline"
-                className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm"
+                className="bg-white/10 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-sm"
               >
-                <FileText className="h-4 w-4 mr-2" />
+                <FileText className="h-3 w-3 mr-2" />
                 {apps?.length || 0} Applications Available
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm"
+                className="bg-white/10 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-sm"
               >
                 Secure & Compliant
               </Badge>
@@ -320,7 +321,7 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[200px] md:h-[370px] overflow-hidden">
+        <div className="relative h-[300px] md:h-[370px] overflow-hidden">
           <div className="absolute inset-0">
             <img
               src={projectBannerImage}
@@ -364,10 +365,8 @@ export default function Dashboard() {
         </div>
 
         {/* Form Section */}
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-          <div className="max-w-7xl mx-auto">
-            <ProjectRequisitionForm />
-          </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ProjectRequisitionForm />
         </div>
       </section>
     </div>
