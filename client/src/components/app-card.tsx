@@ -47,127 +47,138 @@ export function AppCard({ app, onClick }: AppCardProps) {
   };
 
   return (
-    <div 
-      className="group relative bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-200/40 hover:shadow-xl hover:shadow-primary/8 hover:border-primary/25 hover:-translate-y-0.5 transition-all duration-250 cursor-pointer overflow-hidden"
-      onClick={handleClick}
-    >
-      {/* Subtle gradient accent */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-250"></div>
-      
-      <div className="relative p-6">
-        {/* Compact header */}
-        <div className="flex items-center mb-4">
-          <div className={`relative w-12 h-12 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200`}>
-            <i className={`${app.icon} text-white text-lg`}></i>
-          </div>
-          <div className="ml-4 flex-1 min-w-0">
-            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1 font-header">
-              {app.name}
-            </h3>
-            <Badge 
-              variant="secondary" 
-              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2.5 py-0.5 rounded-lg hover:scale-105 transition-transform duration-150`}
-            >
-              {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
-            </Badge>
-          </div>
-        </div>
+    <>
+      <div 
+        className="group relative bg-white rounded-2xl shadow-sm border border-gray-200/60 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+        onClick={handleClick}
+      >
+        {/* Modern gradient border on hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
         
-        {/* Compact description */}
-        <div className="mb-4">
-          {app.shortDescription ? (
-            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-              {app.shortDescription}
-            </p>
-          ) : (
-            <RichTextViewer 
-              content={app.description || ""} 
-              maxLines={2} 
-              className="text-gray-600 text-sm leading-relaxed"
-            />
-          )}
-        </div>
-        
-        {/* File attachments */}
-        {app.attachments && app.attachments.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-2">
-              {app.attachments.slice(0, 2).map((filename, index) => {
-                const originalName = filename.split('-').slice(1).join('-') || filename;
-                const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
-                
-                const getFileIcon = () => {
-                  switch (fileExtension) {
-                    case 'pdf':
-                      return <FileText className="h-3 w-3 text-red-500" />;
-                    case 'doc':
-                    case 'docx':
-                      return <FileText className="h-3 w-3 text-blue-500" />;
-                    case 'txt':
-                    case 'rtf':
-                      return <FileText className="h-3 w-3 text-gray-500" />;
-                    default:
-                      return <FileText className="h-3 w-3 text-blue-500" />;
-                  }
-                };
-                
-                return (
-                  <button
-                    key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(`/api/files/${filename}`, '_blank');
-                    }}
-                    className="flex items-center space-x-1.5 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-150 group/file"
-                    title={`View ${originalName}`}
+        <div className="relative p-4">
+          {/* Compact header with app icon and title */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center space-x-3 flex-1 min-w-0">
+              <div className={`w-10 h-10 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200 flex-shrink-0`}>
+                <i className={`${app.icon} text-white text-sm`}></i>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-base text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-1 font-header mb-1">
+                  {app.name}
+                </h3>
+                <div className="flex items-center gap-2">
+                  <Badge 
+                    variant="secondary" 
+                    className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2 py-0.5 rounded-md`}
                   >
-                    <span className="group-hover/file:scale-110 transition-transform">
-                      {getFileIcon()}
+                    {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
+                  </Badge>
+                  {app.subcategory && (
+                    <span className="text-xs text-gray-500 font-medium truncate">
+                      {app.subcategory}
                     </span>
-                    <span className="font-medium max-w-20 truncate">
-                      {originalName.length > 15 ? `${originalName.substring(0, 12)}...` : originalName}
-                    </span>
-                  </button>
-                );
-              })}
-              {app.attachments.length > 2 && (
-                <span className="text-xs text-gray-500 px-2 py-1 bg-gray-50 rounded-md">
-                  +{app.attachments.length - 2} more
-                </span>
-              )}
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Compact footer */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
-            {app.subcategory}
-          </span>
-          <div className="flex items-center space-x-2">
+            
+            {/* Action button */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleViewDetails}
-              className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-primary/5 transition-all duration-200"
-              title="View details"
+              className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 p-0 text-gray-400 hover:text-primary"
             >
               <Eye className="h-4 w-4" />
             </Button>
-            <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
-              <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Launch</span>
-              <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+          </div>
+          
+          {/* Compact description */}
+          <div className="mb-3">
+            {app.shortDescription ? (
+              <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                {app.shortDescription}
+              </p>
+            ) : (
+              <RichTextViewer 
+                content={app.description || ""} 
+                maxLines={2} 
+                className="text-gray-600 text-sm leading-relaxed"
+              />
+            )}
+          </div>
+          
+          {/* Bottom row with files and launch */}
+          <div className="flex items-center justify-between">
+            {/* File attachments */}
+            <div className="flex items-center gap-1 flex-1">
+              {app.attachments && app.attachments.length > 0 && (
+                <>
+                  {app.attachments.slice(0, 2).map((filename, index) => {
+                    const originalName = filename.split('-').slice(1).join('-') || filename;
+                    const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
+                    
+                    const getFileIcon = () => {
+                      switch (fileExtension) {
+                        case 'pdf':
+                          return <FileText className="h-3 w-3 text-red-500" />;
+                        case 'doc':
+                        case 'docx':
+                          return <FileText className="h-3 w-3 text-blue-500" />;
+                        case 'txt':
+                        case 'rtf':
+                          return <FileText className="h-3 w-3 text-gray-500" />;
+                        default:
+                          return <FileText className="h-3 w-3 text-blue-500" />;
+                      }
+                    };
+                    
+                    return (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(`/api/files/${filename}`, '_blank');
+                        }}
+                        className="flex items-center space-x-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded border border-gray-200 hover:border-gray-300 transition-all duration-150"
+                        title={`View ${originalName}`}
+                      >
+                        {getFileIcon()}
+                        <span className="truncate max-w-16">{originalName}</span>
+                      </button>
+                    );
+                  })}
+                  {app.attachments.length > 2 && (
+                    <span className="text-xs text-gray-500 ml-1">
+                      +{app.attachments.length - 2} more
+                    </span>
+                  )}
+                </>
+              )}
             </div>
+            
+            {/* Launch button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(app.url, '_blank', 'noopener,noreferrer');
+              }}
+              className="h-8 px-3 text-xs text-gray-500 hover:text-primary hover:bg-primary/5 transition-colors duration-200"
+            >
+              <ExternalLink className="h-3 w-3 mr-1" />
+              Launch
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Details Modal */}
-      <AppDetailsModal 
+      <AppDetailsModal
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
         app={app}
       />
-    </div>
+    </>
   );
 }
