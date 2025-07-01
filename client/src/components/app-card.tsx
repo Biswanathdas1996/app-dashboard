@@ -55,34 +55,21 @@ export function AppCard({ app, onClick }: AppCardProps) {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-250"></div>
       
       <div className="relative p-6">
-        {/* Compact header with view details button */}
+        {/* Compact header */}
         <div className="flex items-center mb-4">
           <div className={`relative w-12 h-12 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200`}>
             <i className={`${app.icon} text-white text-lg`}></i>
           </div>
           <div className="ml-4 flex-1 min-w-0">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1">
-                  {app.name}
-                </h3>
-                <Badge 
-                  variant="secondary" 
-                  className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2.5 py-0.5 rounded-lg hover:scale-105 transition-transform duration-150`}
-                >
-                  {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
-                </Badge>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleViewDetails}
-                className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-primary/5 opacity-0 group-hover:opacity-100 transition-all duration-200"
-                title="View details"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-            </div>
+            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1">
+              {app.name}
+            </h3>
+            <Badge 
+              variant="secondary" 
+              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2.5 py-0.5 rounded-lg hover:scale-105 transition-transform duration-150`}
+            >
+              {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
+            </Badge>
           </div>
         </div>
         
@@ -151,9 +138,20 @@ export function AppCard({ app, onClick }: AppCardProps) {
           <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
             {app.subcategory}
           </span>
-          <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
-            <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Launch</span>
-            <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleViewDetails}
+              className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-primary/5 transition-all duration-200"
+              title="View details"
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+            <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
+              <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Launch</span>
+              <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+            </div>
           </div>
         </div>
       </div>
