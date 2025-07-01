@@ -37,7 +37,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-white">
       <Header 
         onSearchChange={setSearch} 
         searchValue={search}
@@ -46,146 +46,144 @@ export default function Dashboard() {
         currentSubcategory={subcategory}
       />
       
-      {/* Hero Banner with Image */}
-      <div className="relative h-[500px] lg:h-[600px] overflow-hidden">
+      {/* Compact Professional Hero */}
+      <div className="relative h-[350px] md:h-[450px] overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900">
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
-            alt="Woman and robot collaboration" 
-            className="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-700"
+            alt="Digital transformation" 
+            className="w-full h-full object-cover object-center opacity-40 mix-blend-overlay"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white max-w-3xl">
-            <div className="mb-6">
-              <Badge variant="secondary" className="px-3 py-1 bg-orange-500/20 text-orange-200 border-orange-300/30 text-sm font-medium backdrop-blur-sm mb-4">
-                Innovation Hub
-              </Badge>
-            </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 font-header leading-tight">
-              The Future of <span className="text-orange-400">Business</span>
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-8 opacity-95 font-body leading-relaxed max-w-2xl">
-              Where innovation meets excellence. Discover cutting-edge solutions that transform how we work.
-            </p>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <Badge variant="secondary" className="px-6 py-3 bg-white/20 text-white border-white/30 font-medium backdrop-blur-sm text-base">
-                <FileText className="h-5 w-5 mr-2" />
-                {apps?.length || 0} Digital Solutions
-              </Badge>
-              <div className="hidden lg:block h-px w-12 bg-white/30"></div>
-              <span className="text-white/80 text-sm font-medium">Powered by PwC Innovation</span>
-            </div>
-          </div>
-        </div>
-        {/* Decorative elements */}
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-orange-500/10 to-transparent rounded-full"></div>
-        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full"></div>
-      </div>
-
-      {/* Compact Welcome Banner */}
-      <div className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <div className="text-center lg:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2 font-header">
-                PwC Digital Hub
-              </h1>
-              <p className="text-lg md:text-xl opacity-95 font-body">
-                Innovative business solutions & digital transformation
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Badge variant="secondary" className="px-4 py-2 bg-white/20 text-white border-white/30 text-sm font-medium">
-                <FileText className="h-4 w-4 mr-2" />
-                {apps?.length || 0} Solutions
-              </Badge>
-            </div>
-          </div>
-        </div>
-        {/* Subtle decorative elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-      </div>
-
-
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Apps Grid with modern compact design */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 p-5 hover:shadow-md transition-all duration-300">
-                <div className="flex items-start gap-3 mb-3">
-                  <Skeleton className="w-10 h-10 rounded-xl flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-3 w-3/4" />
-                  </div>
-                </div>
-                <Skeleton className="h-8 w-full mb-3" />
-                <div className="flex items-center justify-between">
-                  <Skeleton className="h-3 w-16" />
-                  <Skeleton className="h-4 w-4" />
-                </div>
+          <div className="text-white max-w-4xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13 3v18M8 8h12M8 16h12"/>
+                </svg>
               </div>
-            ))}
+              <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 font-medium">
+                Digital Solutions Hub
+              </Badge>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-header leading-tight">
+              Business <span className="text-orange-400">Innovation</span> Platform
+            </h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-200 leading-relaxed max-w-3xl">
+              Access enterprise-grade applications and submit project requests through our centralized digital hub.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Badge variant="outline" className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                <FileText className="h-4 w-4 mr-2" />
+                {apps?.length || 0} Applications Available
+              </Badge>
+              <Badge variant="outline" className="bg-white/10 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                Secure & Compliant
+              </Badge>
+            </div>
           </div>
-        ) : apps && apps.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-            {(apps || []).map((app) => (
-              <AppCard 
-                key={app.id} 
-                app={app} 
-                onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            {search || category !== "all" || subcategory !== "all" ? (
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 max-w-sm mx-auto border border-white/50">
-                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FileText className="text-gray-400 h-8 w-8" />
-                </div>
-                <p className="text-gray-600 mb-4 font-medium">No applications match your filters</p>
-                <Button 
+        </div>
+      </div>
+
+
+
+      {/* Main Applications Section */}
+      <main className="bg-gray-50/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Business Applications</h2>
+              <p className="text-gray-600">Access your enterprise tools and digital solutions</p>
+            </div>
+            <div className="flex items-center gap-2 mt-4 sm:mt-0">
+              <Badge variant="secondary" className="text-sm">
+                {apps?.length || 0} Available
+              </Badge>
+              {(search || category !== "all" || subcategory !== "all") && (
+                <Button
                   onClick={handleClearFilters}
                   variant="outline"
                   size="sm"
-                  className="font-medium"
+                  className="text-sm"
                 >
                   Clear Filters
                 </Button>
-              </div>
-            ) : (
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 max-w-sm mx-auto border border-white/50">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FileText className="text-orange-500 h-8 w-8" />
-                </div>
-                <p className="text-gray-600 mb-2 font-medium">No applications yet</p>
-                <p className="text-sm text-gray-500">
-                  Visit the <span className="text-primary font-semibold">Admin Panel</span> to add applications
-                </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        )}
+
+          {/* Applications Grid */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-start gap-3 mb-4">
+                    <Skeleton className="w-12 h-12 rounded-lg flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <Skeleton className="h-5 w-full mb-2" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-16 w-full mb-4" />
+                  <div className="flex items-center justify-between">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-8 w-16" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : apps && apps.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {apps.map((app) => (
+                <AppCard 
+                  key={app.id} 
+                  app={app} 
+                  onClick={() => window.open(app.url, '_blank', 'noopener,noreferrer')}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="bg-white rounded-xl border border-gray-200 p-8 max-w-md mx-auto">
+                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <FileText className="text-gray-400 h-8 w-8" />
+                </div>
+                {search || category !== "all" || subcategory !== "all" ? (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
+                    <p className="text-gray-600 mb-4">No applications match your current filters</p>
+                    <Button 
+                      onClick={handleClearFilters}
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                    >
+                      Clear All Filters
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Applications</h3>
+                    <p className="text-gray-600">Applications will appear here once they're added through the Admin Panel</p>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </main>
 
-      {/* What's New Section */}
-      <section className="bg-white/50 backdrop-blur-sm py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-1">What's new</h2>
-            <p className="text-gray-600">Latest insights and updates</p>
+      {/* Industry Insights Section */}
+      <section className="bg-white border-t border-gray-200">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Industry Insights</h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Stay informed with the latest trends, research, and thought leadership from PwC experts
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1 - Container Operations */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
               <div className="aspect-video bg-gradient-to-br from-blue-500 to-orange-500 relative overflow-hidden">
@@ -271,34 +269,49 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Project Requisition Banner */}
-      <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={projectBannerImage} 
-            alt="Digital innovation banner" 
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 via-orange-500/60 to-transparent"></div>
-        </div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white max-w-2xl">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-header">
-              Transform Your Ideas
-            </h2>
-            <p className="text-lg md:text-xl mb-6 opacity-95 font-body leading-relaxed">
-              Submit your project requirements and let our experts bring your vision to life with cutting-edge solutions.
-            </p>
-            <Badge variant="secondary" className="px-4 py-2 bg-white/20 text-white border-white/30 text-sm font-medium backdrop-blur-sm">
-              Start Your Project Journey
-            </Badge>
+      {/* Project Requisition Section */}
+      <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
+        {/* Call-to-Action Banner */}
+        <div className="relative h-[280px] md:h-[320px] overflow-hidden">
+          <div className="absolute inset-0">
+            <img 
+              src={projectBannerImage} 
+              alt="Project innovation" 
+              className="w-full h-full object-cover object-center opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/90 via-orange-500/80 to-orange-400/70"></div>
+          </div>
+          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+            <div className="text-white max-w-3xl text-center mx-auto">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span className="text-sm font-medium">Project Services</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Start Your Project?
+              </h2>
+              <p className="text-lg md:text-xl mb-6 opacity-95 leading-relaxed">
+                Submit your requirements and connect with our expert team to bring your digital transformation ideas to life.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                  Fast Response
+                </Badge>
+                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                  Expert Review
+                </Badge>
+                <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 backdrop-blur-sm">
+                  Tailored Solutions
+                </Badge>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Project Requisition Form Section */}
-      <section className="bg-gradient-to-br from-slate-50 to-blue-50/50 border-t border-white/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Form Section */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <ProjectRequisitionForm />
         </div>
       </section>
