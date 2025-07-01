@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, getQueryFn } from "@/lib/queryClient";
 import type { WebApp, InsertWebApp, UpdateWebApp } from "@shared/schema";
 
 export function useApps(search?: string, category?: string, subcategory?: string) {
@@ -12,13 +12,13 @@ export function useApps(search?: string, category?: string, subcategory?: string
   const url = `/api/apps${queryString ? `?${queryString}` : ''}`;
   
   return useQuery<WebApp[]>({
-    queryKey: ['/api/apps', search, category, subcategory],
+    queryKey: [url],
   });
 }
 
 export function useApp(id: number) {
   return useQuery<WebApp>({
-    queryKey: ['/api/apps', id],
+    queryKey: [`/api/apps/${id}`],
     enabled: !!id,
   });
 }
