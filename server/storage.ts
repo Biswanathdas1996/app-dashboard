@@ -100,9 +100,8 @@ export class MemStorage implements IStorage {
       storageData.webApps?.forEach(app => this.webApps.set(app.id, app));
       this.currentAppId = storageData.nextAppId || 1;
     } catch (error) {
-      // File doesn't exist or is corrupted, start with default data
-      console.log('No existing data file found, initializing with default categories');
-      await this.initializeDefaultCategories();
+      // File doesn't exist or is corrupted, start with empty data
+      console.log('No existing data file found, starting with empty data');
     }
   }
 
@@ -123,49 +122,6 @@ export class MemStorage implements IStorage {
     } catch (error) {
       console.error('Failed to save data to file:', error);
     }
-  }
-
-  private async initializeDefaultCategories() {
-    // Initialize default categories and subcategories
-    const defaultCategories = [
-      { name: "Financial Services", isActive: true },
-      { name: "Healthcare & Life Sciences", isActive: true },
-      { name: "Telecommunications", isActive: true },
-      { name: "Government & Public Services", isActive: true },
-      { name: "Infrastructure & Real Estate", isActive: true }
-    ];
-
-    const defaultSubcategories = [
-      // Financial Services
-      { name: "Banking & Lending", categoryId: 1, isActive: true },
-      { name: "Insurance", categoryId: 1, isActive: true },
-      { name: "Capital Markets", categoryId: 1, isActive: true },
-      { name: "Non-Banking Financial Companies (NBFCs) & FinTech", categoryId: 1, isActive: true },
-      { name: "Payments & Financial Infrastructure", categoryId: 1, isActive: true },
-      { name: "Regulatory, Risk & Compliance", categoryId: 1, isActive: true },
-      
-      // Healthcare & Life Sciences
-      { name: "Pharmaceuticals & Therapeutics", categoryId: 2, isActive: true },
-      { name: "Biotechnology & Genomics", categoryId: 2, isActive: true },
-      { name: "Healthcare Providers & Systems", categoryId: 2, isActive: true },
-      { name: "Medical Devices & Diagnostics", categoryId: 2, isActive: true }
-    ];
-
-    // Add categories
-    for (const category of defaultCategories) {
-      const id = this.currentCategoryId++;
-      const newCategory: Category = { ...category, id };
-      this.categories.set(id, newCategory);
-    }
-
-    // Add subcategories
-    for (const subcategory of defaultSubcategories) {
-      const id = this.currentSubcategoryId++;
-      const newSubcategory: Subcategory = { ...subcategory, id };
-      this.subcategories.set(id, newSubcategory);
-    }
-
-    await this.saveToFile();
   }
 
   async getUser(id: number): Promise<User | undefined> {

@@ -108,6 +108,7 @@ Uses file-based JSON storage (`data/apps.json`) for all data persistence. The st
 - `start`: Production server startup
 
 ## Changelog
+- July 1, 2025: Removed all default initialization logic - system now only uses data from app.json with no fallback categories
 - July 1, 2025: Converted to fully dynamic category system - all categories and subcategories are now derived from applications in app.json rather than stored separately
 - July 1, 2025: Removed all database dependencies, app now uses only JSON file storage for complete database independence
 - July 1, 2025: Simplified header to show only PwC logo, removed application directory text for cleaner appearance
