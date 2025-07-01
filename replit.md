@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Added document viewing functionality with clickable file attachments on application cards
+- July 1, 2025: Enhanced file upload component with improved UI, file type icons, and view/download capabilities
+- July 1, 2025: Implemented file viewing buttons on application cards with proper file type recognition and styling
 - July 1, 2025: Refined application cards to be more compact with improved space utilization and PwC brand alignment
 - July 1, 2025: Updated grid layout to display more cards per row (up to 5 columns on large screens) for better content density
 - July 1, 2025: Enhanced text truncation with line-clamp utilities and optimized typography for readability

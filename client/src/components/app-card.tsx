@@ -72,21 +72,64 @@ export function AppCard({ app, onClick }: AppCardProps) {
           />
         </div>
         
+        {/* File attachments */}
+        {app.attachments && app.attachments.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              {app.attachments.slice(0, 2).map((filename, index) => {
+                const originalName = filename.split('-').slice(1).join('-') || filename;
+                const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
+                
+                const getFileIcon = () => {
+                  switch (fileExtension) {
+                    case 'pdf':
+                      return <FileText className="h-3 w-3 text-red-500" />;
+                    case 'doc':
+                    case 'docx':
+                      return <FileText className="h-3 w-3 text-blue-500" />;
+                    case 'txt':
+                    case 'rtf':
+                      return <FileText className="h-3 w-3 text-gray-500" />;
+                    default:
+                      return <FileText className="h-3 w-3 text-blue-500" />;
+                  }
+                };
+                
+                return (
+                  <button
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`/api/files/${filename}`, '_blank');
+                    }}
+                    className="flex items-center space-x-1.5 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-150 group/file"
+                    title={`View ${originalName}`}
+                  >
+                    <span className="group-hover/file:scale-110 transition-transform">
+                      {getFileIcon()}
+                    </span>
+                    <span className="font-medium max-w-20 truncate">
+                      {originalName.length > 15 ? `${originalName.substring(0, 12)}...` : originalName}
+                    </span>
+                  </button>
+                );
+              })}
+              {app.attachments.length > 2 && (
+                <span className="text-xs text-gray-500 px-2 py-1 bg-gray-50 rounded-md">
+                  +{app.attachments.length - 2} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Compact footer */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
-              {app.subcategory}
-            </span>
-            {app.attachments && app.attachments.length > 0 && (
-              <div className="flex items-center space-x-1 text-xs text-gray-500">
-                <FileText className="h-3 w-3" />
-                <span>{app.attachments.length}</span>
-              </div>
-            )}
-          </div>
+          <span className="text-xs font-medium text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md">
+            {app.subcategory}
+          </span>
           <div className="flex items-center space-x-1 text-primary group-hover:text-accent transition-colors">
-            <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Open</span>
+            <span className="text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">Launch</span>
             <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
           </div>
         </div>
