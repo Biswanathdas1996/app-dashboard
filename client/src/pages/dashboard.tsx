@@ -7,8 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
-import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
-import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
+import heroImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
+import projectBannerImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -320,7 +320,7 @@ export default function Dashboard() {
       {/* Project Requisition Section */}
       <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
-        <div className="relative h-[200px] md:h-[220px] overflow-hidden">
+        <div className="relative h-[200px] md:h-[370px] overflow-hidden">
           <div className="absolute inset-0">
             <img
               src={projectBannerImage}
@@ -348,17 +348,6 @@ export default function Dashboard() {
                 Submit your requirements and connect with our expert team to
                 bring your digital transformation ideas to life.
               </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
-                  Fast Response
-                </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
-                  Expert Review
-                </Badge>
-                <Badge className="bg-white/20 text-white border-white/30 px-3 py-1 backdrop-blur-sm text-xs">
-                  Tailored Solutions
-                </Badge>
-              </div>
             </div>
           </div>
         </div>
