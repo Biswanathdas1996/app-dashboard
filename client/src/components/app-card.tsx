@@ -76,11 +76,9 @@ export function AppCard({ app, onClick }: AppCardProps) {
             <h3 className="font-bold text-base text-gray-900 group-hover:text-primary transition-colors leading-tight line-clamp-1 mb-1">
               {app.name}
             </h3>
-            <Badge 
-              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2 py-0.5 rounded-md`}
-            >
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               {app.category}
-            </Badge>
+            </p>
           </div>
         </div>
         
