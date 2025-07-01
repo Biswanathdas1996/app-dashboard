@@ -111,6 +111,9 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Redesigned app details modal with modern full-width layout and gradient header design
+- July 1, 2025: Enhanced modal with improved visual hierarchy, card-based sections, and better content organization
+- July 1, 2025: Added decorative elements and responsive grid layout for optimal viewing experience
 - July 1, 2025: Added view details modal accessible via eye icon button on each application card
 - July 1, 2025: Implemented comprehensive app details modal showing full description, documents, and launch link
 - July 1, 2025: Enhanced application cards with hover-revealed details button for better UX
