@@ -17,10 +17,9 @@ This is a full-stack web application directory that allows users to manage and a
 ### Backend Architecture
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js for REST API
-- **Database ORM**: Drizzle ORM with PostgreSQL
-- **Database Provider**: Neon Database (serverless PostgreSQL)
+- **Data Storage**: File-based JSON storage (no database)
 - **Schema Validation**: Zod for runtime type checking
-- **Session Management**: Express sessions with PostgreSQL store
+- **Session Management**: Express sessions with memory store
 
 ### Project Structure
 ```
@@ -64,7 +63,7 @@ This is a full-stack web application directory that allows users to manage and a
 - **404 Page**: Error handling for unknown routes
 
 ### Storage Strategy
-Currently implements in-memory storage with file persistence for development. The storage layer is abstracted through an interface to support easy migration to database storage.
+Uses file-based JSON storage (`data/apps.json`) for all data persistence. The storage layer is abstracted through an interface and completely independent of any database system.
 
 ## Data Flow
 
@@ -78,14 +77,13 @@ Currently implements in-memory storage with file persistence for development. Th
 ## External Dependencies
 
 ### Core Dependencies
-- **@neondatabase/serverless**: PostgreSQL database connection
-- **drizzle-orm**: Database ORM and query builder
 - **@tanstack/react-query**: Server state management
 - **@radix-ui/***: Headless UI component library
 - **react-hook-form**: Form state management
 - **zod**: Schema validation
 - **@tiptap/react**: Rich text editor for descriptions
 - **multer**: File upload handling middleware
+- **fs/promises**: File system operations for JSON storage
 
 ### Development Tools
 - **Vite**: Build tool and development server
@@ -98,19 +96,19 @@ Currently implements in-memory storage with file persistence for development. Th
 ### Build Process
 1. **Frontend**: Vite builds React app to `dist/public`
 2. **Backend**: ESBuild bundles server code to `dist/index.js`
-3. **Database**: Drizzle migrations applied via `db:push` command
+3. **Data**: JSON files are automatically created and managed by the application
 
 ### Environment Configuration
-- `DATABASE_URL`: PostgreSQL connection string
 - `NODE_ENV`: Environment mode (development/production)
+- No database configuration required - uses local JSON file storage
 
 ### Scripts
 - `dev`: Development server with hot reloading
 - `build`: Production build for both frontend and backend
 - `start`: Production server startup
-- `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Removed all database dependencies, app now uses only JSON file storage for complete database independence
 - July 1, 2025: Simplified header to show only PwC logo, removed application directory text for cleaner appearance
 - July 1, 2025: Created compact and modern navigation bar with pill-style design, shortened category names, and improved responsive layout
 - July 1, 2025: Implemented horizontal navigation menu with visible category buttons and dropdown subcategories for filtering applications

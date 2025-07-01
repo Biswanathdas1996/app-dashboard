@@ -81,7 +81,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
             </p>
           ) : (
             <RichTextViewer 
-              content={app.description} 
+              content={app.description || ""} 
               maxLines={2} 
               className="text-gray-600 text-sm leading-relaxed"
             />

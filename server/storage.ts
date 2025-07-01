@@ -1,4 +1,4 @@
-import { users, categories, subcategories, webApps, type User, type Category, type Subcategory, type WebApp, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp } from "@shared/schema";
+import { type User, type Category, type Subcategory, type WebApp, type InsertUser, type InsertCategory, type InsertSubcategory, type InsertWebApp, type UpdateCategory, type UpdateSubcategory, type UpdateWebApp } from "@shared/schema";
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -289,7 +289,7 @@ export class MemStorage implements IStorage {
     const app: WebApp = { 
       id,
       name: insertApp.name,
-      shortDescription: insertApp.shortDescription ?? null,
+      shortDescription: insertApp.shortDescription,
       description: insertApp.description,
       url: insertApp.url,
       category: insertApp.category,
@@ -327,7 +327,7 @@ export class MemStorage implements IStorage {
     return apps.filter(app => {
       const matchesQuery = !query || 
         app.name.toLowerCase().includes(query.toLowerCase()) ||
-        app.description.toLowerCase().includes(query.toLowerCase()) ||
+        (app.description && app.description.toLowerCase().includes(query.toLowerCase())) ||
         (app.shortDescription && app.shortDescription.toLowerCase().includes(query.toLowerCase()));
       
       const matchesCategory = !category || app.category === category;
