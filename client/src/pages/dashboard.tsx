@@ -72,11 +72,11 @@ export default function Dashboard() {
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
                     <SelectItem value="all" className="rounded-lg font-medium">All Categories</SelectItem>
-                    {categoriesData?.categories.map((cat) => (
+                    {categoriesData?.categories?.map((cat) => (
                       <SelectItem key={cat} value={cat} className="rounded-lg font-medium">
                         {cat.charAt(0).toUpperCase() + cat.slice(1)}
                       </SelectItem>
-                    ))}
+                    )) || []}
                   </SelectContent>
                 </Select>
               </div>
@@ -89,11 +89,11 @@ export default function Dashboard() {
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-gray-200/50 shadow-xl bg-white/95 backdrop-blur-sm">
                     <SelectItem value="all" className="rounded-lg font-medium">All Subcategories</SelectItem>
-                    {categoriesData?.subcategories.map((subcat) => (
+                    {categoriesData?.subcategories?.map((subcat) => (
                       <SelectItem key={subcat} value={subcat} className="rounded-lg font-medium">
                         {subcat}
                       </SelectItem>
-                    ))}
+                    )) || []}
                   </SelectContent>
                 </Select>
               </div>
@@ -133,7 +133,7 @@ export default function Dashboard() {
           </div>
         ) : apps && apps.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-            {apps.map((app) => (
+            {(apps || []).map((app) => (
               <AppCard 
                 key={app.id} 
                 app={app} 

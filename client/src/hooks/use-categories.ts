@@ -6,18 +6,18 @@ import type { Category, Subcategory, InsertCategory, UpdateCategory, InsertSubca
 export function useCategories() {
   return useQuery({
     queryKey: ["/api/categories"],
-    queryFn: () => apiRequest("/api/categories") as Promise<Category[]>,
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/categories");
+      return response.json() as Promise<Category[]>;
+    },
   });
 }
 
 export function useCreateCategory() {
   return useMutation({
     mutationFn: async (category: InsertCategory) => {
-      return apiRequest("/api/categories", {
-        method: "POST",
-        body: JSON.stringify(category),
-        headers: { "Content-Type": "application/json" },
-      }) as Promise<Category>;
+      const response = await apiRequest("POST", "/api/categories", category);
+      return response.json() as Promise<Category>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
@@ -28,11 +28,8 @@ export function useCreateCategory() {
 export function useUpdateCategory() {
   return useMutation({
     mutationFn: async ({ id, category }: { id: number; category: UpdateCategory }) => {
-      return apiRequest(`/api/categories/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(category),
-        headers: { "Content-Type": "application/json" },
-      }) as Promise<Category>;
+      const response = await apiRequest("PATCH", `/api/categories/${id}`, category);
+      return response.json() as Promise<Category>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
@@ -43,9 +40,7 @@ export function useUpdateCategory() {
 export function useDeleteCategory() {
   return useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/categories/${id}`, {
-        method: "DELETE",
-      });
+      await apiRequest("DELETE", `/api/categories/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
@@ -57,11 +52,12 @@ export function useDeleteCategory() {
 export function useSubcategories(categoryId?: number) {
   return useQuery({
     queryKey: ["/api/subcategories", categoryId],
-    queryFn: () => {
+    queryFn: async () => {
       const url = categoryId 
         ? `/api/subcategories?categoryId=${categoryId}`
         : "/api/subcategories";
-      return apiRequest(url) as Promise<Subcategory[]>;
+      const response = await apiRequest("GET", url);
+      return response.json() as Promise<Subcategory[]>;
     },
   });
 }
@@ -69,11 +65,8 @@ export function useSubcategories(categoryId?: number) {
 export function useCreateSubcategory() {
   return useMutation({
     mutationFn: async (subcategory: InsertSubcategory) => {
-      return apiRequest("/api/subcategories", {
-        method: "POST",
-        body: JSON.stringify(subcategory),
-        headers: { "Content-Type": "application/json" },
-      }) as Promise<Subcategory>;
+      const response = await apiRequest("POST", "/api/subcategories", subcategory);
+      return response.json() as Promise<Subcategory>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/subcategories"] });
@@ -84,11 +77,8 @@ export function useCreateSubcategory() {
 export function useUpdateSubcategory() {
   return useMutation({
     mutationFn: async ({ id, subcategory }: { id: number; subcategory: UpdateSubcategory }) => {
-      return apiRequest(`/api/subcategories/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(subcategory),
-        headers: { "Content-Type": "application/json" },
-      }) as Promise<Subcategory>;
+      const response = await apiRequest("PATCH", `/api/subcategories/${id}`, subcategory);
+      return response.json() as Promise<Subcategory>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/subcategories"] });
@@ -99,9 +89,7 @@ export function useUpdateSubcategory() {
 export function useDeleteSubcategory() {
   return useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/subcategories/${id}`, {
-        method: "DELETE",
-      });
+      await apiRequest("DELETE", `/api/subcategories/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/subcategories"] });
