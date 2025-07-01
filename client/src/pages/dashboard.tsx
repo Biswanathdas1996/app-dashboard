@@ -277,9 +277,9 @@ export default function Dashboard() {
             <img 
               src={projectBannerImage} 
               alt="Project innovation" 
-              className="w-full h-full object-cover object-center opacity-30"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/90 via-orange-500/80 to-orange-400/70"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/75 via-orange-500/60 to-orange-400/50"></div>
           </div>
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
             <div className="text-white max-w-3xl text-center mx-auto">
