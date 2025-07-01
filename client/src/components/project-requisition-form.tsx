@@ -61,22 +61,22 @@ export function ProjectRequisitionForm() {
   };
 
   return (
-    <div className="py-12">
+    <div className="py-8">
       <div className="max-w-4xl mx-auto">
-        <Card className="shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-primary to-accent text-white p-8">
-            <CardTitle className="text-3xl font-bold font-header">
+        <Card className="shadow-lg border border-white/50 bg-white/80 backdrop-blur-md">
+          <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6">
+            <CardTitle className="text-2xl font-bold font-header">
               Project Requisition
             </CardTitle>
-            <CardDescription className="text-white/90 text-lg">
-              Submit your project plan and requirements for review
+            <CardDescription className="text-white/90">
+              Submit your project requirements for review
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-8">
+          <CardContent className="p-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   {/* Basic Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="title"
@@ -261,14 +261,13 @@ export function ProjectRequisitionForm() {
                   />
 
                   {/* Submit Button */}
-                  <div className="flex justify-end pt-6">
+                  <div className="flex justify-end pt-4">
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-primary hover:bg-primary/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                      size="lg"
+                      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 py-2 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
                     >
-                      {isSubmitting ? "Submitting..." : "Submit Project Requisition"}
+                      {isSubmitting ? "Submitting..." : "Submit Request"}
                     </Button>
                   </div>
               </form>
