@@ -63,10 +63,10 @@ export default function Admin() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 font-header">
                 Admin Panel
               </h1>
-              <p className="text-xl opacity-90">
+              <p className="text-xl opacity-90 font-body">
                 Manage your web applications directory
               </p>
             </div>

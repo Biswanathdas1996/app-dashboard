@@ -5,6 +5,12 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        body: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        header: ['"ITC Charter"', '"Crimson Text"', 'Georgia', 'serif'],
+        sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        serif: ['"ITC Charter"', '"Crimson Text"', 'Georgia', 'serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

@@ -123,7 +123,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{app ? "Edit App" : "Add New App"}</DialogTitle>
+          <DialogTitle className="font-header">{app ? "Edit App" : "Add New App"}</DialogTitle>
         </DialogHeader>
         
         <Form {...form}>

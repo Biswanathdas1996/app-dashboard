@@ -61,7 +61,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
             <i className={`${app.icon} text-white text-lg`}></i>
           </div>
           <div className="ml-4 flex-1 min-w-0">
-            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1">
+            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 line-clamp-1 font-header">
               {app.name}
             </h3>
             <Badge 

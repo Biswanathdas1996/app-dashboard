@@ -75,7 +75,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                     <i className={`${app.icon} text-white text-3xl`}></i>
                   </div>
                   <div>
-                    <DialogTitle className="text-4xl font-bold text-white mb-3 tracking-tight">
+                    <DialogTitle className="text-4xl font-bold text-white mb-3 tracking-tight font-header">
                       {app.name}
                     </DialogTitle>
                     <div className="flex items-center space-x-4">
@@ -133,7 +133,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
               <div>
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                  <h3 className="text-2xl font-bold text-gray-900">Summary</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 font-header">Summary</h3>
                 </div>
                 <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-6 border border-primary/10 shadow-sm">
                   <p className="text-gray-700 leading-relaxed text-lg font-medium">
@@ -147,7 +147,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
             <div>
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                <h3 className="text-2xl font-bold text-gray-900">Description</h3>
+                <h3 className="text-2xl font-bold text-gray-900 font-header">Description</h3>
               </div>
               <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl p-6 border border-gray-200/50 shadow-sm">
                 <RichTextViewer 
@@ -162,7 +162,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
               <div>
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                  <h3 className="text-2xl font-bold text-gray-900">Application Access</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 font-header">Application Access</h3>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-200">
                   <div className="flex items-center justify-between">
@@ -196,7 +196,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                 <div>
                   <div className="flex items-center space-x-3 mb-6">
                     <div className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <h3 className="text-2xl font-bold text-gray-900 font-header">
                       Documents ({app.attachments.length})
                     </h3>
                   </div>

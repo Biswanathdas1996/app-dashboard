@@ -22,10 +22,10 @@ export function Header({ onSearchChange, searchValue }: HeaderProps) {
             </div>
             <div className="hidden md:block">
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-xl font-bold text-gray-900 tracking-tight font-header">
                   Web Application Directory
                 </h1>
-                <p className="text-sm text-gray-500 font-medium">
+                <p className="text-sm text-gray-500 font-medium font-body">
                   Powered by PwC
                 </p>
               </div>

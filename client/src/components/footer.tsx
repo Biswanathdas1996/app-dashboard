@@ -10,10 +10,10 @@ export function Footer() {
             <div className="flex items-center space-x-3 mb-6">
               <PwCLogo size="md" className="text-white" />
               <div>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-white font-header">
                   Application Portfolio
                 </h3>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-400 text-sm font-body">
                   Powered by PwC Innovation
                 </p>
               </div>
@@ -27,7 +27,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">
+            <h4 className="text-lg font-semibold text-white mb-4 font-header">
               Quick Access
             </h4>
             <ul className="space-y-3">
@@ -51,7 +51,7 @@ export function Footer() {
 
           {/* Support & Resources */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Support</h4>
+            <h4 className="text-lg font-semibold text-white mb-4 font-header">Support</h4>
             <ul className="space-y-3">
               <li>
                 <span className="text-gray-300">Help Center</span>
