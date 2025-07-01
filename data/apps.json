@@ -15,6 +15,16 @@
       "id": 3,
       "name": "Telecommunications",
       "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Government & Public Services",
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "Infrastructure & Real Estate",
+      "isActive": true
     }
   ],
   "subcategories": [
@@ -72,7 +82,7 @@
     }
   ],
   "nextUserId": 1,
-  "nextCategoryId": 4,
+  "nextCategoryId": 6,
   "nextSubcategoryId": 5,
   "nextAppId": 4
 }

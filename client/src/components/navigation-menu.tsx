@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Filter } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,9 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCategories, useSubcategories } from "@/hooks/use-categories";
 import { cn } from "@/lib/utils";
@@ -32,125 +29,103 @@ export function NavigationMenu({ onCategoryChange, currentCategory, currentSubca
     onCategoryChange(categoryName, subcategoryName);
   };
 
-  const getCurrentDisplayText = () => {
-    if (currentSubcategory && currentSubcategory !== "all") {
-      return currentSubcategory;
-    }
-    if (currentCategory && currentCategory !== "all") {
-      return currentCategory;
-    }
-    return "All Categories";
-  };
-
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-2">
-        <div className="w-32 h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+      <div className="flex items-center space-x-4">
+        <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+        <div className="w-24 h-8 bg-gray-200 rounded animate-pulse"></div>
+        <div className="w-28 h-8 bg-gray-200 rounded animate-pulse"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center space-x-4">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button 
-            variant="outline" 
-            className={cn(
-              "min-w-48 justify-between bg-white border-gray-200 hover:bg-gray-50",
-              (currentCategory !== "all" || currentSubcategory !== "all") && "border-primary bg-primary/5"
-            )}
-          >
-            <div className="flex items-center space-x-2">
-              <Filter className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">{getCurrentDisplayText()}</span>
-            </div>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 max-h-96 overflow-y-auto" align="start">
-          <DropdownMenuItem 
-            onClick={() => handleCategorySelect("all")}
-            className={cn(
-              "font-medium cursor-pointer",
-              currentCategory === "all" && "bg-primary/10 text-primary"
-            )}
-          >
-            All Categories
-          </DropdownMenuItem>
-          
-          <DropdownMenuSeparator />
-          
-          {categories.map((category) => {
-            const categorySubcategories = getCategorySubcategories(category.id);
-            
-            // If category has subcategories, show as submenu
-            if (categorySubcategories.length > 0) {
-              return (
-                <DropdownMenuSub key={category.id}>
-                  <DropdownMenuSubTrigger 
-                    className={cn(
-                      "cursor-pointer",
-                      currentCategory === category.name && "bg-primary/10 text-primary"
-                    )}
-                  >
-                    <span className="font-medium">{category.name}</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="w-48">
-                    <DropdownMenuItem 
-                      onClick={() => handleCategorySelect(category.name)}
-                      className={cn(
-                        "font-medium cursor-pointer",
-                        currentCategory === category.name && currentSubcategory === "all" && "bg-primary/10 text-primary"
-                      )}
-                    >
-                      All {category.name}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {categorySubcategories.map((subcategory: any) => (
-                      <DropdownMenuItem 
-                        key={subcategory.id}
-                        onClick={() => handleCategorySelect(category.name, subcategory.name)}
-                        className={cn(
-                          "cursor-pointer",
-                          currentSubcategory === subcategory.name && "bg-primary/10 text-primary"
-                        )}
-                      >
-                        {subcategory.name}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-              );
-            } else {
-              // If no subcategories, make category directly clickable
-              return (
-                <DropdownMenuItem 
-                  key={category.id}
-                  onClick={() => handleCategorySelect(category.name)}
+    <nav className="flex items-center space-x-1">
+      {/* All Categories */}
+      <Button
+        variant={currentCategory === "all" ? "default" : "ghost"}
+        size="sm"
+        onClick={() => handleCategorySelect("all")}
+        className={cn(
+          "font-medium",
+          currentCategory === "all" 
+            ? "bg-primary text-white" 
+            : "text-gray-700 hover:text-primary hover:bg-primary/10"
+        )}
+      >
+        All
+      </Button>
+
+      {/* Category Menu Items */}
+      {categories.map((category) => {
+        const categorySubcategories = getCategorySubcategories(category.id);
+        const isActive = currentCategory === category.name;
+        
+        // If category has subcategories, show as dropdown
+        if (categorySubcategories.length > 0) {
+          return (
+            <DropdownMenu key={category.id}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant={isActive ? "default" : "ghost"}
+                  size="sm"
                   className={cn(
-                    "font-medium cursor-pointer",
-                    currentCategory === category.name && "bg-primary/10 text-primary"
+                    "font-medium",
+                    isActive 
+                      ? "bg-primary text-white" 
+                      : "text-gray-700 hover:text-primary hover:bg-primary/10"
                   )}
                 >
                   {category.name}
+                  <ChevronDown className="ml-1 h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-48">
+                <DropdownMenuItem 
+                  onClick={() => handleCategorySelect(category.name)}
+                  className={cn(
+                    "font-medium cursor-pointer",
+                    isActive && currentSubcategory === "all" && "bg-primary/10 text-primary"
+                  )}
+                >
+                  All {category.name}
                 </DropdownMenuItem>
-              );
-            }
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
-      
-      {(currentCategory !== "all" || currentSubcategory !== "all") && (
-        <Button 
-          variant="ghost" 
-          size="sm"
-          onClick={() => handleCategorySelect("all")}
-          className="text-gray-500 hover:text-gray-700"
-        >
-          Clear Filter
-        </Button>
-      )}
-    </div>
+                <DropdownMenuSeparator />
+                {categorySubcategories.map((subcategory: any) => (
+                  <DropdownMenuItem 
+                    key={subcategory.id}
+                    onClick={() => handleCategorySelect(category.name, subcategory.name)}
+                    className={cn(
+                      "cursor-pointer",
+                      currentSubcategory === subcategory.name && "bg-primary/10 text-primary"
+                    )}
+                  >
+                    {subcategory.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        } else {
+          // If no subcategories, make category directly clickable
+          return (
+            <Button
+              key={category.id}
+              variant={isActive ? "default" : "ghost"}
+              size="sm"
+              onClick={() => handleCategorySelect(category.name)}
+              className={cn(
+                "font-medium",
+                isActive 
+                  ? "bg-primary text-white" 
+                  : "text-gray-700 hover:text-primary hover:bg-primary/10"
+              )}
+            >
+              {category.name}
+            </Button>
+          );
+        }
+      })}
+    </nav>
   );
 }
