@@ -317,7 +317,7 @@ export default function Dashboard() {
       </section>
 
       {/* Project Requisition Section */}
-      <section className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
+      <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Call-to-Action Banner */}
         <div className="relative h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] overflow-hidden bg-black">
           <div className="absolute inset-0">

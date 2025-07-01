@@ -68,17 +68,21 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
               </div>
             )}
 
-            {/* Admin Link */}
-            <Link href="/app-dashboard/admin">
-              <Button 
-                variant={location.includes("/admin") ? "default" : "outline"}
-                size="sm"
-                className="font-semibold"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Admin
-              </Button>
-            </Link>
+            {/* New Request Button */}
+            <Button 
+              variant="outline"
+              size="sm"
+              className="font-semibold"
+              onClick={() => {
+                const requisitionSection = document.getElementById('project-requisition');
+                if (requisitionSection) {
+                  requisitionSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              New Request
+            </Button>
 
             {/* Dashboard Link - Show when not on dashboard */}
             {!location.includes("/app-dashboard/") && (
