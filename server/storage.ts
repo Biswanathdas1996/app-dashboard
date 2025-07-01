@@ -271,7 +271,8 @@ export class MemStorage implements IStorage {
       subcategory: insertApp.subcategory,
       icon: insertApp.icon || "fas fa-globe",
       isActive: insertApp.isActive ?? true,
-      attachments: insertApp.attachments || []
+      attachments: insertApp.attachments || [],
+      rating: insertApp.rating || 0
     };
     this.webApps.set(id, app);
     await this.saveToFile();

@@ -5,6 +5,8 @@ import { RichTextViewer } from "./rich-text-viewer";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { AppDetailsModal } from "./app-details-modal";
+import { StarRating } from "./star-rating";
+import { useUpdateApp } from "@/hooks/use-apps";
 
 interface AppCardProps {
   app: WebApp;
@@ -22,6 +24,7 @@ const categoryColors = {
 
 export function AppCard({ app, onClick }: AppCardProps) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const updateApp = useUpdateApp();
   
   const colorClasses = categoryColors[app.category as keyof typeof categoryColors] || 
     "from-slate-500 to-slate-600 shadow-slate-500/20 bg-slate-50 text-slate-700 border-slate-200";
@@ -44,6 +47,17 @@ export function AppCard({ app, onClick }: AppCardProps) {
   const handleViewDetails = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowDetailsModal(true);
+  };
+
+  const handleRatingChange = async (newRating: number) => {
+    try {
+      await updateApp.mutateAsync({
+        id: app.id,
+        app: { rating: newRating }
+      });
+    } catch (error) {
+      console.error('Failed to update rating:', error);
+    }
   };
 
   return (
@@ -76,9 +90,16 @@ export function AppCard({ app, onClick }: AppCardProps) {
             <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors leading-tight line-clamp-2 mb-2">
               {app.name}
             </h3>
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
               {app.category}
             </p>
+            <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+              <StarRating
+                rating={app.rating || 0}
+                onRatingChange={handleRatingChange}
+                size="sm"
+              />
+            </div>
           </div>
         </div>
         

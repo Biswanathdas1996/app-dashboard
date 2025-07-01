@@ -27,6 +27,7 @@ export const insertWebAppSchema = z.object({
   icon: z.string().min(1),
   isActive: z.boolean().default(true),
   attachments: z.array(z.string()).default([]),
+  rating: z.number().min(1).max(5).default(0),
 });
 
 export const insertProjectRequisitionSchema = z.object({
@@ -93,6 +94,7 @@ export type WebApp = {
   icon: string;
   isActive: boolean;
   attachments: string[];
+  rating: number;
   createdAt?: Date;
   updatedAt?: Date;
 };
