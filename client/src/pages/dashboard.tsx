@@ -317,8 +317,8 @@ export default function Dashboard() {
 
       {/* Project Requisition Section */}
       <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
-        {/* Call-to-Action Banner */}
-        <div className="relative h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] overflow-hidden bg-black">
+        {/* Compact Call-to-Action Banner */}
+        <div className="relative h-[120px] sm:h-[140px] md:h-[160px] overflow-hidden bg-black">
           <div className="absolute inset-0">
             <img
               src={genaiCircleImage}
@@ -329,10 +329,10 @@ export default function Dashboard() {
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-full flex items-center">
-            <div className="text-white w-full max-w-3xl relative z-10">
-              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1 mb-2 sm:mb-3 w-fit border border-white/20">
+            <div className="text-white w-full max-w-2xl relative z-10">
+              <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 mb-1.5 w-fit border border-white/20">
                 <svg
-                  className="w-3 h-3"
+                  className="w-2.5 h-2.5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -340,21 +340,20 @@ export default function Dashboard() {
                 </svg>
                 <span className="text-xs font-medium">Project Services</span>
               </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1.5 drop-shadow-lg">
                 Ready to Start Your Project?
               </h2>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-3 sm:mb-4 leading-relaxed drop-shadow-md max-w-full lg:max-w-3xl">
-                Submit your requirements and connect with our expert team to
-                bring your digital transformation ideas to life.
+              <p className="text-xs sm:text-sm md:text-base mb-2 leading-relaxed drop-shadow-md max-w-full">
+                Submit your requirements and connect with our expert team.
               </p>
-              <div className="flex flex-wrap gap-1 sm:gap-2">
-                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-black/50 text-white border-white/30 px-1.5 py-0.5 backdrop-blur-sm text-xs">
                   Fast Response
                 </Badge>
-                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-1.5 py-0.5 backdrop-blur-sm text-xs">
                   Expert Review
                 </Badge>
-                <Badge className="bg-black/50 text-white border-white/30 px-2 sm:px-3 py-1 backdrop-blur-sm text-xs">
+                <Badge className="bg-black/50 text-white border-white/30 px-1.5 py-0.5 backdrop-blur-sm text-xs">
                   Tailored Solutions
                 </Badge>
               </div>
@@ -362,8 +361,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Form Section */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 lg:py-8">
+        {/* Compact Form Section */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-4 lg:py-6">
           <ProjectRequisitionForm />
         </div>
       </section>

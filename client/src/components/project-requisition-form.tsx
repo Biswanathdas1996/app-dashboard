@@ -66,21 +66,21 @@ export function ProjectRequisitionForm() {
 
   return (
     <div>
-      <div className="w-full">
-        <Card className="shadow-lg border border-gray-200 bg-white">
-          <CardHeader className="bg-gradient-to-r from-orange-600 to-orange-500 text-white p-4">
-            <CardTitle className="text-xl font-bold">
+      <div className="max-w-3xl mx-auto">
+        <Card className="shadow-md border border-gray-200 bg-white">
+          <CardHeader className="bg-gradient-to-r from-orange-600 to-orange-500 text-white p-3">
+            <CardTitle className="text-lg font-bold">
               Project Requisition
             </CardTitle>
-            <CardDescription className="text-white/90 text-sm">
+            <CardDescription className="text-white/90 text-xs">
               Submit your project requirements for review
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                   {/* Basic Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <FormField
                       control={form.control}
                       name="title"
@@ -156,7 +156,7 @@ export function ProjectRequisitionForm() {
                   </div>
 
                   {/* Requester Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <FormField
                       control={form.control}
                       name="requesterName"
@@ -306,11 +306,11 @@ export function ProjectRequisitionForm() {
                   />
 
                   {/* Submit Button */}
-                  <div className="flex justify-end pt-2">
+                  <div className="flex justify-end pt-1">
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white px-6 py-2 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                      className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white px-5 py-1.5 font-semibold shadow-md hover:shadow-lg transition-all duration-200 text-sm"
                     >
                       {isSubmitting ? "Submitting..." : "Submit Request"}
                     </Button>
