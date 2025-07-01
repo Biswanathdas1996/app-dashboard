@@ -49,111 +49,78 @@ export function AppCard({ app, onClick }: AppCardProps) {
   return (
     <>
       <div 
-        className="group relative bg-white rounded-2xl shadow-sm border border-gray-200/60 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+        className="group relative bg-white/95 backdrop-blur-sm rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/20 hover:scale-[1.02] transition-all duration-200 cursor-pointer overflow-hidden"
         onClick={handleClick}
       >
-        {/* Modern gradient border on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-accent/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         
-        <div className="relative p-4">
-          {/* Compact header with app icon and title */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center space-x-3 flex-1 min-w-0">
-              <div className={`w-10 h-10 bg-gradient-to-br ${gradientClasses} rounded-xl flex items-center justify-center shadow-sm ${shadowClass} group-hover:scale-105 transition-transform duration-200 flex-shrink-0`}>
-                <i className={`${app.icon} text-white text-sm`}></i>
+        <div className="relative p-3">
+          {/* Header row */}
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2.5 flex-1 min-w-0">
+              <div className={`w-8 h-8 bg-gradient-to-br ${gradientClasses} rounded-lg flex items-center justify-center ${shadowClass} group-hover:scale-110 transition-transform duration-200 flex-shrink-0`}>
+                <i className={`${app.icon} text-white text-xs`}></i>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-base text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-1 font-header mb-1">
+                <h3 className="font-semibold text-sm text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-1 font-header">
                   {app.name}
                 </h3>
-                <div className="flex items-center gap-2">
-                  <Badge 
-                    variant="secondary" 
-                    className={`${bgClass} ${textClass} border ${borderClass} font-medium text-xs px-2 py-0.5 rounded-md`}
-                  >
-                    {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
-                  </Badge>
-                  {app.subcategory && (
-                    <span className="text-xs text-gray-500 font-medium truncate">
-                      {app.subcategory}
-                    </span>
-                  )}
-                </div>
               </div>
             </div>
-            
-            {/* Action button */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleViewDetails}
-              className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 p-0 text-gray-400 hover:text-primary"
+              className="opacity-0 group-hover:opacity-100 transition-all duration-200 h-6 w-6 p-0 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-md"
             >
-              <Eye className="h-4 w-4" />
+              <Eye className="h-3 w-3" />
             </Button>
           </div>
+
+          {/* Category and subcategory */}
+          <div className="flex items-center gap-1.5 mb-2">
+            <Badge 
+              variant="secondary" 
+              className={`${bgClass} ${textClass} border ${borderClass} font-medium text-[10px] px-1.5 py-0.5 rounded-md h-5`}
+            >
+              {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
+            </Badge>
+            {app.subcategory && (
+              <span className="text-[10px] text-gray-500 font-medium truncate bg-gray-50 px-1.5 py-0.5 rounded-md">
+                {app.subcategory}
+              </span>
+            )}
+          </div>
           
-          {/* Compact description */}
-          <div className="mb-3">
+          {/* Description */}
+          <div className="mb-2">
             {app.shortDescription ? (
-              <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+              <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                 {app.shortDescription}
               </p>
             ) : (
               <RichTextViewer 
                 content={app.description || ""} 
                 maxLines={2} 
-                className="text-gray-600 text-sm leading-relaxed"
+                className="text-gray-600 text-xs leading-relaxed"
               />
             )}
           </div>
           
-          {/* Bottom row with files and launch */}
-          <div className="flex items-center justify-between">
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-1 border-t border-gray-50">
             {/* File attachments */}
-            <div className="flex items-center gap-1 flex-1">
-              {app.attachments && app.attachments.length > 0 && (
+            <div className="flex items-center gap-1">
+              {app.attachments && app.attachments.length > 0 ? (
                 <>
-                  {app.attachments.slice(0, 2).map((filename, index) => {
-                    const originalName = filename.split('-').slice(1).join('-') || filename;
-                    const fileExtension = originalName.split('.').pop()?.toLowerCase() || '';
-                    
-                    const getFileIcon = () => {
-                      switch (fileExtension) {
-                        case 'pdf':
-                          return <FileText className="h-3 w-3 text-red-500" />;
-                        case 'doc':
-                        case 'docx':
-                          return <FileText className="h-3 w-3 text-blue-500" />;
-                        case 'txt':
-                        case 'rtf':
-                          return <FileText className="h-3 w-3 text-gray-500" />;
-                        default:
-                          return <FileText className="h-3 w-3 text-blue-500" />;
-                      }
-                    };
-                    
-                    return (
-                      <button
-                        key={index}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(`/api/files/${filename}`, '_blank');
-                        }}
-                        className="flex items-center space-x-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded border border-gray-200 hover:border-gray-300 transition-all duration-150"
-                        title={`View ${originalName}`}
-                      >
-                        {getFileIcon()}
-                        <span className="truncate max-w-16">{originalName}</span>
-                      </button>
-                    );
-                  })}
-                  {app.attachments.length > 2 && (
-                    <span className="text-xs text-gray-500 ml-1">
-                      +{app.attachments.length - 2} more
-                    </span>
-                  )}
+                  <FileText className="h-3 w-3 text-gray-400" />
+                  <span className="text-[10px] text-gray-500 font-medium">
+                    {app.attachments.length} file{app.attachments.length > 1 ? 's' : ''}
+                  </span>
                 </>
+              ) : (
+                <div className="h-3"></div>
               )}
             </div>
             
@@ -165,9 +132,9 @@ export function AppCard({ app, onClick }: AppCardProps) {
                 e.stopPropagation();
                 window.open(app.url, '_blank', 'noopener,noreferrer');
               }}
-              className="h-8 px-3 text-xs text-gray-500 hover:text-primary hover:bg-primary/5 transition-colors duration-200"
+              className="h-6 px-2 text-[10px] text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors duration-200 rounded-md font-medium"
             >
-              <ExternalLink className="h-3 w-3 mr-1" />
+              <ExternalLink className="h-2.5 w-2.5 mr-1" />
               Launch
             </Button>
           </div>
