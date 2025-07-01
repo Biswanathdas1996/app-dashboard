@@ -20,19 +20,9 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center">
             <div className="transition-transform hover:scale-105 duration-200">
               <PwCLogo size="md" />
-            </div>
-            <div className="hidden md:block">
-              <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-gray-900 tracking-tight font-header">
-                  Web Application Directory
-                </h1>
-                <p className="text-sm text-gray-500 font-medium font-body">
-                  Powered by PwC
-                </p>
-              </div>
             </div>
           </div>
 

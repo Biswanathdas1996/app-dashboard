@@ -111,6 +111,10 @@ Currently implements in-memory storage with file persistence for development. Th
 - `db:push`: Apply database schema changes
 
 ## Changelog
+- July 1, 2025: Simplified header to show only PwC logo, removed application directory text for cleaner appearance
+- July 1, 2025: Created compact and modern navigation bar with pill-style design, shortened category names, and improved responsive layout
+- July 1, 2025: Implemented horizontal navigation menu with visible category buttons and dropdown subcategories for filtering applications
+- July 1, 2025: Added dynamic category and subcategory management system with API endpoints and admin interface
 - July 1, 2025: Implemented professional typography with Helvetica Neue for body text and ITC Charter/Crimson Text for headers
 - July 1, 2025: Added short description feature with optional field in forms, card display priority, and search functionality
 - July 1, 2025: Added professional footer with PwC branding, links, and company information
