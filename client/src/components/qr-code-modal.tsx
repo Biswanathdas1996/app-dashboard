@@ -99,17 +99,17 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-4 bg-gradient-to-br from-gray-900 to-black">
-            {/* Compact QR Code Container */}
-            <div className="bg-white p-4 rounded-2xl shadow-xl border border-gray-600 mx-auto w-fit">
+            {/* Larger QR Code Container */}
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-600 mx-auto w-fit">
               {qrCodeUrl ? (
                 <img 
                   src={qrCodeUrl} 
                   alt={`QR Code for ${appName}`}
-                  className="w-48 h-48 mx-auto"
+                  className="w-64 h-64 mx-auto"
                 />
               ) : (
-                <div className="w-48 h-48 bg-gray-100 rounded-xl flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+                <div className="w-64 h-64 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"></div>
                 </div>
               )}
             </div>
