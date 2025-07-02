@@ -141,7 +141,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
         {/* Modern action buttons - Always at bottom */}
         <div className="mt-auto space-y-3">
-          <div className="flex gap-2">
+          <div className="flex gap-3 items-stretch">
             <Button
               className={`flex-1 bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
             >
@@ -151,7 +151,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
             <Button
               onClick={handleShowQR}
               variant="outline"
-              className="px-4 py-4 rounded-2xl border-2 border-gray-300 hover:border-primary hover:bg-primary/5 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="w-16 h-auto rounded-2xl border-2 border-gray-300 hover:border-primary hover:bg-primary/5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
               title="Show QR Code"
             >
               <QrCode className="h-5 w-5" />

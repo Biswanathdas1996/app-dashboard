@@ -108,6 +108,9 @@ Uses file-based JSON storage (`data/apps.json`) for all data persistence. The st
 - `start`: Production server startup
 
 ## Changelog
+- July 2, 2025: Enhanced app details modal with compact header design, improved star rating display, copy URL functionality, and better visual hierarchy
+- July 2, 2025: Added QR code functionality to app cards with compact modal displaying scannable codes for mobile access, including download and copy features
+- July 2, 2025: Improved button alignment on app cards with better spacing and proportional QR button alongside launch button
 - July 1, 2025: Fixed scrolling issue in app details modal by adding proper flex layout and min-height constraints
 - July 1, 2025: Added comprehensive export/import functionality for app.json data with responsive UI buttons and proper error handling
 - July 1, 2025: Fixed all accessibility warnings by adding proper DialogDescription components to all modal dialogs
