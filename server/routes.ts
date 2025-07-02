@@ -470,7 +470,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             subcategory: app.subcategory,
             icon: app.icon,
             isActive: app.isActive,
-            attachments: app.attachments || []
+            attachments: app.attachments || [],
+            rating: app.rating || 1
           });
           importedAppsCount++;
         } catch (error) {
@@ -491,7 +492,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               priority: requisition.priority,
               category: requisition.category,
               expectedDelivery: requisition.expectedDelivery,
-              attachments: requisition.attachments || []
+              attachments: requisition.attachments || [],
+              isPrivate: requisition.isPrivate || false,
+              logo: requisition.logo
             });
             importedRequisitionsCount++;
           } catch (error) {

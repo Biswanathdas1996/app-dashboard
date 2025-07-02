@@ -12,6 +12,7 @@ import { useCreateApp, useUpdateApp } from "@/hooks/use-apps";
 import { useCategories } from "@/hooks/use-categories";
 import { RichTextEditor } from "./rich-text-editor";
 import { FileUpload } from "./file-upload";
+import { StarRating } from "./star-rating";
 
 interface AppModalProps {
   isOpen: boolean;
@@ -52,6 +53,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
       icon: "fas fa-globe",
       isActive: true,
       attachments: [],
+      rating: 1,
     },
   });
 
@@ -67,6 +69,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
         icon: app.icon,
         isActive: app.isActive,
         attachments: app.attachments || [],
+        rating: app.rating || 1,
       });
     } else {
       form.reset({
@@ -79,6 +82,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
         icon: "fas fa-globe",
         isActive: true,
         attachments: [],
+        rating: 1,
       });
     }
   }, [app, form]);
@@ -260,6 +264,26 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="rating"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Initial Rating</FormLabel>
+                  <FormControl>
+                    <div className="py-2">
+                      <StarRating
+                        rating={field.value || 1}
+                        onRatingChange={field.onChange}
+                        size="md"
+                      />
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
