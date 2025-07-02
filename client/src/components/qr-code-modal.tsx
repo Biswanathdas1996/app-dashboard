@@ -62,7 +62,7 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md w-[90vw] max-h-[85vh] overflow-hidden p-0 gap-0 flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black border-gray-700">
+      <DialogContent className="max-w-lg w-[95vw] max-h-[90vh] overflow-hidden p-0 gap-0 flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black border-gray-700">
         {/* Compact Header */}
         <div className="relative bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white border-b border-gray-700">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
@@ -100,16 +100,16 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-4 bg-gradient-to-br from-gray-900 to-black">
             {/* Larger QR Code Container */}
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-600 mx-auto w-fit">
+            <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-600 mx-auto w-fit">
               {qrCodeUrl ? (
                 <img 
                   src={qrCodeUrl} 
                   alt={`QR Code for ${appName}`}
-                  className="w-64 h-64 mx-auto"
+                  className="w-72 h-72 mx-auto"
                 />
               ) : (
-                <div className="w-64 h-64 bg-gray-100 rounded-xl flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"></div>
+                <div className="w-72 h-72 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-600"></div>
                 </div>
               )}
             </div>
