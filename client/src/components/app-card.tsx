@@ -69,7 +69,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden min-w-[320px] max-w-[380px] flex flex-col h-full transform hover:scale-[1.02]"
+      className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden w-full flex flex-col h-full transform hover:scale-[1.02]"
       onClick={handleClick}
     >
       {/* Enhanced glassmorphism effect with subtle animation */}

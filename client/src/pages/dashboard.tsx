@@ -130,7 +130,7 @@ export default function Dashboard() {
 
           {/* Applications Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 lg:gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 lg:gap-10">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div
                   key={i}
@@ -152,7 +152,7 @@ export default function Dashboard() {
               ))}
             </div>
           ) : apps && apps.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 lg:gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 lg:gap-10">
               {apps.map((app) => (
                 <AppCard
                   key={app.id}
