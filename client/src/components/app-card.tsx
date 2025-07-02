@@ -69,7 +69,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   return (
     <div 
-      className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden min-w-[280px] flex flex-col h-full transform hover:scale-[1.02]"
+      className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden min-w-[320px] max-w-[380px] flex flex-col h-full transform hover:scale-[1.02]"
       onClick={handleClick}
     >
       {/* Enhanced glassmorphism effect with subtle animation */}
@@ -92,22 +92,22 @@ export function AppCard({ app, onClick }: AppCardProps) {
         </Button>
       </div>
       
-      <div className="relative p-6 flex flex-col flex-1 z-10">
-        {/* Enhanced header with better spacing */}
-        <div className="flex items-start gap-4 mb-5">
-          <div className={`w-16 h-16 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-xl ${shadowClass} group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden`}>
+      <div className="relative p-5 flex flex-col flex-1 z-10">
+        {/* Enhanced header with optimized spacing */}
+        <div className="flex items-start gap-4 mb-4">
+          <div className={`w-14 h-14 bg-gradient-to-br ${gradientClasses} rounded-2xl flex items-center justify-center shadow-xl ${shadowClass} group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden`}>
             {/* Icon shine effect */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <i className={`${app.icon} text-white text-xl relative z-10`}></i>
+            <i className={`${app.icon} text-white text-lg relative z-10`}></i>
           </div>
-          <div className="flex-1 min-w-0 space-y-2">
-            <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary transition-colors duration-300 leading-tight line-clamp-2">
+          <div className="flex-1 min-w-0 space-y-1.5">
+            <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
               {app.name}
             </h3>
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-100 px-2 py-1 rounded-full">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide bg-gray-100 px-2 py-1 rounded-full">
                 {app.category}
-              </p>
+              </span>
               {app.subcategory && (
                 <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">
                   {app.subcategory}
@@ -121,74 +121,64 @@ export function AppCard({ app, onClick }: AppCardProps) {
                 size="sm"
               />
               <span className="text-xs text-gray-500 font-medium">
-                {app.rating ? app.rating.toFixed(1) : '0.0'} stars
+                {app.rating ? app.rating.toFixed(1) : '0.0'}
               </span>
             </div>
           </div>
         </div>
         
-        {/* Enhanced description with better typography */}
-        <div className="flex-1 space-y-4">
+        {/* Optimized description section */}
+        <div className="flex-1 space-y-3">
           {(app.shortDescription || app.description) && (
-            <div className="bg-gradient-to-br from-gray-50/50 to-gray-100/30 rounded-2xl p-4 border border-gray-200/40">
+            <div className="bg-gradient-to-br from-gray-50/50 to-gray-100/30 rounded-xl p-3 border border-gray-200/40">
               {app.shortDescription ? (
-                <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 font-medium">
+                <p className="text-gray-700 text-sm leading-relaxed line-clamp-4">
                   {app.shortDescription}
                 </p>
               ) : (
                 <RichTextViewer 
                   content={app.description || ""} 
-                  maxLines={3} 
+                  maxLines={4} 
                   className="text-gray-700 text-sm leading-relaxed"
                 />
               )}
             </div>
           )}
           
-          {/* Enhanced file indicator with animation */}
+          {/* Compact file indicator */}
           {app.attachments && app.attachments.length > 0 && (
-            <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/90 to-indigo-50/90 rounded-2xl border border-blue-200/60 group-hover:border-blue-300/80 transition-colors duration-300">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center shadow-sm">
-                <FileText className="h-4 w-4 text-blue-600" />
+            <div className="flex items-center gap-2 p-2.5 bg-gradient-to-r from-blue-50/90 to-indigo-50/90 rounded-xl border border-blue-200/60 group-hover:border-blue-300/80 transition-colors duration-300">
+              <div className="w-7 h-7 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                <FileText className="h-3.5 w-3.5 text-blue-600" />
               </div>
-              <div className="flex-1">
-                <span className="text-sm font-semibold text-gray-700">
-                  {app.attachments.length} {app.attachments.length === 1 ? 'file' : 'files'}
-                </span>
-                <p className="text-xs text-gray-500">Documents available</p>
-              </div>
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-gray-700 flex-1">
+                {app.attachments.length} {app.attachments.length === 1 ? 'file' : 'files'}
+              </span>
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
             </div>
           )}
         </div>
 
-        {/* Enhanced action buttons with improved styling */}
-        <div className="mt-auto pt-4 space-y-3">
-          <div className="flex gap-3 items-stretch">
+        {/* Optimized action buttons */}
+        <div className="mt-auto pt-3">
+          <div className="flex gap-2.5 items-stretch">
             <Button
-              className={`flex-1 bg-gradient-to-r ${gradientClasses} text-white hover:opacity-95 hover:scale-[1.03] transition-all duration-400 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl relative overflow-hidden`}
+              className={`flex-1 bg-gradient-to-r ${gradientClasses} text-white hover:opacity-95 hover:scale-[1.02] transition-all duration-400 shadow-lg ${shadowClass} rounded-xl font-bold py-3.5 text-sm border-0 group-hover:shadow-xl relative overflow-hidden`}
             >
               {/* Button shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <ExternalLink className="h-5 w-5 mr-2 relative z-10" />
+              <ExternalLink className="h-4 w-4 mr-2 relative z-10" />
               <span className="relative z-10">Launch App</span>
             </Button>
             <Button
               onClick={handleShowQR}
               variant="outline"
-              className="w-16 h-auto rounded-2xl border-2 border-gray-300 hover:border-primary hover:bg-primary/10 transition-all duration-400 shadow-lg hover:shadow-xl flex items-center justify-center hover:scale-110 group/qr relative overflow-hidden"
+              className="w-14 h-auto rounded-xl border-2 border-gray-300 hover:border-primary hover:bg-primary/10 transition-all duration-400 shadow-md hover:shadow-lg flex items-center justify-center hover:scale-105 group/qr relative overflow-hidden"
               title="Show QR Code"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover/qr:opacity-100 transition-opacity duration-400"></div>
-              <QrCode className="h-5 w-5 relative z-10 transition-transform duration-300 group-hover/qr:rotate-12" />
+              <QrCode className="h-4 w-4 relative z-10 transition-transform duration-300 group-hover/qr:rotate-12" />
             </Button>
-          </div>
-          
-          {/* Subtle interaction hint */}
-          <div className="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-            <p className="text-xs text-gray-500">
-              Click to launch • QR for mobile access
-            </p>
           </div>
         </div>
       </div>
