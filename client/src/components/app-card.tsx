@@ -1,10 +1,11 @@
-import { ExternalLink, FileText, Eye } from "lucide-react";
+import { ExternalLink, FileText, Eye, QrCode } from "lucide-react";
 import { useState } from "react";
 import type { WebApp } from "@shared/schema";
 import { RichTextViewer } from "./rich-text-viewer";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { AppDetailsModal } from "./app-details-modal";
+import { QRCodeModal } from "./qr-code-modal";
 import { StarRating } from "./star-rating";
 import { useUpdateApp } from "@/hooks/use-apps";
 
@@ -24,6 +25,7 @@ const categoryColors = {
 
 export function AppCard({ app, onClick }: AppCardProps) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const updateApp = useUpdateApp();
   
   const colorClasses = categoryColors[app.category as keyof typeof categoryColors] || 
@@ -47,6 +49,11 @@ export function AppCard({ app, onClick }: AppCardProps) {
   const handleViewDetails = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowDetailsModal(true);
+  };
+
+  const handleShowQR = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowQRModal(true);
   };
 
   const handleRatingChange = async (newRating: number) => {
@@ -132,14 +139,24 @@ export function AppCard({ app, onClick }: AppCardProps) {
           )}
         </div>
 
-        {/* Modern launch button - Always at bottom */}
-        <div className="mt-auto">
-          <Button
-            className={`w-full bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
-          >
-            <ExternalLink className="h-5 w-5 mr-2" />
-            Launch Application
-          </Button>
+        {/* Modern action buttons - Always at bottom */}
+        <div className="mt-auto space-y-3">
+          <div className="flex gap-2">
+            <Button
+              className={`flex-1 bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 shadow-xl ${shadowClass} rounded-2xl font-bold py-4 text-base border-0 group-hover:shadow-2xl`}
+            >
+              <ExternalLink className="h-5 w-5 mr-2" />
+              Launch Application
+            </Button>
+            <Button
+              onClick={handleShowQR}
+              variant="outline"
+              className="px-4 py-4 rounded-2xl border-2 border-gray-300 hover:border-primary hover:bg-primary/5 transition-all duration-300 shadow-lg hover:shadow-xl"
+              title="Show QR Code"
+            >
+              <QrCode className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -148,6 +165,14 @@ export function AppCard({ app, onClick }: AppCardProps) {
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
         app={app}
+      />
+
+      {/* QR Code Modal */}
+      <QRCodeModal 
+        isOpen={showQRModal}
+        onClose={() => setShowQRModal(false)}
+        url={app.url}
+        appName={app.name}
       />
     </div>
   );
