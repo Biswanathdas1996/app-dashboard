@@ -62,19 +62,21 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl w-[90vw] max-h-[90vh] overflow-hidden p-0 gap-0 flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black border-gray-700">
-        {/* Header */}
-        <div className="relative bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white border-b border-gray-700">
+      <DialogContent className="max-w-md w-[90vw] max-h-[85vh] overflow-hidden p-0 gap-0 flex flex-col bg-gradient-to-br from-slate-900 via-gray-900 to-black border-gray-700">
+        {/* Compact Header */}
+        <div className="relative bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white border-b border-gray-700">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
           <div className="relative z-10">
             <DialogHeader className="space-y-0">
-              <DialogDescription className="text-gray-300 text-sm mb-2">
-                Scan to access application on mobile device
-              </DialogDescription>
               <div className="flex items-center justify-between">
-                <DialogTitle className="text-2xl font-bold text-white tracking-tight">
-                  QR Code for {appName}
-                </DialogTitle>
+                <div>
+                  <DialogTitle className="text-lg font-bold text-white tracking-tight">
+                    QR Code
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300 text-xs">
+                    Scan to access {appName}
+                  </DialogDescription>
+                </div>
                 <Button
                   type="button"
                   variant="ghost"
@@ -84,7 +86,7 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
                     e.stopPropagation();
                     onClose();
                   }}
-                  className="h-8 w-8 p-0 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                  className="h-7 w-7 p-0 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
                   title="Close modal"
                 >
                   <X className="h-4 w-4" />
@@ -94,29 +96,29 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
           </div>
         </div>
 
-        {/* QR Code Display */}
-        <div className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-gray-900 to-black">
-          <div className="text-center space-y-6">
-            {/* QR Code Container */}
-            <div className="bg-white p-8 rounded-3xl shadow-2xl border border-gray-600 mx-auto inline-block">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-4 space-y-4 bg-gradient-to-br from-gray-900 to-black">
+            {/* Compact QR Code Container */}
+            <div className="bg-white p-4 rounded-2xl shadow-xl border border-gray-600 mx-auto w-fit">
               {qrCodeUrl ? (
                 <img 
                   src={qrCodeUrl} 
                   alt={`QR Code for ${appName}`}
-                  className="w-64 h-64 mx-auto"
+                  className="w-48 h-48 mx-auto"
                 />
               ) : (
-                <div className="w-64 h-64 bg-gray-100 rounded-xl flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"></div>
+                <div className="w-48 h-48 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
                 </div>
               )}
             </div>
 
-            {/* URL Display */}
-            <div className="bg-gray-800/50 rounded-2xl p-4 border border-gray-700 backdrop-blur-sm">
-              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Application URL</p>
+            {/* Compact URL Display */}
+            <div className="bg-gray-800/50 rounded-xl p-3 border border-gray-700 backdrop-blur-sm">
+              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">URL</p>
               <div className="flex items-center space-x-2">
-                <div className="flex-1 bg-gray-900/50 px-3 py-2 rounded-lg border border-gray-600 font-mono text-sm text-gray-200 min-w-0">
+                <div className="flex-1 bg-gray-900/50 px-2 py-1 rounded border border-gray-600 font-mono text-xs text-gray-200 min-w-0">
                   <span className="truncate block">{url}</span>
                 </div>
                 <Button
@@ -128,59 +130,61 @@ export function QRCodeModal({ isOpen, onClose, url, appName }: QRCodeModalProps)
                     e.stopPropagation();
                     copyToClipboard();
                   }}
-                  className="shrink-0 h-9 w-9 p-0 hover:bg-blue-600/20 border-gray-600 text-gray-300 hover:text-white"
+                  className="shrink-0 h-7 w-7 p-0 hover:bg-blue-600/20 border-gray-600 text-gray-300 hover:text-white"
                   title="Copy URL"
                 >
                   {copied ? (
-                    <Check className="h-4 w-4 text-green-400" />
+                    <Check className="h-3 w-3 text-green-400" />
                   ) : (
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-3 w-3" />
                   )}
                 </Button>
               </div>
             </div>
 
-            {/* Instructions */}
-            <div className="text-center space-y-2">
-              <p className="text-gray-300 text-sm">
-                Point your mobile camera at the QR code to open the application
+            {/* Compact Instructions */}
+            <div className="text-center space-y-1">
+              <p className="text-gray-300 text-xs">
+                Point your camera at the QR code
               </p>
               <p className="text-gray-500 text-xs">
-                Works with most modern smartphones and QR code scanner apps
+                Works with most smartphones
               </p>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-700 bg-gray-800/50">
+        {/* Compact Footer */}
+        <div className="p-3 border-t border-gray-700 bg-gray-800/50">
           <div className="flex items-center justify-between">
             <div className="text-xs text-gray-400">
-              Press <kbd className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-gray-300 font-mono">Esc</kbd> to close
+              <kbd className="px-1 py-0.5 bg-gray-700 border border-gray-600 rounded text-gray-300 font-mono text-xs">Esc</kbd>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <Button
                 type="button"
                 variant="outline"
+                size="sm"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   downloadQRCode();
                 }}
-                className="bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600 px-4 py-2 rounded-lg"
+                className="bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600 px-3 py-1 rounded text-xs"
                 disabled={!qrCodeUrl}
               >
-                <Download className="h-4 w-4 mr-2" />
-                Download
+                <Download className="h-3 w-3 mr-1" />
+                Save
               </Button>
               <Button 
                 type="button"
+                size="sm"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   onClose();
                 }}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-3 py-1 rounded text-xs"
               >
                 Close
               </Button>
