@@ -93,47 +93,47 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-hidden p-0 gap-0 flex flex-col">
         {/* Header Section with Gradient Background */}
-        <div className={`relative bg-gradient-to-br ${gradientClasses} p-8 text-white overflow-hidden`}>
+        <div className={`relative bg-gradient-to-br ${gradientClasses} p-6 text-white overflow-hidden`}>
           <div className="absolute inset-0 bg-black/10"></div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-24 translate-x-24"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-16 -translate-x-16"></div>
           
           <div className="relative z-10">
             <DialogHeader className="space-y-0">
-              <DialogDescription className="text-white/80 text-base mb-4">
-                View detailed information about {app.name} including description, documents, and launch link.
+              <DialogDescription className="text-white/80 text-sm mb-3">
+                View detailed information about {app.name}
               </DialogDescription>
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-6">
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-xl border border-white/20">
-                    <i className={`${app.icon} text-white text-3xl`}></i>
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/20">
+                    <i className={`${app.icon} text-white text-2xl`}></i>
                   </div>
                   <div>
-                    <DialogTitle className="text-4xl font-bold text-white mb-3 tracking-tight font-header">
+                    <DialogTitle className="text-3xl font-bold text-white mb-2 tracking-tight font-header">
                       {app.name}
                     </DialogTitle>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-3">
                       <Badge 
                         variant="secondary" 
-                        className="bg-white/20 text-white border-white/20 font-semibold text-sm px-4 py-2 rounded-xl backdrop-blur-sm hover:bg-white/30 transition-colors"
+                        className="bg-white/20 text-white border-white/20 font-semibold text-xs px-3 py-1 rounded-lg backdrop-blur-sm hover:bg-white/30 transition-colors"
                       >
                         {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
                       </Badge>
                       {app.subcategory && (
-                        <span className="text-sm font-medium text-white/90 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
+                        <span className="text-xs font-medium text-white/90 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm">
                           {app.subcategory}
                         </span>
                       )}
-                      <div className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-white">
+                      <div className="flex items-center space-x-1 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm">
+                        <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                        <span className="text-xs font-medium text-white">
                           {app.rating.toFixed(1)}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                   <Button
                     type="button"
                     onClick={(e) => {
@@ -141,11 +141,10 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                       e.stopPropagation();
                       window.open(app.url, '_blank', 'noopener,noreferrer');
                     }}
-                    className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-                    size="lg"
+                    className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm font-semibold px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                   >
-                    <ExternalLink className="h-5 w-5 mr-2" />
-                    Launch Application
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Launch
                   </Button>
                   <Button
                     type="button"
@@ -156,10 +155,10 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                       e.stopPropagation();
                       onClose();
                     }}
-                    className="h-10 w-10 p-0 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                    className="h-8 w-8 p-0 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
                     title="Close modal"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
