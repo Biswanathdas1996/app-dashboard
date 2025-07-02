@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { insertWebAppSchema, type WebApp, type InsertWebApp, type Category } from "@shared/schema";
 import { useCreateApp, useUpdateApp } from "@/hooks/use-apps";
 import { useCategories } from "@/hooks/use-categories";
+import { useSubcategories } from "@/hooks/use-categories";
 import { RichTextEditor } from "./rich-text-editor";
 import { FileUpload } from "./file-upload";
 import { StarRating } from "./star-rating";
@@ -40,6 +41,7 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
   const createApp = useCreateApp();
   const updateApp = useUpdateApp();
   const { data: categoriesData } = useCategories();
+  const { data: subcategoriesData } = useSubcategories();
   
   const form = useForm<InsertWebApp>({
     resolver: zodResolver(insertWebAppSchema),
@@ -86,6 +88,22 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
       });
     }
   }, [app, form]);
+
+  // Watch the selected category to filter subcategories
+  const selectedCategory = form.watch("category");
+  const selectedCategoryId = categoriesData?.find(cat => cat.name === selectedCategory)?.id;
+  const availableSubcategories = subcategoriesData?.filter(sub => sub.categoryId === selectedCategoryId) || [];
+
+  // Clear subcategory when category changes
+  useEffect(() => {
+    if (selectedCategory && availableSubcategories.length > 0) {
+      const currentSubcategory = form.getValues("subcategory");
+      const isValidSubcategory = availableSubcategories.some(sub => sub.name === currentSubcategory);
+      if (!isValidSubcategory) {
+        form.setValue("subcategory", "");
+      }
+    }
+  }, [selectedCategory, availableSubcategories, form]);
 
   const onSubmit = async (data: InsertWebApp) => {
     try {
@@ -214,9 +232,23 @@ export function AppModal({ isOpen, onClose, app }: AppModalProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Subcategory</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter subcategory" {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select subcategory" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {availableSubcategories.length === 0 && (
+                          <SelectItem value="none" disabled>No subcategories available</SelectItem>
+                        )}
+                        {availableSubcategories.map((subcategory) => (
+                          <SelectItem key={subcategory.id} value={subcategory.name}>
+                            {subcategory.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
