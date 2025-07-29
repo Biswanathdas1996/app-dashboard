@@ -17,8 +17,8 @@ This is a full-stack web application directory that allows users to manage and a
 ### Backend Architecture
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js for REST API
-- **Data Storage**: File-based JSON storage (no database)
-- **Schema Validation**: Zod for runtime type checking
+- **Database**: PostgreSQL with Drizzle ORM
+- **Schema Validation**: Zod for runtime type checking with Drizzle integration
 - **Session Management**: Express sessions with memory store
 
 ### Project Structure
@@ -63,7 +63,7 @@ This is a full-stack web application directory that allows users to manage and a
 - **404 Page**: Error handling for unknown routes
 
 ### Storage Strategy
-Uses file-based JSON storage (`data/apps.json`) for all data persistence. The storage layer is abstracted through an interface and completely independent of any database system.
+Uses PostgreSQL database with Drizzle ORM for all data persistence. The storage layer is abstracted through an interface (IStorage) with a DatabaseStorage implementation that provides full CRUD operations for all entities.
 
 ## Data Flow
 
@@ -108,6 +108,7 @@ Uses file-based JSON storage (`data/apps.json`) for all data persistence. The st
 - `start`: Production server startup
 
 ## Changelog
+- January 8, 2025: **Major Database Migration** - Completely refactored application from JSON file storage to PostgreSQL database with Drizzle ORM, maintaining all existing functionality while providing better performance, data integrity, and scalability
 - July 2, 2025: Enhanced app details modal with compact header design, improved star rating display, copy URL functionality, and better visual hierarchy
 - July 2, 2025: Added QR code functionality to app cards with compact modal displaying scannable codes for mobile access, including download and copy features
 - July 2, 2025: Optimized app card design with increased width (320-380px), reduced unused space, improved typography, and enhanced UX with better content density

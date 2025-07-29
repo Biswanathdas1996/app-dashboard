@@ -1,7 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertWebAppSchema, updateWebAppSchema, insertCategorySchema, updateCategorySchema, insertSubcategorySchema, updateSubcategorySchema, insertProjectRequisitionSchema, updateProjectRequisitionSchema } from "@shared/schema";
+import { 
+  enhancedInsertWebAppSchema, 
+  updateWebAppSchema, 
+  enhancedInsertCategorySchema, 
+  updateCategorySchema, 
+  enhancedInsertSubcategorySchema, 
+  updateSubcategorySchema, 
+  enhancedInsertProjectRequisitionSchema, 
+  updateProjectRequisitionSchema 
+} from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -98,7 +107,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new web app
   app.post("/api/apps", async (req, res) => {
     try {
-      const validatedApp = insertWebAppSchema.parse(req.body);
+      const validatedApp = enhancedInsertWebAppSchema.parse(req.body);
       const app = await storage.createWebApp(validatedApp);
       res.status(201).json(app);
     } catch (error) {
@@ -161,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/categories", async (req, res) => {
     try {
-      const validatedCategory = insertCategorySchema.parse(req.body);
+      const validatedCategory = enhancedInsertCategorySchema.parse(req.body);
       const category = await storage.createCategory(validatedCategory);
       res.status(201).json(category);
     } catch (error) {
@@ -229,7 +238,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/subcategories", async (req, res) => {
     try {
-      const validatedSubcategory = insertSubcategorySchema.parse(req.body);
+      const validatedSubcategory = enhancedInsertSubcategorySchema.parse(req.body);
       const subcategory = await storage.createSubcategory(validatedSubcategory);
       res.status(201).json(subcategory);
     } catch (error) {
@@ -341,7 +350,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/requisitions", async (req, res) => {
     try {
-      const validatedRequisition = insertProjectRequisitionSchema.parse(req.body);
+      const validatedRequisition = enhancedInsertProjectRequisitionSchema.parse(req.body);
       const requisition = await storage.createProjectRequisition(validatedRequisition);
       res.status(201).json(requisition);
     } catch (error) {
