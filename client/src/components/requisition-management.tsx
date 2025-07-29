@@ -50,13 +50,13 @@ function RequisitionDetailsModal({ isOpen, onClose, requisition }: RequisitionDe
             <div className="flex items-center space-x-4">
               <Badge 
                 variant="secondary" 
-                className={`${priorityColors[requisition.priority]} font-semibold`}
+                className={`${priorityColors[requisition.priority as keyof typeof priorityColors]} font-semibold`}
               >
                 {requisition.priority.charAt(0).toUpperCase() + requisition.priority.slice(1)} Priority
               </Badge>
               <Badge 
                 variant="secondary" 
-                className={`${statusColors[requisition.status]} font-semibold`}
+                className={`${statusColors[requisition.status as keyof typeof statusColors]} font-semibold`}
               >
                 {requisition.status.charAt(0).toUpperCase() + requisition.status.slice(1)}
               </Badge>
@@ -285,7 +285,7 @@ export function RequisitionManagement() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge className={priorityColors[requisition.priority]}>
+                    <Badge className={priorityColors[requisition.priority as keyof typeof priorityColors]}>
                       {requisition.priority.charAt(0).toUpperCase() + requisition.priority.slice(1)}
                     </Badge>
                   </TableCell>
@@ -322,6 +322,17 @@ export function RequisitionManagement() {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
+                      {requisition.deployedLink && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => window.open(requisition.deployedLink!, '_blank')}
+                          className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50"
+                          title="View Deployed Application"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"

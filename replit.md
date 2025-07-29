@@ -108,6 +108,9 @@ Uses PostgreSQL database with Drizzle ORM for all data persistence. The storage 
 - `start`: Production server startup
 
 ## Changelog
+- July 29, 2025: Added deployed URL viewing functionality to project requisitions - external link button in management table and dedicated section in details modal for completed projects
+- July 29, 2025: Fixed TypeScript validation errors in schema definitions and requisition management component for improved type safety
+- July 29, 2025: Created drizzle.config.json file for database schema management and resolved application startup issues
 - January 8, 2025: **Major Database Migration** - Completely refactored application from JSON file storage to PostgreSQL database with Drizzle ORM, maintaining all existing functionality while providing better performance, data integrity, and scalability
 - July 2, 2025: Enhanced app details modal with compact header design, improved star rating display, copy URL functionality, and better visual hierarchy
 - July 2, 2025: Added QR code functionality to app cards with compact modal displaying scannable codes for mobile access, including download and copy features
