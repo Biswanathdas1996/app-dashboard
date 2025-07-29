@@ -140,19 +140,19 @@ export const updateProjectRequisitionSchema = enhancedInsertProjectRequisitionSc
 
 // Types
 export type User = typeof users.$inferSelect;
-export type InsertUser = z.infer<typeof insertUserSchema>;
+export type InsertUser = typeof users.$inferInsert;
 
 export type Category = typeof categories.$inferSelect;
-export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type InsertCategory = z.infer<typeof enhancedInsertCategorySchema>;
 
 export type Subcategory = typeof subcategories.$inferSelect;
-export type InsertSubcategory = z.infer<typeof insertSubcategorySchema>;
+export type InsertSubcategory = z.infer<typeof enhancedInsertSubcategorySchema>;
 
 export type WebApp = typeof webApps.$inferSelect;
-export type InsertWebApp = z.infer<typeof insertWebAppSchema>;
+export type InsertWebApp = z.infer<typeof enhancedInsertWebAppSchema>;
 
 export type ProjectRequisition = typeof projectRequisitions.$inferSelect;
-export type InsertProjectRequisition = z.infer<typeof insertProjectRequisitionSchema>;
+export type InsertProjectRequisition = z.infer<typeof enhancedInsertProjectRequisitionSchema>;
 
 export type UpdateCategory = z.infer<typeof updateCategorySchema>;
 export type UpdateSubcategory = z.infer<typeof updateSubcategorySchema>;
