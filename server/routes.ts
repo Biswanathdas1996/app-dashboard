@@ -58,6 +58,35 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Override the root redirect in production mode to serve directly
+  if (process.env.NODE_ENV === "production") {
+    const express = require("express");
+    const path = require("path");
+    const fs = require("fs");
+    
+    const distPath = path.resolve(__dirname, "public");
+    
+    // Serve static files from root instead of /app-dashboard
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+    }
+    
+    // Handle root route to serve index.html directly
+    app.get("/", (req, res, next) => {
+      try {
+        const indexPath = path.resolve(distPath, "index.html");
+        
+        if (fs.existsSync(indexPath)) {
+          res.sendFile(indexPath);
+        } else {
+          next();
+        }
+      } catch (error) {
+        next();
+      }
+    });
+  }
+
   // Health check endpoint for Kubernetes probes
   app.get("/api/health", (req, res) => {
     res.status(200).json({
@@ -564,6 +593,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to import data" });
     }
   });
+
+  // Add catch-all route for SPA in production mode
+  if (process.env.NODE_ENV === "production") {
+    app.get("*", (req, res) => {
+      const path = require("path");
+      const distPath = path.resolve(__dirname, "public");
+      const indexPath = path.resolve(distPath, "index.html");
+      res.sendFile(indexPath);
+    });
+  }
 
   const httpServer = createServer(app);
   return httpServer;
