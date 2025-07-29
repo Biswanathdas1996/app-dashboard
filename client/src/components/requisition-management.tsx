@@ -240,7 +240,6 @@ export function RequisitionManagement() {
               <TableHead>Project Title</TableHead>
               <TableHead>Requester</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead>Priority</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -253,7 +252,6 @@ export function RequisitionManagement() {
                   <TableCell><Skeleton className="h-4 w-48" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                  <TableCell><Skeleton className="h-5 w-16" /></TableCell>
                   <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                   <TableCell className="text-right">
@@ -282,11 +280,6 @@ export function RequisitionManagement() {
                   <TableCell>
                     <Badge variant="outline" className="bg-slate-50">
                       {requisition.category}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={priorityColors[requisition.priority as keyof typeof priorityColors]}>
-                      {requisition.priority.charAt(0).toUpperCase() + requisition.priority.slice(1)}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -377,7 +370,7 @@ export function RequisitionManagement() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-16">
+                <TableCell colSpan={6} className="text-center py-16">
                   <div className="text-slate-500">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <AlertCircle className="h-6 w-6" />
