@@ -269,26 +269,27 @@ export function RequisitionEditModal({ isOpen, onClose, requisition }: Requisiti
                 />
               </div>
 
-              {/* Deployed Link - Show only for completed status */}
-              {form.watch('status') === 'completed' && (
-                <FormField
-                  control={form.control}
-                  name="deployedLink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Deployed Link</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="url" 
-                          placeholder="https://your-deployed-app.com" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+              {/* Deployed Link - Always available */}
+              <FormField
+                control={form.control}
+                name="deployedLink"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Deployed Link (Optional)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="url" 
+                        placeholder="https://your-deployed-app.com" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <div className="text-sm text-gray-500">
+                      Add the URL where the completed application is deployed
+                    </div>
+                  </FormItem>
+                )}
+              />
 
               {/* Description */}
               <FormField
