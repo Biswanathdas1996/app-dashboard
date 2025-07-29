@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Eye, Edit, Mail, Calendar, Clock, AlertCircle, CheckCircle2, X, ExternalLink } from "lucide-react";
+import { useState, useRef } from "react";
+import { Eye, Edit, Mail, Calendar, Clock, AlertCircle, CheckCircle2, X, ExternalLink, Download, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -173,6 +173,7 @@ export function RequisitionManagement() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingRequisition, setEditingRequisition] = useState<ProjectRequisition | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { toast } = useToast();
   const { data: requisitions, isLoading } = useRequisitions();
@@ -224,12 +225,206 @@ export function RequisitionManagement() {
     }
   };
 
+  const exportToCSV = () => {
+    if (!requisitions || requisitions.length === 0) {
+      toast({
+        title: "No data to export",
+        description: "There are no requisitions to export.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const headers = [
+      'ID',
+      'Title',
+      'Description',
+      'Requester Name',
+      'Requester Email',
+      'Priority',
+      'Category',
+      'Expected Delivery',
+      'Status',
+      'Deployed Link',
+      'Is Private',
+      'Created At',
+      'Updated At'
+    ];
+
+    const csvData = requisitions.map(req => [
+      req.id?.toString() || '',
+      req.title || '',
+      req.description?.replace(/<[^>]*>/g, '') || '', // Strip HTML tags
+      req.requesterName || '',
+      req.requesterEmail || '',
+      req.priority || '',
+      req.category || '',
+      req.expectedDelivery || '',
+      req.status || '',
+      req.deployedLink || '',
+      req.isPrivate ? 'Yes' : 'No',
+      req.createdAt ? new Date(req.createdAt).toISOString() : '',
+      req.updatedAt ? new Date(req.updatedAt).toISOString() : ''
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(field => `"${field.replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `project-requisitions-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Export successful",
+      description: `Exported ${requisitions.length} requisitions to CSV.`,
+    });
+  };
+
+  const handleImportCSV = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select a CSV file.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csv = e.target?.result as string;
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+        
+        // Validate headers
+        const requiredHeaders = ['Title', 'Description', 'Requester Name', 'Requester Email', 'Priority', 'Category'];
+        const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+        
+        if (missingHeaders.length > 0) {
+          toast({
+            title: "Invalid CSV format",
+            description: `Missing required columns: ${missingHeaders.join(', ')}`,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const data = lines.slice(1).filter(line => line.trim()).map(line => {
+          const values = line.split(',').map(v => v.replace(/"/g, '').trim());
+          const obj: any = {};
+          headers.forEach((header, index) => {
+            obj[header] = values[index] || '';
+          });
+          return obj;
+        });
+
+        // Process each row
+        let importedCount = 0;
+        data.forEach(async (row) => {
+          if (row.Title && row['Requester Name'] && row['Requester Email']) {
+            try {
+              // Create requisition via API
+              const response = await fetch('/api/requisitions', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  title: row.Title,
+                  description: row.Description || '',
+                  requesterName: row['Requester Name'],
+                  requesterEmail: row['Requester Email'],
+                  priority: ['low', 'medium', 'high', 'urgent'].includes(row.Priority?.toLowerCase()) ? row.Priority.toLowerCase() : 'medium',
+                  category: row.Category || 'General',
+                  expectedDelivery: row['Expected Delivery'] || null,
+                  status: ['pending', 'approved', 'rejected', 'in-progress', 'completed'].includes(row.Status?.toLowerCase()) ? row.Status.toLowerCase() : 'pending',
+                  deployedLink: row['Deployed Link'] || null,
+                  isPrivate: row['Is Private']?.toLowerCase() === 'yes' || row['Is Private']?.toLowerCase() === 'true' || false,
+                  attachments: [],
+                }),
+              });
+              
+              if (response.ok) {
+                importedCount++;
+              }
+            } catch (error) {
+              console.error('Error importing row:', error);
+            }
+          }
+        });
+
+        // Refresh the data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
+        toast({
+          title: "Import started",
+          description: `Processing ${data.length} rows. Page will refresh automatically.`,
+        });
+
+      } catch (error) {
+        toast({
+          title: "Import failed",
+          description: "Error parsing CSV file. Please check the format.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    reader.readAsText(file);
+    
+    // Reset the input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Project Requisitions</h2>
           <p className="text-gray-600 mt-1">Review and manage submitted project requests</p>
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportToCSV}
+            disabled={!requisitions || requisitions.length === 0}
+            className="flex items-center space-x-2"
+          >
+            <Download className="h-4 w-4" />
+            <span>Export CSV</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center space-x-2"
+          >
+            <Upload className="h-4 w-4" />
+            <span>Import CSV</span>
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv"
+            onChange={handleImportCSV}
+            className="hidden"
+          />
         </div>
       </div>
 
