@@ -38,7 +38,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
           </div>
 
           {/* Navigation Menu - Only show on dashboard */}
-          {location.includes("/app-dashboard") && onCategoryChange && (
+          {location === "/" && onCategoryChange && (
             <div className="hidden md:flex items-center flex-1 justify-center max-w-2xl mx-4">
               <NavigationMenu 
                 onCategoryChange={onCategoryChange}
@@ -109,7 +109,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
         </div>
 
         {/* Mobile Navigation and Search - Only show on dashboard */}
-        {location.includes("/app-dashboard") && onSearchChange && (
+        {location === "/" && onSearchChange && (
           <div className="md:hidden px-4 pb-4 space-y-3">
             {/* Mobile Navigation */}
             {onCategoryChange && (

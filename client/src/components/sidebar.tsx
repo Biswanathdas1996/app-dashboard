@@ -6,12 +6,12 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: "/app-dashboard/",
+      path: "/",
       label: "Dashboard",
       icon: Home,
     },
     {
-      path: "/app-dashboard/admin",
+      path: "/admin",
       label: "Admin Panel",
       icon: Settings,
     },

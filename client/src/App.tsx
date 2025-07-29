@@ -9,15 +9,11 @@ import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 import { Footer } from "@/components/footer";
 
-// App prefix configuration
-const APP_PREFIX = "/app-dashboard";
-
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={() => <Redirect to={`${APP_PREFIX}/`} />} />
-      <Route path={`${APP_PREFIX}/`} component={Dashboard} />
-      <Route path={`${APP_PREFIX}/admin`} component={Admin} />
+      <Route path="/" component={Dashboard} />
+      <Route path="/admin" component={Admin} />
 
       <Route component={NotFound} />
     </Switch>
