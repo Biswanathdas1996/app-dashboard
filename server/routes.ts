@@ -399,28 +399,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Export all data endpoint
+  // Export all data endpoint (CSV format)
   app.get("/api/export", async (req, res) => {
     try {
-      const [apps, categories, subcategories, requisitions] = await Promise.all([
-        storage.getAllWebApps(),
-        storage.getAllCategories(),
-        storage.getAllSubcategories(),
-        storage.getAllProjectRequisitions()
-      ]);
+      const apps = await storage.getAllWebApps();
+      
+      // Generate CSV content
+      const csvHeader = [
+        'ID',
+        'Name',
+        'Short Description',
+        'Description',
+        'URL',
+        'Category',
+        'Subcategory',
+        'Icon',
+        'Rating',
+        'Is Active',
+        'Attachments Count',
+        'Created At',
+        'Updated At'
+      ].join(',');
 
-      const exportData = {
-        apps,
-        categories,
-        subcategories,
-        projectRequisitions: requisitions,
-        exportDate: new Date().toISOString(),
-        version: "1.0"
-      };
+      const csvRows = apps.map(app => {
+        // Escape CSV values and handle commas/quotes
+        const escapeCSV = (value: any): string => {
+          if (value === null || value === undefined) return '';
+          const str = String(value);
+          // If value contains comma, quote, or newline, wrap in quotes and escape internal quotes
+          if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+            return `"${str.replace(/"/g, '""')}"`;
+          }
+          return str;
+        };
 
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', 'attachment; filename="apps-export.json"');
-      res.json(exportData);
+        // Strip HTML tags from description for CSV
+        const stripHtml = (html: string): string => {
+          return html ? html.replace(/<[^>]*>/g, '').trim() : '';
+        };
+
+        return [
+          app.id,
+          escapeCSV(app.name),
+          escapeCSV(app.shortDescription || ''),
+          escapeCSV(stripHtml(app.description || '')),
+          escapeCSV(app.url),
+          escapeCSV(app.category),
+          escapeCSV(app.subcategory || ''),
+          escapeCSV(app.icon),
+          app.rating || 0,
+          app.isActive ? 'Yes' : 'No',
+          app.attachments ? app.attachments.length : 0,
+          escapeCSV(app.createdAt?.toISOString() || ''),
+          escapeCSV(app.updatedAt?.toISOString() || '')
+        ].join(',');
+      });
+
+      const csvContent = [csvHeader, ...csvRows].join('\n');
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="apps-export.csv"');
+      res.send(csvContent);
     } catch (error) {
       res.status(500).json({ message: "Failed to export data" });
     }
