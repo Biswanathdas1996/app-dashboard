@@ -91,18 +91,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
               New Request
             </Button>
 
-            {/* Dashboard Link - Show when not on dashboard */}
-            {!location.includes("/app-dashboard/") && (
-              <Link href="/app-dashboard/">
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  className="font-semibold"
-                >
-                  Dashboard
-                </Button>
-              </Link>
-            )}
+            
           </div>
 
 
