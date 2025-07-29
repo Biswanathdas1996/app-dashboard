@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
@@ -15,6 +16,8 @@ import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 // Configure multer for file uploads
 const uploadsDir = path.join(process.cwd(), 'uploads');
@@ -60,31 +63,30 @@ const upload = multer({
 export async function registerRoutes(app: Express): Promise<Server> {
   // Override the root redirect in production mode to serve directly
   if (process.env.NODE_ENV === "production") {
-    const express = require("express");
-    const path = require("path");
-    const fs = require("fs");
-    
+    // Get current directory for ES modules
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     const distPath = path.resolve(__dirname, "public");
     
-    // Serve static files from root instead of /app-dashboard
-    if (fs.existsSync(distPath)) {
+    // Check if dist directory exists
+    try {
+      await fs.access(distPath);
+      // Serve static files from root instead of /app-dashboard
       app.use(express.static(distPath));
-    }
-    
-    // Handle root route to serve index.html directly
-    app.get("/", (req, res, next) => {
-      try {
-        const indexPath = path.resolve(distPath, "index.html");
-        
-        if (fs.existsSync(indexPath)) {
+      
+      // Handle root route to serve index.html directly
+      app.get("/", async (req, res, next) => {
+        try {
+          const indexPath = path.resolve(distPath, "index.html");
+          await fs.access(indexPath);
           res.sendFile(indexPath);
-        } else {
+        } catch (error) {
           next();
         }
-      } catch (error) {
-        next();
-      }
-    });
+      });
+    } catch (error) {
+      // Dist path doesn't exist, skip static serving
+    }
   }
 
   // Health check endpoint for Kubernetes probes
@@ -596,11 +598,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Add catch-all route for SPA in production mode
   if (process.env.NODE_ENV === "production") {
-    app.get("*", (req, res) => {
-      const path = require("path");
-      const distPath = path.resolve(__dirname, "public");
-      const indexPath = path.resolve(distPath, "index.html");
-      res.sendFile(indexPath);
+    app.get("*", async (req, res) => {
+      try {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = dirname(__filename);
+        const distPath = path.resolve(__dirname, "public");
+        const indexPath = path.resolve(distPath, "index.html");
+        
+        await fs.access(indexPath);
+        res.sendFile(indexPath);
+      } catch (error) {
+        res.status(404).send("Page not found");
+      }
     });
   }
 

@@ -108,6 +108,8 @@ Uses PostgreSQL database with Drizzle ORM for all data persistence. The storage 
 - `start`: Production server startup
 
 ## Changelog
+- July 29, 2025: **Fixed Production Redirect Issue** - Resolved the automatic redirect from root URL to `/app-dashboard/` in production deployments by implementing ES module-compatible route overrides that serve the application directly from root URL
+- July 29, 2025: Added working CSV export and import functionality to project requisitions with full data validation and proper file handling
 - July 29, 2025: Added deployed URL viewing functionality to project requisitions - external link button in management table and dedicated section in details modal for completed projects
 - July 29, 2025: Fixed TypeScript validation errors in schema definitions and requisition management component for improved type safety
 - July 29, 2025: Created drizzle.config.json file for database schema management and resolved application startup issues
