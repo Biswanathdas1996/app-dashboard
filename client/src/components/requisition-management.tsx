@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, Mail, Calendar, Clock, AlertCircle, CheckCircle2, X } from "lucide-react";
+import { Eye, Edit, Mail, Calendar, Clock, AlertCircle, CheckCircle2, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { useRequisitions, useUpdateRequisition, useDeleteRequisition } from "@/h
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RichTextViewer } from "@/components/rich-text-viewer";
+import { RequisitionEditModal } from "@/components/requisition-edit-modal";
 import type { ProjectRequisition } from "@shared/schema";
 
 const priorityColors = {
@@ -116,6 +117,27 @@ function RequisitionDetailsModal({ isOpen, onClose, requisition }: RequisitionDe
               </div>
             </div>
 
+            {/* Deployed Link - Show for completed status */}
+            {requisition.status === 'completed' && requisition.deployedLink && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Deployed Application</h3>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <a
+                    href={requisition.deployedLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-green-700 hover:text-green-800 font-medium"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    View Deployed Application
+                  </a>
+                  <p className="text-sm text-green-600 mt-1">
+                    {requisition.deployedLink}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Attachments */}
             {requisition.attachments && requisition.attachments.length > 0 && (
               <div>
@@ -149,6 +171,8 @@ function RequisitionDetailsModal({ isOpen, onClose, requisition }: RequisitionDe
 export function RequisitionManagement() {
   const [selectedRequisition, setSelectedRequisition] = useState<ProjectRequisition | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingRequisition, setEditingRequisition] = useState<ProjectRequisition | null>(null);
   
   const { toast } = useToast();
   const { data: requisitions, isLoading } = useRequisitions();
@@ -158,6 +182,11 @@ export function RequisitionManagement() {
   const handleViewDetails = (requisition: ProjectRequisition) => {
     setSelectedRequisition(requisition);
     setIsDetailsModalOpen(true);
+  };
+
+  const handleEdit = (requisition: ProjectRequisition) => {
+    setEditingRequisition(requisition);
+    setIsEditModalOpen(true);
   };
 
   const handleStatusChange = async (requisitionId: number, newStatus: string) => {
@@ -289,8 +318,18 @@ export function RequisitionManagement() {
                         size="sm"
                         onClick={() => handleViewDetails(requisition)}
                         className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50"
+                        title="View Details"
                       >
                         <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEdit(requisition)}
+                        className="p-2 text-slate-400 hover:text-green-600 hover:bg-green-50"
+                        title="Edit Requisition"
+                      >
+                        <Edit className="h-4 w-4" />
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -348,6 +387,15 @@ export function RequisitionManagement() {
           isOpen={isDetailsModalOpen}
           onClose={() => setIsDetailsModalOpen(false)}
           requisition={selectedRequisition}
+        />
+      )}
+
+      {/* Edit Modal */}
+      {editingRequisition && (
+        <RequisitionEditModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          requisition={editingRequisition}
         />
       )}
     </div>

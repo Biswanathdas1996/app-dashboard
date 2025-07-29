@@ -58,6 +58,7 @@ export const projectRequisitions = pgTable('project_requisitions', {
   attachments: text('attachments').array().default([]),
   logo: text('logo'),
   status: text('status').default('pending').notNull(), // 'pending' | 'approved' | 'rejected' | 'in-progress' | 'completed'
+  deployedLink: text('deployed_link'), // Link to deployed application
   isPrivate: boolean('is_private').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -125,6 +126,7 @@ export const enhancedInsertProjectRequisitionSchema = z.object({
   expectedDelivery: z.string().optional(),
   attachments: z.array(z.string()).default([]),
   logo: z.string().optional(),
+  deployedLink: z.string().url("Must be a valid URL").optional(),
   isPrivate: z.boolean().default(false),
 });
 
