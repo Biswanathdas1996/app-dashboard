@@ -241,6 +241,7 @@ export function RequisitionManagement() {
               <TableHead>Requester</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Expected Delivery</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -253,6 +254,7 @@ export function RequisitionManagement() {
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                   <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                  <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
@@ -298,6 +300,15 @@ export function RequisitionManagement() {
                         <SelectItem value="completed">Completed</SelectItem>
                       </SelectContent>
                     </Select>
+                  </TableCell>
+                  <TableCell>
+                    {requisition.expectedDelivery ? (
+                      <span className="text-sm text-slate-600">
+                        {new Date(requisition.expectedDelivery).toLocaleDateString()}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-slate-400">Not specified</span>
+                    )}
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-slate-600">
@@ -370,7 +381,7 @@ export function RequisitionManagement() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-16">
+                <TableCell colSpan={7} className="text-center py-16">
                   <div className="text-slate-500">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <AlertCircle className="h-6 w-6" />
