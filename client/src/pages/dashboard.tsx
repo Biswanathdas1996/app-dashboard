@@ -52,7 +52,6 @@ export default function Dashboard() {
         currentCategory={category}
         currentSubcategory={subcategory}
       />
-
       {/* Compact Professional Hero */}
       <div className="relative h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] overflow-hidden bg-black">
         <div className="absolute inset-0">
@@ -95,16 +94,13 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
       {/* Main Applications Section */}
       <main className="bg-gray-50/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-8">
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 sm:mb-8 gap-4">
             <div className="flex-1">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
-                Business Applications
-              </h2>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Labs editorial</h2>
               <p className="text-sm sm:text-base text-gray-600">
                 Access your enterprise tools and digital solutions
               </p>
@@ -202,7 +198,6 @@ export default function Dashboard() {
           )}
         </div>
       </main>
-
       {/* Industry Insights Section */}
       <section className="bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8 sm:py-12">
@@ -315,10 +310,8 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
-
       {/* Deployed Applications Section */}
       <DeployedAppsShowcase />
-
       {/* Project Requisition Section */}
       <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Compact Call-to-Action Banner */}
