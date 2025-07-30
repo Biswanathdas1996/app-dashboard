@@ -109,6 +109,9 @@ export function DeployedAppsShowcase() {
                       <span className="text-sm font-medium text-gray-700 block truncate">
                         {app.requesterName}
                       </span>
+                      <span className="text-xs text-gray-500 block truncate">
+                        {app.requesterEmail}
+                      </span>
                       {app.expectedDelivery && (
                         <div className="flex items-center gap-1 mt-0.5">
                           <Calendar className="w-3 h-3 text-gray-500" />
