@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Calendar, User } from "lucide-react";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 
 interface ProjectRequisition {
   id: number;
@@ -48,34 +47,6 @@ export function DeployedAppsShowcase() {
     return null; // Don't show section if no deployed apps
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'in-progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'approved':
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority.toLowerCase()) {
-      case 'urgent':
-        return 'bg-red-100 text-red-800';
-      case 'high':
-        return 'bg-orange-100 text-orange-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   return (
     <section className="bg-white py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,15 +83,7 @@ export function DeployedAppsShowcase() {
                   <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden">
                     {/* Icon shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    {app.logo ? (
-                      <img 
-                        src={app.logo} 
-                        alt={`${app.title} logo`}
-                        className="w-8 h-8 rounded-lg object-cover relative z-10"
-                      />
-                    ) : (
-                      <ExternalLink className="text-white text-lg relative z-10" />
-                    )}
+                    <ExternalLink className="text-white text-lg relative z-10" />
                   </div>
                   <div className="flex-1 min-w-0 space-y-1.5">
                     <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
