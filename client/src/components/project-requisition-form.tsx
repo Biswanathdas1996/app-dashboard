@@ -34,12 +34,10 @@ import { LogoUpload } from "@/components/logo-upload";
 import { useCreateRequisition } from "@/hooks/use-requisitions";
 import { useCategories } from "@/hooks/use-categories";
 import { useToast } from "@/hooks/use-toast";
-import { insertProjectRequisitionSchema } from "@shared/schema";
+import { enhancedInsertProjectRequisitionSchema } from "@shared/schema";
 import type { InsertProjectRequisition } from "@shared/schema";
 
-const formSchema = insertProjectRequisitionSchema.extend({
-  expectedDelivery: z.string().optional(),
-});
+const formSchema = enhancedInsertProjectRequisitionSchema;
 
 export function ProjectRequisitionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,7 +45,7 @@ export function ProjectRequisitionForm() {
   const createRequisition = useCreateRequisition();
   const { data: categories } = useCategories();
 
-  const form = useForm<InsertProjectRequisition>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -63,7 +61,7 @@ export function ProjectRequisitionForm() {
     },
   });
 
-  const onSubmit = async (data: InsertProjectRequisition) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
       await createRequisition.mutateAsync(data);
