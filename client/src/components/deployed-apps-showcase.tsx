@@ -112,14 +112,7 @@ export function DeployedAppsShowcase() {
                       <span className="text-xs text-gray-500 block truncate">
                         {app.requesterEmail}
                       </span>
-                      {app.expectedDelivery && (
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <Calendar className="w-3 h-3 text-gray-500" />
-                          <span className="text-xs text-gray-500">
-                            {new Date(app.expectedDelivery).toLocaleDateString()}
-                          </span>
-                        </div>
-                      )}
+                      
                     </div>
                     <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                   </div>
