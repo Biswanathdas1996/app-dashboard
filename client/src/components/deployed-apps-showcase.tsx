@@ -99,8 +99,7 @@ export function DeployedAppsShowcase() {
                 </div>
                 
                 {/* Optimized description section */}
-                <div className="flex-1 space-y-3"></div>
-                  
+                <div className="flex-1 space-y-3">
                   {/* Requester Info */}
                   <div className="flex items-center gap-2 p-2.5 bg-gradient-to-r from-blue-50/90 to-indigo-50/90 rounded-xl border border-blue-200/60 group-hover:border-blue-300/80 transition-colors duration-300">
                     <div className="w-7 h-7 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
