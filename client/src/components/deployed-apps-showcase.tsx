@@ -131,11 +131,7 @@ export function DeployedAppsShowcase() {
                         {app.category}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className={`text-xs ${getPriorityColor(app.priority)}`}>
-                        {app.priority.charAt(0).toUpperCase() + app.priority.slice(1)} Priority
-                      </Badge>
-                    </div>
+                    
                   </div>
                 </div>
                 
