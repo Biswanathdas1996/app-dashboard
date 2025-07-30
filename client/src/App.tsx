@@ -8,7 +8,6 @@ import Admin from "@/pages/admin";
 
 import NotFound from "@/pages/not-found";
 import { Footer } from "@/components/footer";
-import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
 
 function Router() {
   return (
@@ -30,7 +29,6 @@ function App() {
           <div className="flex-1">
             <Router />
           </div>
-          <DeployedAppsShowcase />
           <Footer />
         </div>
       </TooltipProvider>

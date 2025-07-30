@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText } from "lucide-react";
+import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
 import genaiImage from "@assets/genai-story_1751387441561.webp";
@@ -314,6 +315,9 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
+      {/* Deployed Applications Section */}
+      <DeployedAppsShowcase />
 
       {/* Project Requisition Section */}
       <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
