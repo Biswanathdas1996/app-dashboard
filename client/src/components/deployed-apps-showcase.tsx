@@ -99,13 +99,7 @@ export function DeployedAppsShowcase() {
                 </div>
                 
                 {/* Optimized description section */}
-                <div className="flex-1 space-y-3">
-                  <div className="bg-gradient-to-br from-gray-50/50 to-gray-100/30 rounded-xl p-3 border border-gray-200/40">
-                    <div 
-                      className="text-gray-700 text-sm leading-relaxed line-clamp-4"
-                      dangerouslySetInnerHTML={{ __html: app.description }}
-                    />
-                  </div>
+                <div className="flex-1 space-y-3"></div>
                   
                   {/* Requester Info */}
                   <div className="flex items-center gap-2 p-2.5 bg-gradient-to-r from-blue-50/90 to-indigo-50/90 rounded-xl border border-blue-200/60 group-hover:border-blue-300/80 transition-colors duration-300">
