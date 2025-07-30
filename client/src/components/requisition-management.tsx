@@ -432,6 +432,7 @@ export function RequisitionManagement() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-16">#</TableHead>
               <TableHead>Project Title</TableHead>
               <TableHead>Requester</TableHead>
               <TableHead>Category</TableHead>
@@ -445,6 +446,7 @@ export function RequisitionManagement() {
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
+                  <TableCell><Skeleton className="h-4 w-8" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-48" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
@@ -460,8 +462,13 @@ export function RequisitionManagement() {
                 </TableRow>
               ))
             ) : requisitions && requisitions.length > 0 ? (
-              requisitions.map((requisition) => (
+              requisitions.map((requisition, index) => (
                 <TableRow key={requisition.id} className="hover:bg-slate-50">
+                  <TableCell>
+                    <div className="text-sm font-medium text-slate-600">
+                      {index + 1}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div>
                       <div className="font-medium text-slate-800">{requisition.title}</div>
@@ -576,7 +583,7 @@ export function RequisitionManagement() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-16">
+                <TableCell colSpan={8} className="text-center py-16">
                   <div className="text-slate-500">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <AlertCircle className="h-6 w-6" />
