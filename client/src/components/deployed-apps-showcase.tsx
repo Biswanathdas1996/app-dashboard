@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Calendar, User } from "lucide-react";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 
 interface ProjectRequisition {
@@ -92,77 +91,101 @@ export function DeployedAppsShowcase() {
         </div>
 
         {/* Apps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 lg:gap-10">
           {deployedApps.map((app) => (
-            <Card key={app.id} className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-white">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg font-semibold text-gray-900 font-header line-clamp-2">
-                      {app.title}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-600 mt-1">
-                      {app.category}
-                    </CardDescription>
-                  </div>
-                  {app.logo && (
-                    <div className="ml-3 flex-shrink-0">
+            <div 
+              key={app.id}
+              className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden w-full flex flex-col h-full transform hover:scale-[1.02]"
+              onClick={() => window.open(app.deployedLink, '_blank', 'noopener,noreferrer')}
+            >
+              {/* Enhanced glassmorphism effect with subtle animation */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-white/40 to-accent/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+              
+              {/* Animated border gradient */}
+              <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 p-[1px]">
+                <div className="w-full h-full bg-white rounded-3xl"></div>
+              </div>
+              
+              <div className="relative p-5 flex flex-col flex-1 z-10">
+                {/* Enhanced header with optimized spacing */}
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden">
+                    {/* Icon shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    {app.logo ? (
                       <img 
                         src={app.logo} 
                         alt={`${app.title} logo`}
-                        className="w-10 h-10 rounded-lg object-cover"
+                        className="w-8 h-8 rounded-lg object-cover relative z-10"
                       />
+                    ) : (
+                      <ExternalLink className="text-white text-lg relative z-10" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-1.5">
+                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
+                      {app.title}
+                    </h3>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide bg-gray-100 px-2 py-1 rounded-full">
+                        {app.category}
+                      </span>
+                      <Badge className={`text-xs ${getStatusColor(app.status)}`}>
+                        {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                      </Badge>
                     </div>
-                  )}
+                    <div className="flex items-center gap-2">
+                      <Badge className={`text-xs ${getPriorityColor(app.priority)}`}>
+                        {app.priority.charAt(0).toUpperCase() + app.priority.slice(1)} Priority
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
-              </CardHeader>
-
-              <CardContent className="pt-0">
-                {/* Description */}
-                <div 
-                  className="text-sm text-gray-700 mb-4 line-clamp-3"
-                  dangerouslySetInnerHTML={{ __html: app.description }}
-                />
-
-                {/* Status and Priority Badges */}
-                <div className="flex items-center gap-2 mb-4">
-                  <Badge className={`text-xs ${getStatusColor(app.status)}`}>
-                    {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-                  </Badge>
-                  <Badge className={`text-xs ${getPriorityColor(app.priority)}`}>
-                    {app.priority.charAt(0).toUpperCase() + app.priority.slice(1)} Priority
-                  </Badge>
+                
+                {/* Optimized description section */}
+                <div className="flex-1 space-y-3">
+                  <div className="bg-gradient-to-br from-gray-50/50 to-gray-100/30 rounded-xl p-3 border border-gray-200/40">
+                    <div 
+                      className="text-gray-700 text-sm leading-relaxed line-clamp-4"
+                      dangerouslySetInnerHTML={{ __html: app.description }}
+                    />
+                  </div>
+                  
+                  {/* Requester Info */}
+                  <div className="flex items-center gap-2 p-2.5 bg-gradient-to-r from-blue-50/90 to-indigo-50/90 rounded-xl border border-blue-200/60 group-hover:border-blue-300/80 transition-colors duration-300">
+                    <div className="w-7 h-7 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                      <User className="h-3.5 w-3.5 text-blue-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-gray-700 block truncate">
+                        {app.requesterName}
+                      </span>
+                      {app.expectedDelivery && (
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Calendar className="w-3 h-3 text-gray-500" />
+                          <span className="text-xs text-gray-500">
+                            {new Date(app.expectedDelivery).toLocaleDateString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                  </div>
                 </div>
 
-                {/* Requester Info */}
-                <div className="flex items-center text-xs text-gray-500 mb-4">
-                  <User className="w-3 h-3 mr-1" />
-                  <span>{app.requesterName}</span>
-                  {app.expectedDelivery && (
-                    <>
-                      <Calendar className="w-3 h-3 ml-3 mr-1" />
-                      <span>{new Date(app.expectedDelivery).toLocaleDateString()}</span>
-                    </>
-                  )}
-                </div>
-
-                {/* Demo Button */}
-                <Button
-                  asChild
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
-                >
-                  <a
-                    href={app.deployedLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2"
+                {/* Optimized action button */}
+                <div className="mt-auto pt-3">
+                  <Button
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:opacity-95 hover:scale-[1.02] transition-all duration-400 shadow-lg shadow-orange-500/20 rounded-xl font-bold py-3.5 text-sm border-0 group-hover:shadow-xl relative overflow-hidden"
                   >
-                    <ExternalLink className="w-4 h-4" />
-                    Launch Application
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                    {/* Button shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <ExternalLink className="h-4 w-4 mr-2 relative z-10" />
+                    <span className="relative z-10">Launch Application</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
