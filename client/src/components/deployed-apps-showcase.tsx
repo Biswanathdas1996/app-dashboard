@@ -130,9 +130,6 @@ export function DeployedAppsShowcase() {
                       <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide bg-gray-100 px-2 py-1 rounded-full">
                         {app.category}
                       </span>
-                      <Badge className={`text-xs ${getStatusColor(app.status)}`}>
-                        {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-                      </Badge>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge className={`text-xs ${getPriorityColor(app.priority)}`}>
