@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
-import { Plus, Edit, Trash2, ExternalLink, Download, Upload } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "wouter";
+import { Plus, Edit, Trash2, ExternalLink, Download, Upload, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -24,11 +25,29 @@ const categoryColors = {
 } as const;
 
 export default function Admin() {
+  const [, setLocation] = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingApp, setEditingApp] = useState<WebApp | undefined>();
   const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Check authentication on component mount
+  useEffect(() => {
+    const isAuthenticated = sessionStorage.getItem("admin_authenticated");
+    if (!isAuthenticated) {
+      setLocation("/admin-login");
+    }
+  }, [setLocation]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("admin_authenticated");
+    setLocation("/admin-login");
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
+  };
 
   const { data: apps, isLoading } = useApps();
   const deleteApp = useDeleteApp();
@@ -150,7 +169,16 @@ export default function Admin() {
                 Manage your web applications directory
               </p>
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:flex items-center gap-3">
+              <Button 
+                onClick={handleLogout}
+                variant="outline"
+                size="lg"
+                className="bg-white/20 text-white border-white/30 hover:bg-white/30 font-semibold"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
               <Button 
                 onClick={() => setIsModalOpen(true)} 
                 size="lg"

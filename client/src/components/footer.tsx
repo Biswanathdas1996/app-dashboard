@@ -67,6 +67,14 @@ export function Footer() {
               <li>
                 <span className="text-gray-300">System Status</span>
               </li>
+              <li>
+                <a
+                  href="/admin-login"
+                  className="text-gray-300 hover:text-primary transition-colors duration-200"
+                >
+                  Admin Portal
+                </a>
+              </li>
             </ul>
           </div>
         </div>
