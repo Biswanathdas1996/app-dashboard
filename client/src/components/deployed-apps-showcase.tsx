@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ExternalLink, Calendar, User } from "lucide-react";
+import { ExternalLink, Calendar, User, DollarSign, BarChart3, Shield, Zap, Database, Globe, Briefcase, Settings } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ProjectRequisition {
@@ -24,6 +24,75 @@ export function DeployedAppsShowcase() {
   const { data: requisitions = [], isLoading } = useQuery<ProjectRequisition[]>({
     queryKey: ["/api/requisitions"],
   });
+
+  // Function to get category-specific icon and colors
+  const getCategoryIcon = (category: string) => {
+    const categoryLower = category.toLowerCase();
+    switch (categoryLower) {
+      case 'financial':
+      case 'finance':
+        return { 
+          icon: DollarSign, 
+          bgGradient: 'from-green-300 to-green-400',
+          shadowColor: 'shadow-green-300/20'
+        };
+      case 'analytics':
+      case 'data':
+        return { 
+          icon: BarChart3, 
+          bgGradient: 'from-blue-300 to-blue-400',
+          shadowColor: 'shadow-blue-300/20'
+        };
+      case 'security':
+      case 'cybersecurity':
+        return { 
+          icon: Shield, 
+          bgGradient: 'from-red-300 to-red-400',
+          shadowColor: 'shadow-red-300/20'
+        };
+      case 'technology':
+      case 'tech':
+        return { 
+          icon: Zap, 
+          bgGradient: 'from-yellow-300 to-yellow-400',
+          shadowColor: 'shadow-yellow-300/20'
+        };
+      case 'database':
+      case 'storage':
+        return { 
+          icon: Database, 
+          bgGradient: 'from-purple-300 to-purple-400',
+          shadowColor: 'shadow-purple-300/20'
+        };
+      case 'web':
+      case 'website':
+        return { 
+          icon: Globe, 
+          bgGradient: 'from-indigo-300 to-indigo-400',
+          shadowColor: 'shadow-indigo-300/20'
+        };
+      case 'business':
+      case 'enterprise':
+        return { 
+          icon: Briefcase, 
+          bgGradient: 'from-gray-300 to-gray-400',
+          shadowColor: 'shadow-gray-300/20'
+        };
+      case 'operations':
+      case 'management':
+        return { 
+          icon: Settings, 
+          bgGradient: 'from-teal-300 to-teal-400',
+          shadowColor: 'shadow-teal-300/20'
+        };
+      default:
+        return { 
+          icon: ExternalLink, 
+          bgGradient: 'from-orange-300 to-orange-400',
+          shadowColor: 'shadow-orange-300/20'
+        };
+    }
+  };
 
   // Filter requisitions that have deployed links
   const deployedApps = requisitions.filter(req => req.deployedLink && req.deployedLink.trim() !== '');
@@ -63,7 +132,10 @@ export function DeployedAppsShowcase() {
 
         {/* Apps Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 lg:gap-10">
-          {deployedApps.map((app) => (
+          {deployedApps.map((app) => {
+            const categoryInfo = getCategoryIcon(app.category);
+            const IconComponent = categoryInfo.icon;
+            return (
             <div 
               key={app.id}
               className="group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 cursor-pointer overflow-hidden w-full flex flex-col h-full transform hover:scale-[1.02]"
@@ -80,10 +152,10 @@ export function DeployedAppsShowcase() {
               <div className="relative p-5 flex flex-col flex-1 z-10">
                 {/* Enhanced header with optimized spacing */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden">
+                  <div className={`w-14 h-14 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-2xl flex items-center justify-center shadow-xl ${categoryInfo.shadowColor} group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20 relative overflow-hidden`}>
                     {/* Icon shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <ExternalLink className="text-white text-lg relative z-10" />
+                    <IconComponent className="text-white text-lg relative z-10" />
                   </div>
                   <div className="flex-1 min-w-0 space-y-1.5">
                     <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
@@ -131,7 +203,8 @@ export function DeployedAppsShowcase() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Stats */}
