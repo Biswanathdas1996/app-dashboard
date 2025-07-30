@@ -83,11 +83,11 @@ export function DeployedAppsShowcase() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 font-header mb-4">
-            Deployed Applications
+            Live Client Solutions
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body">
-            Explore our successfully deployed project requisitions - innovative solutions 
-            built to address real business needs and enhance operational efficiency.
+            Discover our successfully delivered client applications - cutting-edge digital solutions 
+            developed by PwC's ET Labs team to transform business operations and drive innovation.
           </p>
         </div>
 
@@ -158,7 +158,7 @@ export function DeployedAppsShowcase() {
                     className="flex items-center justify-center gap-2"
                   >
                     <ExternalLink className="w-4 h-4" />
-                    View Demo
+                    Launch Application
                   </a>
                 </Button>
               </CardContent>
@@ -169,8 +169,8 @@ export function DeployedAppsShowcase() {
         {/* Stats */}
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-600">
-            Showing {deployedApps.length} deployed application{deployedApps.length !== 1 ? 's' : ''} 
-            from our project requisitions
+            Showcasing {deployedApps.length} live client solution{deployedApps.length !== 1 ? 's' : ''} 
+            developed by PwC ET Labs
           </p>
         </div>
       </div>
