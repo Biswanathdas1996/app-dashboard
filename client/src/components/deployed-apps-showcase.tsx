@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Calendar, User, DollarSign, BarChart3, Shield, Zap, Database, Globe, Briefcase, Settings } from "lucide-react";
 import { Button } from "./ui/button";
+import { useTrackView, createTrackingData } from "@/hooks/use-analytics";
+import { useEffect, useState } from "react";
 
 interface ProjectRequisition {
   id: number;
@@ -24,6 +26,8 @@ export function DeployedAppsShowcase() {
   const { data: requisitions = [], isLoading } = useQuery<ProjectRequisition[]>({
     queryKey: ["/api/requisitions"],
   });
+  const trackView = useTrackView();
+  const [trackedViews, setTrackedViews] = useState<Set<number>>(new Set());
 
   // Function to get category-specific icon and colors
   const getCategoryIcon = (category: string) => {
@@ -97,6 +101,24 @@ export function DeployedAppsShowcase() {
   // Show all requisitions, not just deployed ones
   const allProjects = requisitions;
 
+  // Track card views for all visible projects
+  useEffect(() => {
+    if (allProjects.length > 0) {
+      allProjects.forEach(project => {
+        if (!trackedViews.has(project.id)) {
+          const trackingData = createTrackingData(
+            project.id, 
+            project.title, 
+            project.category, 
+            "card_view"
+          );
+          trackView.mutate(trackingData);
+          setTrackedViews(prev => new Set(prev).add(project.id));
+        }
+      });
+    }
+  }, [allProjects, trackedViews, trackView]);
+
   if (isLoading) {
     return (
       <section className="bg-gradient-to-br from-orange-50 to-orange-100 py-16">
@@ -140,7 +162,17 @@ export function DeployedAppsShowcase() {
             <div 
               key={app.id}
               className={`group relative bg-white/98 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 hover:-translate-y-3 transition-all duration-500 overflow-hidden w-full flex flex-col h-full transform hover:scale-[1.02] ${hasDeployedLink ? 'cursor-pointer' : 'cursor-default'}`}
-              onClick={hasDeployedLink ? () => window.open(app.deployedLink, '_blank', 'noopener,noreferrer') : undefined}
+              onClick={hasDeployedLink ? () => {
+                // Track launch from card click
+                const launchTrackingData = createTrackingData(
+                  app.id, 
+                  app.title, 
+                  app.category, 
+                  "launch"
+                );
+                trackView.mutate(launchTrackingData);
+                window.open(app.deployedLink, '_blank', 'noopener,noreferrer');
+              } : undefined}
             >
               {/* Enhanced glassmorphism effect with subtle animation */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-white/40 to-accent/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
@@ -198,6 +230,14 @@ export function DeployedAppsShowcase() {
                       className="w-full bg-gradient-to-r from-orange-300 to-orange-400 text-white hover:opacity-95 hover:scale-[1.02] transition-all duration-400 shadow-lg shadow-orange-300/20 rounded-xl font-bold py-3.5 text-sm border-0 group-hover:shadow-xl relative overflow-hidden"
                       onClick={(e) => {
                         e.stopPropagation();
+                        // Track launch
+                        const launchTrackingData = createTrackingData(
+                          app.id, 
+                          app.title, 
+                          app.category, 
+                          "launch"
+                        );
+                        trackView.mutate(launchTrackingData);
                         window.open(app.deployedLink, '_blank', 'noopener,noreferrer');
                       }}
                     >
