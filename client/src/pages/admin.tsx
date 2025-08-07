@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
-import { Plus, Edit, Trash2, ExternalLink, Download, Upload, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, ExternalLink, Download, Upload, LogOut, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { AppModal } from "@/components/app-modal";
 import { CategoryManagement } from "@/components/category-management";
 import { RequisitionManagement } from "@/components/requisition-management";
+import { AnalyticsDashboard } from "@/components/analytics-dashboard";
 import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -196,10 +197,11 @@ export default function Admin() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
           <Tabs defaultValue="applications" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="applications">Applications</TabsTrigger>
               <TabsTrigger value="categories">Categories</TabsTrigger>
               <TabsTrigger value="requisitions">Project Requests</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
 
             <TabsContent value="applications" className="space-y-6">
@@ -419,6 +421,17 @@ export default function Admin() {
 
             <TabsContent value="requisitions" className="space-y-6">
               <RequisitionManagement />
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-6">
+              <div className="flex items-center gap-2 mb-6">
+                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+                  <p className="text-gray-600 mt-1">Track application usage and performance metrics</p>
+                </div>
+              </div>
+              <AnalyticsDashboard />
             </TabsContent>
           </Tabs>
         </div>

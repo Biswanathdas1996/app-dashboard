@@ -5,22 +5,25 @@ import {
   subcategories, 
   webApps, 
   projectRequisitions,
+  analytics,
   type User,
   type Category,
   type Subcategory,
   type WebApp,
   type ProjectRequisition,
+  type Analytics,
   type InsertUser,
   type InsertCategory,
   type InsertSubcategory,
   type InsertWebApp,
   type InsertProjectRequisition,
+  type InsertAnalytics,
   type UpdateCategory,
   type UpdateSubcategory,
   type UpdateWebApp,
   type UpdateProjectRequisition,
 } from '@shared/schema';
-import { eq, desc, and, or, ilike } from 'drizzle-orm';
+import { eq, desc, and, or, ilike, count, sql } from 'drizzle-orm';
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -56,6 +59,23 @@ export interface IStorage {
   createProjectRequisition(requisition: InsertProjectRequisition): Promise<ProjectRequisition>;
   updateProjectRequisition(id: number, requisition: UpdateProjectRequisition): Promise<ProjectRequisition | undefined>;
   deleteProjectRequisition(id: number): Promise<boolean>;
+  
+  // Analytics methods
+  createAnalytics(analytics: InsertAnalytics): Promise<Analytics>;
+  getAnalyticsSummary(): Promise<{
+    totalViews: number;
+    mostViewedApps: Array<{
+      appId: number;
+      appName: string;
+      appCategory: string;
+      viewCount: number;
+    }>;
+    viewsByCategory: Array<{
+      category: string;
+      viewCount: number;
+    }>;
+    recentViews: Analytics[];
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -287,6 +307,82 @@ export class DatabaseStorage implements IStorage {
       .where(eq(projectRequisitions.id, id))
       .returning();
     return !!deletedRequisition;
+  }
+
+  // Analytics methods
+  async createAnalytics(insertAnalytics: InsertAnalytics): Promise<Analytics> {
+    const [analyticsRecord] = await db
+      .insert(analytics)
+      .values(insertAnalytics)
+      .returning();
+    return analyticsRecord;
+  }
+
+  async getAnalyticsSummary(): Promise<{
+    totalViews: number;
+    mostViewedApps: Array<{
+      appId: number;
+      appName: string;
+      appCategory: string;
+      viewCount: number;
+    }>;
+    viewsByCategory: Array<{
+      category: string;
+      viewCount: number;
+    }>;
+    recentViews: Analytics[];
+  }> {
+    // Get total views
+    const [totalViewsResult] = await db
+      .select({ count: count() })
+      .from(analytics);
+    const totalViews = totalViewsResult?.count || 0;
+
+    // Get most viewed apps
+    const mostViewedApps = await db
+      .select({
+        appId: analytics.appId,
+        appName: analytics.appName,
+        appCategory: analytics.appCategory,
+        viewCount: count(analytics.id),
+      })
+      .from(analytics)
+      .where(eq(analytics.appId, analytics.appId))
+      .groupBy(analytics.appId, analytics.appName, analytics.appCategory)
+      .orderBy(desc(count(analytics.id)))
+      .limit(10);
+
+    // Get views by category
+    const viewsByCategory = await db
+      .select({
+        category: analytics.appCategory,
+        viewCount: count(analytics.id),
+      })
+      .from(analytics)
+      .groupBy(analytics.appCategory)
+      .orderBy(desc(count(analytics.id)));
+
+    // Get recent views
+    const recentViews = await db
+      .select()
+      .from(analytics)
+      .orderBy(desc(analytics.createdAt))
+      .limit(20);
+
+    return {
+      totalViews: Number(totalViews),
+      mostViewedApps: mostViewedApps.map(app => ({
+        appId: app.appId || 0,
+        appName: app.appName,
+        appCategory: app.appCategory,
+        viewCount: Number(app.viewCount),
+      })),
+      viewsByCategory: viewsByCategory.map(cat => ({
+        category: cat.category,
+        viewCount: Number(cat.viewCount),
+      })),
+      recentViews,
+    };
   }
 }
 

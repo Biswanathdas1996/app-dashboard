@@ -64,6 +64,19 @@ export const projectRequisitions = pgTable('project_requisitions', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// Analytics table for tracking application views
+export const analytics = pgTable('analytics', {
+  id: serial('id').primaryKey(),
+  appId: integer('app_id').references(() => webApps.id),
+  appName: text('app_name').notNull(), // Store app name for historical data
+  appCategory: text('app_category').notNull(), // Store category for analytics
+  viewType: text('view_type').notNull(), // 'card_view' | 'detail_view' | 'launch'
+  userAgent: text('user_agent'), // Browser information
+  sessionId: text('session_id'), // Session tracking
+  ipAddress: text('ip_address'), // User IP (could be used for geographic analytics)
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // Relations
 export const categoriesRelations = relations(categories, ({ many }) => ({
   subcategories: many(subcategories),
@@ -89,6 +102,10 @@ export const insertProjectRequisitionSchema = createInsertSchema(projectRequisit
   id: true,
   createdAt: true,
   updatedAt: true,
+});
+export const insertAnalyticsSchema = createInsertSchema(analytics).omit({
+  id: true,
+  createdAt: true,
 });
 
 // Enhanced validation schemas
@@ -153,6 +170,9 @@ export type InsertWebApp = z.infer<typeof enhancedInsertWebAppSchema>;
 
 export type ProjectRequisition = typeof projectRequisitions.$inferSelect;
 export type InsertProjectRequisition = z.infer<typeof enhancedInsertProjectRequisitionSchema>;
+
+export type Analytics = typeof analytics.$inferSelect;
+export type InsertAnalytics = typeof analytics.$inferInsert;
 
 export type UpdateCategory = z.infer<typeof updateCategorySchema>;
 export type UpdateSubcategory = z.infer<typeof updateSubcategorySchema>;

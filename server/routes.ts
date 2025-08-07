@@ -10,7 +10,8 @@ import {
   enhancedInsertSubcategorySchema, 
   updateSubcategorySchema, 
   enhancedInsertProjectRequisitionSchema, 
-  updateProjectRequisitionSchema 
+  updateProjectRequisitionSchema,
+  insertAnalyticsSchema
 } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
@@ -593,6 +594,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to import data" });
+    }
+  });
+
+  // Analytics routes
+  app.post("/api/analytics", async (req, res) => {
+    try {
+      const analytics = insertAnalyticsSchema.parse(req.body);
+      const created = await storage.createAnalytics(analytics);
+      res.json(created);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Invalid analytics data", errors: error.errors });
+      } else {
+        console.error("Error creating analytics:", error);
+        res.status(500).json({ message: "Failed to create analytics" });
+      }
+    }
+  });
+
+  app.get("/api/analytics/summary", async (req, res) => {
+    try {
+      const summary = await storage.getAnalyticsSummary();
+      res.json(summary);
+    } catch (error) {
+      console.error("Error getting analytics summary:", error);
+      res.status(500).json({ message: "Failed to get analytics summary" });
     }
   });
 

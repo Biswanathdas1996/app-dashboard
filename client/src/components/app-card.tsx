@@ -1,5 +1,5 @@
 import { ExternalLink, FileText, Eye, QrCode } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { WebApp } from "@shared/schema";
 import { RichTextViewer } from "./rich-text-viewer";
 import { Badge } from "./ui/badge";
@@ -8,6 +8,7 @@ import { AppDetailsModal } from "./app-details-modal";
 import { QRCodeModal } from "./qr-code-modal";
 import { StarRating } from "./star-rating";
 import { useUpdateApp } from "@/hooks/use-apps";
+import { useTrackView, createTrackingData } from "@/hooks/use-analytics";
 
 interface AppCardProps {
   app: WebApp;
@@ -26,7 +27,18 @@ const categoryColors = {
 export function AppCard({ app, onClick }: AppCardProps) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const updateApp = useUpdateApp();
+  const trackView = useTrackView();
+
+  // Track view when card is first displayed
+  useEffect(() => {
+    if (!hasTrackedView) {
+      const trackingData = createTrackingData(app.id, app.name, app.category, "card_view");
+      trackView.mutate(trackingData);
+      setHasTrackedView(true);
+    }
+  }, [app.id, app.name, app.category, hasTrackedView, trackView]);
   
   const colorClasses = categoryColors[app.category as keyof typeof categoryColors] || 
     "from-slate-500 to-slate-600 shadow-slate-500/20 bg-slate-50 text-slate-700 border-slate-200";
@@ -39,6 +51,10 @@ export function AppCard({ app, onClick }: AppCardProps) {
   const borderClass = colorParts[5];
   
   const handleClick = () => {
+    // Track launch
+    const trackingData = createTrackingData(app.id, app.name, app.category, "launch");
+    trackView.mutate(trackingData);
+
     if (onClick) {
       onClick(app);
     } else {
@@ -48,6 +64,9 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
   const handleViewDetails = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // Track detail view
+    const trackingData = createTrackingData(app.id, app.name, app.category, "detail_view");
+    trackView.mutate(trackingData);
     setShowDetailsModal(true);
   };
 
