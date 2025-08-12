@@ -22,7 +22,17 @@ interface ProjectRequisition {
   updatedAt: string;
 }
 
-export function DeployedAppsShowcase() {
+interface DeployedAppsShowcaseProps {
+  searchValue?: string;
+  categoryFilter?: string;
+  subcategoryFilter?: string;
+}
+
+export function DeployedAppsShowcase({ 
+  searchValue = "", 
+  categoryFilter = "", 
+  subcategoryFilter = "" 
+}: DeployedAppsShowcaseProps) {
   const { data: requisitions = [], isLoading } = useQuery<ProjectRequisition[]>({
     queryKey: ["/api/requisitions"],
   });
@@ -98,8 +108,32 @@ export function DeployedAppsShowcase() {
     }
   };
 
-  // Show all requisitions, not just deployed ones
-  const allProjects = requisitions;
+  // Apply filters to the projects
+  const allProjects = requisitions.filter((project) => {
+    // Search filter - check title and description
+    if (searchValue && searchValue.trim() !== "") {
+      const searchLower = searchValue.toLowerCase();
+      const matchesSearch = 
+        project.title.toLowerCase().includes(searchLower) ||
+        project.description.toLowerCase().includes(searchLower) ||
+        project.requesterName.toLowerCase().includes(searchLower);
+      
+      if (!matchesSearch) return false;
+    }
+
+    // Category filter
+    if (categoryFilter && categoryFilter.trim() !== "") {
+      const projectCategory = project.category.toLowerCase();
+      const filterCategory = categoryFilter.toLowerCase();
+      
+      if (projectCategory !== filterCategory) return false;
+    }
+
+    // Note: Subcategory filter would apply if project requisitions had subcategories
+    // Currently project requisitions only have categories, so we skip subcategory filtering
+    
+    return true;
+  });
 
   // Track card views for all visible projects
   useEffect(() => {
@@ -150,6 +184,14 @@ export function DeployedAppsShowcase() {
             Explore our comprehensive project portfolio - innovative digital solutions 
             developed by PwC's ET Labs team across various stages of development and deployment.
           </p>
+          {/* Filter indicator */}
+          {(searchValue || categoryFilter) && (
+            <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
+              <span>Filtered results</span>
+              {searchValue && <span>• "{searchValue}"</span>}
+              {categoryFilter && <span>• {categoryFilter}</span>}
+            </div>
+          )}
         </div>
 
         {/* Apps Grid */}
@@ -266,8 +308,17 @@ export function DeployedAppsShowcase() {
         {/* Stats */}
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-600">
-            Showcasing {allProjects.length} project{allProjects.length !== 1 ? 's' : ''} 
-            developed by PwC ET Labs
+            {(searchValue || categoryFilter) ? (
+              <>
+                Showing {allProjects.length} of {requisitions.length} project{allProjects.length !== 1 ? 's' : ''} 
+                developed by PwC ET Labs
+              </>
+            ) : (
+              <>
+                Showcasing {allProjects.length} project{allProjects.length !== 1 ? 's' : ''} 
+                developed by PwC ET Labs
+              </>
+            )}
           </p>
         </div>
       </div>

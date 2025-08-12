@@ -311,7 +311,11 @@ export default function Dashboard() {
         </div>
       </section>
       {/* Deployed Applications Section */}
-      <DeployedAppsShowcase />
+      <DeployedAppsShowcase 
+        searchValue={search}
+        categoryFilter={category === "all" ? "" : category}
+        subcategoryFilter={subcategory === "all" ? "" : subcategory}
+      />
       {/* Project Requisition Section */}
       <section id="project-requisition" className="bg-gradient-to-br from-orange-50 via-white to-gray-50">
         {/* Compact Call-to-Action Banner */}
