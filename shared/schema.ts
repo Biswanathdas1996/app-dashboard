@@ -41,6 +41,7 @@ export const webApps = pgTable('web_apps', {
   isActive: boolean('is_active').default(true).notNull(),
   attachments: text('attachments').array().default([]),
   rating: integer('rating').default(0).notNull(),
+  sortOrder: integer('sort_order').default(0).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -120,6 +121,7 @@ export const enhancedInsertWebAppSchema = z.object({
   isActive: z.boolean().default(true),
   attachments: z.array(z.string()).default([]),
   rating: z.number().min(0).max(5).default(0),
+  sortOrder: z.number().default(0),
 });
 
 export const enhancedInsertCategorySchema = z.object({

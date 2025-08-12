@@ -190,6 +190,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reorder web apps
+  app.patch("/api/apps/reorder", async (req, res) => {
+    try {
+      const { reorderedIds } = req.body;
+      
+      if (!Array.isArray(reorderedIds) || reorderedIds.length === 0) {
+        return res.status(400).json({ message: "Invalid reorder data" });
+      }
+
+      const success = await storage.reorderWebApps(reorderedIds);
+      
+      if (!success) {
+        return res.status(500).json({ message: "Failed to reorder apps" });
+      }
+
+      res.json({ message: "Apps reordered successfully" });
+    } catch (error) {
+      console.error("Error reordering apps:", error);
+      res.status(500).json({ message: "Failed to reorder apps" });
+    }
+  });
+
   // Category routes
   app.get("/api/categories", async (req, res) => {
     try {

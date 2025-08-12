@@ -52,6 +52,7 @@ export interface IStorage {
   updateWebApp(id: number, app: UpdateWebApp): Promise<WebApp | undefined>;
   deleteWebApp(id: number): Promise<boolean>;
   searchWebApps(query: string, category?: string, subcategory?: string): Promise<WebApp[]>;
+  reorderWebApps(reorderedIds: number[]): Promise<boolean>;
   
   // Project Requisitions methods
   getAllProjectRequisitions(): Promise<ProjectRequisition[]>;
@@ -195,7 +196,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(webApps)
       .where(eq(webApps.isActive, true))
-      .orderBy(desc(webApps.createdAt));
+      .orderBy(webApps.sortOrder, webApps.name);
   }
 
   async getWebApp(id: number): Promise<WebApp | undefined> {
@@ -204,6 +205,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createWebApp(insertApp: InsertWebApp): Promise<WebApp> {
+    // Get the highest sort order and add 1
+    const [maxOrder] = await db
+      .select({ maxOrder: sql<number>`COALESCE(MAX(sort_order), 0)` })
+      .from(webApps);
+    
     const [app] = await db
       .insert(webApps)
       .values({
@@ -211,6 +217,7 @@ export class DatabaseStorage implements IStorage {
         icon: insertApp.icon || "fas fa-globe",
         attachments: insertApp.attachments || [],
         rating: insertApp.rating || 0,
+        sortOrder: (maxOrder?.maxOrder || 0) + 1,
       })
       .returning();
     return app;
@@ -261,7 +268,23 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(webApps)
       .where(and(...conditions))
-      .orderBy(desc(webApps.createdAt));
+      .orderBy(webApps.sortOrder, webApps.name);
+  }
+
+  async reorderWebApps(reorderedIds: number[]): Promise<boolean> {
+    try {
+      // Update sort order for each app based on its position in the array
+      for (let i = 0; i < reorderedIds.length; i++) {
+        await db
+          .update(webApps)
+          .set({ sortOrder: i + 1 })
+          .where(eq(webApps.id, reorderedIds[i]));
+      }
+      return true;
+    } catch (error) {
+      console.error("Error reordering web apps:", error);
+      return false;
+    }
   }
 
   // Project Requisition methods

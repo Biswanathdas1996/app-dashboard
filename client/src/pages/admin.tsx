@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
-import { Plus, Edit, Trash2, ExternalLink, Download, Upload, LogOut, BarChart3 } from "lucide-react";
+import { Plus, Edit, Trash2, ExternalLink, Download, Upload, LogOut, BarChart3, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,26 @@ import { RequisitionManagement } from "@/components/requisition-management";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
 import { useApps, useDeleteApp } from "@/hooks/use-apps";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import type { WebApp } from "@shared/schema";
@@ -25,6 +45,85 @@ const categoryColors = {
   analytics: "bg-indigo-100 text-indigo-700",
 } as const;
 
+// Sortable Table Row Component
+function SortableTableRow({ app, onEdit, onDelete }: { app: WebApp; onEdit: (app: WebApp) => void; onDelete: (app: WebApp) => void }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: app.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  const categoryColor = categoryColors[app.category as keyof typeof categoryColors] || "bg-gray-100 text-gray-700";
+
+  return (
+    <TableRow ref={setNodeRef} style={style} className={isDragging ? "shadow-lg" : ""}>
+      <TableCell className="w-8">
+        <div {...attributes} {...listeners} className="cursor-grab hover:cursor-grabbing p-1">
+          <GripVertical className="h-4 w-4 text-gray-400" />
+        </div>
+      </TableCell>
+      <TableCell className="font-medium">{app.name}</TableCell>
+      <TableCell>
+        <Badge variant="secondary" className={categoryColor}>
+          {app.category}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <Badge variant="outline">{app.subcategory}</Badge>
+      </TableCell>
+      <TableCell>
+        <Badge variant={app.isActive ? "default" : "secondary"}>
+          {app.isActive ? "Active" : "Inactive"}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => onEdit(app)}>
+            <Edit className="w-4 h-4" />
+          </Button>
+          {app.url && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={app.url} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </Button>
+          )}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Application</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{app.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => onDelete(app)} className="bg-red-600 hover:bg-red-700">
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export default function Admin() {
   const [, setLocation] = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,6 +131,7 @@ export default function Admin() {
   const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Check authentication on component mount
   useEffect(() => {
@@ -52,6 +152,64 @@ export default function Admin() {
 
   const { data: apps, isLoading } = useApps();
   const deleteApp = useDeleteApp();
+
+  // Add sensors for drag and drop
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Mutation for reordering apps
+  const reorderMutation = useMutation({
+    mutationFn: async (reorderedIds: number[]) => {
+      const response = await fetch('/api/apps/reorder', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ reorderedIds }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reorder apps');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidate and refetch apps
+      queryClient.invalidateQueries({ queryKey: ['/api/apps'] });
+      toast({
+        title: "Success",
+        description: "Applications reordered successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to reorder applications",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || !apps) return;
+
+    if (active.id !== over.id) {
+      const oldIndex = apps.findIndex((app) => app.id === active.id);
+      const newIndex = apps.findIndex((app) => app.id === over.id);
+
+      const newOrder = arrayMove(apps, oldIndex, newIndex);
+      const reorderedIds = newOrder.map(app => app.id);
+      
+      reorderMutation.mutate(reorderedIds);
+    }
+  };
 
   const handleEdit = (app: WebApp) => {
     setEditingApp(app);
@@ -277,141 +435,73 @@ export default function Admin() {
                 className="hidden"
               />
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>App Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>URL</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell>
-                        <div className="flex items-center">
-                          <Skeleton className="w-8 h-8 rounded-lg mr-3" />
-                          <div>
-                            <Skeleton className="h-4 w-32 mb-1" />
-                            <Skeleton className="h-3 w-24" />
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell><Skeleton className="h-5 w-20" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-48" /></TableCell>
-                      <TableCell><Skeleton className="h-5 w-16" /></TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Skeleton className="w-8 h-8" />
-                          <Skeleton className="w-8 h-8" />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : apps && apps.length > 0 ? (
-                  apps.map((app) => {
-                    const colorClass = categoryColors[app.category as keyof typeof categoryColors] || "bg-slate-100 text-slate-700";
-                    
-                    return (
-                      <TableRow key={app.id} className="hover:bg-slate-50">
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-8"></TableHead>
+                    <TableHead>App Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Subcategory</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {isLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <TableRow key={i}>
+                        <TableCell className="w-8">
+                          <Skeleton className="h-4 w-4" />
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
-                              <i className={`${app.icon} text-white text-sm`}></i>
-                            </div>
+                            <Skeleton className="w-8 h-8 rounded-lg mr-3" />
                             <div>
-                              <div className="font-medium text-slate-800">{app.name}</div>
-                              <div className="text-sm text-slate-500">{app.subcategory}</div>
+                              <Skeleton className="h-4 w-32 mb-1" />
+                              <Skeleton className="h-3 w-24" />
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <Badge className={colorClass}>
-                            {app.category.charAt(0).toUpperCase() + app.category.slice(1)}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <a 
-                            href={app.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-slate-600 text-sm hover:text-blue-600 flex items-center"
-                          >
-                            {app.url}
-                            <ExternalLink className="ml-1 h-3 w-3" />
-                          </a>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={app.isActive ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}>
-                            {app.isActive ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
+                        <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                        <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                        <TableCell><Skeleton className="h-5 w-16" /></TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEdit(app)}
-                              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Application</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "{app.name}"? This action cannot be undone and will permanently remove the application from your directory.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDelete(app)}
-                                    className="bg-red-600 hover:bg-red-700"
-                                    disabled={deleteApp.isPending}
-                                  >
-                                    {deleteApp.isPending ? "Deleting..." : "Delete"}
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                            <Skeleton className="w-8 h-8" />
+                            <Skeleton className="w-8 h-8" />
                           </div>
                         </TableCell>
                       </TableRow>
-                    );
-                  })
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-16">
-                      <div className="text-slate-500">
-                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <Plus className="h-6 w-6" />
+                    ))
+                  ) : apps && apps.length > 0 ? (
+                    <SortableContext items={apps.map(app => app.id)} strategy={verticalListSortingStrategy}>
+                      {apps.map((app) => (
+                        <SortableTableRow
+                          key={app.id}
+                          app={app}
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                        />
+                      ))}
+                    </SortableContext>
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8">
+                        <div className="text-slate-500">
+                          <p className="text-lg font-medium">No applications found</p>
+                          <p className="text-sm">Create your first application to get started</p>
                         </div>
-                        <h3 className="text-lg font-medium text-slate-800 mb-2">No applications yet</h3>
-                        <p className="mb-4">Get started by adding your first web application</p>
-                        <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
-                          <Plus className="mr-2 h-4 w-4" />
-                          Add Your First App
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </DndContext>
           </div>
             </TabsContent>
 
