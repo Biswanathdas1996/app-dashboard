@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ExternalLink, FileText, Eye, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2 } from "lucide-react";
+import { ExternalLink, FileText, Eye, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2, Presentation, Loader2 } from "lucide-react";
 import type { WebApp } from "@shared/schema";
 import { RichTextViewer } from "./rich-text-viewer";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AppDetailsModalProps {
   isOpen: boolean;
@@ -12,8 +13,202 @@ interface AppDetailsModalProps {
   app: WebApp;
 }
 
+interface SlideData {
+  title: string;
+  subtitle?: string;
+  bullets: string[];
+  notes?: string;
+  imageKeyword?: string;
+}
+
+const SLIDE_COLORS = [
+  { bg: "191919", accent: "E8611A", text: "FFFFFF" },
+  { bg: "FFFFFF", accent: "E8611A", text: "2D2D2D" },
+  { bg: "F7F7F7", accent: "D93954", text: "2D2D2D" },
+  { bg: "FFFFFF", accent: "E8611A", text: "2D2D2D" },
+  { bg: "1A1A2E", accent: "E8611A", text: "FFFFFF" },
+  { bg: "E8611A", accent: "FFFFFF", text: "FFFFFF" },
+];
+
+async function generateAndDownloadPPT(app: WebApp): Promise<void> {
+  const plainDescription = app.description
+    ? app.description.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()
+    : app.shortDescription || app.name;
+
+  const response = await fetch("/api/generate-ppt-content", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      appName: app.name,
+      description: plainDescription,
+      category: app.category,
+      subcategory: app.subcategory,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({ error: "Unknown error" }));
+    throw new Error(err.error || "Failed to generate content");
+  }
+
+  const { slides } = (await response.json()) as { slides: SlideData[] };
+
+  const PptxGenJS = (await import("pptxgenjs")).default;
+  const pptx = new PptxGenJS();
+
+  pptx.layout = "LAYOUT_WIDE";
+  pptx.author = "ET Labs";
+  pptx.company = "PwC";
+  pptx.subject = app.name;
+  pptx.title = `${app.name} - Presentation`;
+
+  slides.forEach((slideData, index) => {
+    const slide = pptx.addSlide();
+    const colors = SLIDE_COLORS[index % SLIDE_COLORS.length];
+
+    slide.background = { color: colors.bg };
+
+    if (index === 0) {
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: "100%", h: "100%",
+        fill: { type: "solid", color: "191919" },
+      });
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 4.8, w: "100%", h: 0.06,
+        fill: { type: "solid", color: "E8611A" },
+      });
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0.6, y: 0.5, w: 0.08, h: 1.2,
+        fill: { type: "solid", color: "E8611A" },
+      });
+
+      slide.addText(slideData.title, {
+        x: 1.0, y: 1.0, w: 10, h: 1.6,
+        fontSize: 40, fontFace: "Arial",
+        color: "FFFFFF", bold: true,
+        lineSpacingMultiple: 1.1,
+      });
+      if (slideData.subtitle) {
+        slide.addText(slideData.subtitle, {
+          x: 1.0, y: 2.7, w: 10, h: 0.8,
+          fontSize: 20, fontFace: "Arial",
+          color: "E8611A",
+        });
+      }
+      const categoryLabel = [app.category, app.subcategory].filter(Boolean).join(" · ");
+      slide.addText(categoryLabel, {
+        x: 1.0, y: 3.8, w: 6, h: 0.5,
+        fontSize: 13, fontFace: "Arial",
+        color: "999999",
+      });
+      slide.addText("ET Labs | PwC", {
+        x: 1.0, y: 4.3, w: 6, h: 0.4,
+        fontSize: 11, fontFace: "Arial",
+        color: "666666",
+      });
+    } else if (index === slides.length - 1) {
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: "100%", h: "100%",
+        fill: { type: "solid", color: colors.bg },
+      });
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: "100%", h: 0.06,
+        fill: { type: "solid", color: "FFFFFF" },
+      });
+
+      slide.addText(slideData.title, {
+        x: 1.0, y: 1.2, w: 11, h: 1.2,
+        fontSize: 36, fontFace: "Arial",
+        color: colors.text, bold: true,
+      });
+
+      if (slideData.bullets && slideData.bullets.length > 0) {
+        const bulletText = slideData.bullets.map((b) => ({
+          text: b,
+          options: {
+            fontSize: 16,
+            color: colors.text,
+            paraSpaceAfter: 10,
+            bullet: { type: "bullet" as const, color: colors.accent },
+          },
+        }));
+        slide.addText(bulletText, {
+          x: 1.0, y: 2.6, w: 11, h: 2,
+          fontFace: "Arial",
+          valign: "top",
+        });
+      }
+
+      slide.addText(app.url, {
+        x: 1.0, y: 4.5, w: 8, h: 0.4,
+        fontSize: 12, fontFace: "Arial",
+        color: colors.text,
+        hyperlink: { url: app.url },
+      });
+    } else {
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: 0.5, h: "100%",
+        fill: { type: "solid", color: colors.accent },
+      });
+
+      slide.addText(slideData.title, {
+        x: 0.8, y: 0.4, w: 11.5, h: 0.9,
+        fontSize: 28, fontFace: "Arial",
+        color: colors.text, bold: true,
+      });
+
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0.8, y: 1.3, w: 2, h: 0.04,
+        fill: { type: "solid", color: colors.accent },
+      });
+
+      if (slideData.subtitle) {
+        slide.addText(slideData.subtitle, {
+          x: 0.8, y: 1.5, w: 11.5, h: 0.6,
+          fontSize: 15, fontFace: "Arial",
+          color: "888888", italic: true,
+        });
+      }
+
+      if (slideData.bullets && slideData.bullets.length > 0) {
+        const startY = slideData.subtitle ? 2.2 : 1.7;
+        const bulletText = slideData.bullets.map((b) => ({
+          text: b,
+          options: {
+            fontSize: 16,
+            color: colors.text === "FFFFFF" ? "EEEEEE" : "444444",
+            paraSpaceAfter: 12,
+            bullet: { type: "bullet" as const, color: colors.accent },
+          },
+        }));
+        slide.addText(bulletText, {
+          x: 0.8, y: startY, w: 11.5, h: 3,
+          fontFace: "Arial",
+          valign: "top",
+        });
+      }
+
+      slide.addText(`${index + 1} / ${slides.length}`, {
+        x: 11.5, y: 4.9, w: 1.5, h: 0.4,
+        fontSize: 10, fontFace: "Arial",
+        color: "AAAAAA",
+        align: "right",
+      });
+    }
+
+    if (slideData.notes) {
+      slide.addNotes(slideData.notes);
+    }
+  });
+
+  const safeName = app.name.replace(/[^a-zA-Z0-9]/g, "_");
+  await pptx.writeFile({ fileName: `${safeName}_Presentation.pptx` });
+}
+
 export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) {
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const [isGeneratingPPT, setIsGeneratingPPT] = useState(false);
+  const { toast } = useToast();
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -22,6 +217,26 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
       setTimeout(() => setCopiedUrl(false), 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const handleGeneratePPT = async () => {
+    setIsGeneratingPPT(true);
+    try {
+      await generateAndDownloadPPT(app);
+      toast({
+        title: "Presentation Ready",
+        description: "Your PowerPoint has been downloaded successfully.",
+      });
+    } catch (error: any) {
+      console.error("PPT generation error:", error);
+      toast({
+        title: "Generation Failed",
+        description: error.message || "Could not generate the presentation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPPT(false);
     }
   };
 
@@ -191,11 +406,33 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
 
         <div className="px-8 py-4 border-t border-gray-100 bg-gray-50/30">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Calendar className="h-3.5 w-3.5" />
-              <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently added'}</span>
+            <div className="flex items-center gap-3 text-xs text-gray-400">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently added'}</span>
+              </div>
             </div>
             <div className="flex items-center gap-2.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGeneratePPT(); }}
+                disabled={isGeneratingPPT}
+                className="text-sm h-9 px-5 rounded-xl border-orange-200 text-orange-600 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-300 transition-all font-semibold gap-2"
+              >
+                {isGeneratingPPT ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Presentation className="h-3.5 w-3.5" />
+                    Generate PPT
+                  </>
+                )}
+              </Button>
               <Button 
                 type="button"
                 variant="ghost" 

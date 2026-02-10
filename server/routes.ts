@@ -748,6 +748,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return cachedNews;
   }
 
+  app.post("/api/generate-ppt-content", async (req, res) => {
+    try {
+      const { appName, description, category, subcategory } = req.body;
+      if (!appName || !description) {
+        return res.status(400).json({ error: "App name and description are required" });
+      }
+
+      const apiKey = process.env.PWC_GENAI_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "PWC_GENAI_API_KEY not configured" });
+      }
+
+      const url = process.env.PWC_GENAI_ENDPOINT_URL || "https://genai-sharedservice-americas.pwc.com/completions";
+
+      const prompt = `You are a professional presentation designer. Create a modern, visually appealing PowerPoint presentation for the following application.
+
+Application Name: ${appName}
+Category: ${category || "Technology"}
+Subcategory: ${subcategory || ""}
+Description: ${description}
+
+Generate exactly 6 slides in valid JSON format. Each slide should have:
+- "title": short slide title
+- "subtitle": a subtitle or tagline (optional)
+- "bullets": array of 3-5 concise bullet points
+- "notes": speaker notes (1-2 sentences)
+- "imageKeyword": a single keyword describing a relevant stock image concept (e.g. "analytics", "security", "cloud", "dashboard", "automation")
+
+The slides should follow this structure:
+1. Title slide - app name, tagline, category
+2. Problem Statement - what problem does it solve
+3. Key Features - main capabilities
+4. How It Works - workflow or process
+5. Benefits & Impact - value proposition
+6. Get Started - next steps, call to action
+
+Return ONLY a valid JSON array of slide objects, no markdown, no code fences, no extra text.`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "accept": "application/json",
+          "API-Key": apiKey,
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "vertex_ai.gemini-2.0-flash",
+          prompt: prompt,
+          temperature: 0.7,
+          top_p: 1,
+          presence_penalty: 0,
+          seed: 25,
+          stream: false,
+          max_tokens: 4000
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`PwC GenAI API Error ${response.status}: ${errorText.substring(0, 500)}`);
+        return res.status(502).json({ error: "Failed to generate content from AI service" });
+      }
+
+      const data = await response.json() as any;
+
+      let textContent = "";
+      if (typeof data === "object" && data !== null) {
+        for (const key of ["completion", "text", "output", "result"]) {
+          if (typeof data[key] === "string") {
+            textContent = data[key];
+            break;
+          }
+        }
+        if (!textContent && Array.isArray(data.choices) && data.choices.length > 0) {
+          const choice = data.choices[0];
+          if (typeof choice.text === "string") {
+            textContent = choice.text;
+          } else if (choice.message && typeof choice.message.content === "string") {
+            textContent = choice.message.content;
+          }
+        }
+        if (!textContent) {
+          textContent = JSON.stringify(data);
+        }
+      } else {
+        textContent = String(data);
+      }
+
+      let slides;
+      try {
+        const cleaned = textContent.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+        slides = JSON.parse(cleaned);
+        if (!Array.isArray(slides) || slides.length === 0) {
+          throw new Error("Response is not a valid slide array");
+        }
+        slides = slides.map((s: any) => ({
+          title: String(s.title || ""),
+          subtitle: s.subtitle ? String(s.subtitle) : undefined,
+          bullets: Array.isArray(s.bullets) ? s.bullets.map(String) : [],
+          notes: s.notes ? String(s.notes) : undefined,
+          imageKeyword: s.imageKeyword ? String(s.imageKeyword) : undefined,
+        }));
+      } catch (parseErr) {
+        console.error("Failed to parse LLM response:", textContent.substring(0, 800));
+        slides = [
+          { title: appName, subtitle: category || "Application Overview", bullets: ["Innovative solution for modern enterprises"], notes: "" },
+          { title: "Overview", bullets: [description.substring(0, 300)], notes: "" },
+          { title: "Key Features", bullets: ["Advanced capabilities", "Seamless integration", "Enterprise-grade security", "Real-time analytics"], notes: "" },
+          { title: "How It Works", bullets: ["Simple setup process", "Intuitive interface", "Real-time processing", "Automated workflows"], notes: "" },
+          { title: "Benefits", bullets: ["Increased efficiency", "Cost reduction", "Better insights", "Scalable solution"], notes: "" },
+          { title: "Get Started", subtitle: "Begin your journey today", bullets: ["Contact our team", "Request a demo", "Start free trial"], notes: "" }
+        ];
+      }
+
+      res.json({ slides, aiGenerated: Array.isArray(slides) && slides.length > 0 });
+    } catch (error) {
+      console.error("Error generating PPT content:", error);
+      res.status(500).json({ error: "Failed to generate presentation content" });
+    }
+  });
+
   app.get("/api/news", async (_req, res) => {
     try {
       const articles = await fetchAINews();
