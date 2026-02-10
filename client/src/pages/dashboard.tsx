@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AppCard } from "@/components/app-card";
 import { ProjectRequisitionForm } from "@/components/project-requisition-form";
@@ -6,7 +6,8 @@ import { useApps } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
-import { FileText, X, Sparkles, Zap } from "lucide-react";
+import { FileText, X, Sparkles, Zap, Rocket, ExternalLink, Bot } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
 import { SmartSearch } from "@/components/smart-search";
 import { IndustryInsights } from "@/components/industry-insights";
@@ -21,6 +22,11 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [subcategory, setSubcategory] = useState("all");
+  const [showPromo, setShowPromo] = useState(false);
+
+  useEffect(() => {
+    setShowPromo(true);
+  }, []);
 
   const { data: apps, isLoading } = useApps(
     search,
@@ -56,6 +62,72 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Dialog open={showPromo} onOpenChange={setShowPromo}>
+        <DialogContent className="sm:max-w-lg p-0 overflow-hidden border-0 rounded-3xl shadow-2xl [&>button]:hidden">
+          <DialogTitle className="sr-only">Agent Marketplace Launch</DialogTitle>
+          <DialogDescription className="sr-only">Promotional announcement for the new Agent Marketplace</DialogDescription>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary via-orange-500 to-rose-500" />
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute top-6 left-6 w-24 h-24 border-2 border-white/30 rounded-full" />
+              <div className="absolute top-12 right-8 w-16 h-16 border-2 border-white/20 rounded-full" />
+              <div className="absolute bottom-8 left-1/2 w-32 h-32 border-2 border-white/10 rounded-full" />
+              <div className="absolute top-1/3 left-1/4 w-2 h-2 bg-white/40 rounded-full" />
+              <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-white/30 rounded-full" />
+              <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-white/50 rounded-full" />
+            </div>
+            <div className="relative px-8 pt-10 pb-8 text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-5 border border-white/30">
+                <Bot className="h-10 w-10 text-white" />
+              </div>
+              <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold text-white tracking-wider uppercase mb-4">
+                New Launch
+              </div>
+              <h2 className="text-3xl font-extrabold text-white mb-3 font-header leading-tight">
+                Agent Marketplace<br />is Here!
+              </h2>
+              <p className="text-white/85 text-sm leading-relaxed max-w-sm mx-auto">
+                Discover, deploy, and manage AI agents built for enterprise workflows. Automate tasks, boost productivity, and unlock new possibilities.
+              </p>
+            </div>
+          </div>
+
+          <div className="px-8 pb-8 pt-2 bg-white">
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="text-center p-3 bg-orange-50 rounded-xl">
+                <Rocket className="h-5 w-5 text-primary mx-auto mb-1.5" />
+                <p className="text-[11px] font-semibold text-gray-700">Ready to Deploy</p>
+              </div>
+              <div className="text-center p-3 bg-blue-50 rounded-xl">
+                <Bot className="h-5 w-5 text-blue-500 mx-auto mb-1.5" />
+                <p className="text-[11px] font-semibold text-gray-700">AI-Powered</p>
+              </div>
+              <div className="text-center p-3 bg-emerald-50 rounded-xl">
+                <Sparkles className="h-5 w-5 text-emerald-500 mx-auto mb-1.5" />
+                <p className="text-[11px] font-semibold text-gray-700">Enterprise Ready</p>
+              </div>
+            </div>
+
+            <Button
+              className="w-full bg-gradient-to-r from-primary to-rose-500 hover:from-primary/90 hover:to-rose-500/90 text-white font-bold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-base"
+              onClick={() => {
+                window.open('https://etlab-projects.pwc.in/agent-marketplace/', '_blank', 'noopener,noreferrer');
+                setShowPromo(false);
+              }}
+            >
+              Explore Agent Store
+              <ExternalLink className="h-4.5 w-4.5 ml-2" />
+            </Button>
+            <button
+              onClick={() => setShowPromo(false)}
+              className="w-full mt-3 text-sm text-gray-400 hover:text-gray-600 transition-colors font-medium"
+            >
+              Maybe later
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Header
         onCategoryChange={handleCategoryChange}
         currentCategory={category}
