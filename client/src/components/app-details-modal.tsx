@@ -92,60 +92,62 @@ async function downloadPPT(slides: SlideData[], app: WebApp): Promise<void> {
 
     if (index === 0) {
       if (pptImageData) {
-        slide.addImage({ data: pptImageData, x: 0, y: 0, w: 13.33, h: 7.5, transparency: 70 });
+        slide.addImage({ data: pptImageData, x: 0, y: 0, w: 13.33, h: 7.5, transparency: 65 });
       }
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 7.5, fill: { type: "solid", color: "191919" }, transparency: 30 } as any);
-      slide.addShape(pptx.ShapeType.rect, { x: 0.8, y: 1.2, w: 0.08, h: 1.8, fill: { type: "solid", color: "E8611A" } });
-      slide.addText(slideData.title, { x: 1.2, y: 1.3, w: 7.5, h: 1.8, fontSize: 42, fontFace: "Arial", color: "FFFFFF", bold: true, lineSpacingMultiple: 1.1 });
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 7.5, fill: { type: "solid", color: "191919" }, transparency: 25 } as any);
+      slide.addShape(pptx.ShapeType.rect, { x: 0.8, y: 1.4, w: 0.06, h: 1.6, fill: { type: "solid", color: "E8611A" } });
+      slide.addText(slideData.title.toUpperCase(), { x: 1.2, y: 1.4, w: 7, h: 1.6, fontSize: 38, fontFace: "Arial", color: "FFFFFF", bold: true, lineSpacingMultiple: 1.05, charSpacing: 1.5 });
       if (slideData.subtitle) {
-        slide.addText(slideData.subtitle, { x: 1.2, y: 3.3, w: 7, h: 0.8, fontSize: 20, fontFace: "Arial", color: "E8611A" });
+        slide.addText(slideData.subtitle, { x: 1.2, y: 3.2, w: 7, h: 0.7, fontSize: 18, fontFace: "Arial", color: "E8611A", bold: false });
       }
-      const categoryLabel = [app.category, app.subcategory].filter(Boolean).join(" · ");
-      slide.addText(categoryLabel, { x: 1.2, y: 4.5, w: 6, h: 0.5, fontSize: 13, fontFace: "Arial", color: "999999" });
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 6.8, w: 13.33, h: 0.06, fill: { type: "solid", color: "E8611A" } });
-      slide.addText("ET Labs | PwC", { x: 1.2, y: 6.2, w: 6, h: 0.4, fontSize: 11, fontFace: "Arial", color: "888888" });
+      const categoryLabel = [app.category, app.subcategory].filter(Boolean).join("  |  ");
+      slide.addText(categoryLabel.toUpperCase(), { x: 1.2, y: 4.2, w: 6, h: 0.4, fontSize: 11, fontFace: "Arial", color: "999999", charSpacing: 2 });
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 7.0, w: 13.33, h: 0.04, fill: { type: "solid", color: "E8611A" } });
+      slide.addText("ET Labs  |  PwC", { x: 1.2, y: 6.4, w: 6, h: 0.35, fontSize: 10, fontFace: "Arial", color: "777777", charSpacing: 1 });
 
       if (pptImageData) {
-        slide.addImage({ data: pptImageData, x: 8.5, y: 1.0, w: 4.3, h: 3.2, rounding: true });
-        slide.addShape(pptx.ShapeType.rect, { x: 8.5, y: 1.0, w: 4.3, h: 3.2, fill: { type: "solid", color: "191919" }, transparency: 40, rectRadius: 0.15 } as any);
+        slide.addImage({ data: pptImageData, x: 8.6, y: 1.2, w: 4.0, h: 3.0, rounding: true });
+        slide.addShape(pptx.ShapeType.rect, { x: 8.6, y: 1.2, w: 4.0, h: 3.0, fill: { type: "solid", color: "000000" }, transparency: 50, rectRadius: 0.12 } as any);
       }
     } else if (index === slides.length - 1) {
       if (pptImageData) {
-        slide.addImage({ data: pptImageData, x: 0, y: 0, w: 13.33, h: 7.5, transparency: 75 });
+        slide.addImage({ data: pptImageData, x: 0, y: 0, w: 13.33, h: 7.5, transparency: 80 });
       }
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 7.5, fill: { type: "solid", color: colors.bg.replace("#", "") }, transparency: 20 } as any);
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 0.06, fill: { type: "solid", color: "E8611A" } });
-      slide.addText(slideData.title, { x: 1.0, y: 1.2, w: 7, h: 1.2, fontSize: 36, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 7.5, fill: { type: "solid", color: colors.bg.replace("#", "") }, transparency: 15 } as any);
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 0.04, fill: { type: "solid", color: "E8611A" } });
+      slide.addText(slideData.title.toUpperCase(), { x: 1.0, y: 1.4, w: 7, h: 1.0, fontSize: 32, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true, charSpacing: 1.5 });
+      slide.addShape(pptx.ShapeType.rect, { x: 1.0, y: 2.5, w: 2.0, h: 0.04, fill: { type: "solid", color: "E8611A" } });
       if (slideData.bullets && slideData.bullets.length > 0) {
-        const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 16, color: colors.text.replace("#", ""), paraSpaceAfter: 10, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
-        slide.addText(bulletText, { x: 1.0, y: 2.6, w: 7, h: 2, fontFace: "Arial", valign: "top" });
+        const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 15, color: colors.text.replace("#", ""), paraSpaceAfter: 14, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
+        slide.addText(bulletText, { x: 1.0, y: 2.9, w: 7, h: 2.2, fontFace: "Arial", valign: "top", lineSpacingMultiple: 1.2 });
       }
-      slide.addText(app.url, { x: 1.0, y: 5.0, w: 6, h: 0.4, fontSize: 12, fontFace: "Arial", color: "E8611A", hyperlink: { url: app.url } });
-      slide.addText("ET Labs | PwC", { x: 1.0, y: 6.5, w: 6, h: 0.4, fontSize: 11, fontFace: "Arial", color: "888888" });
+      slide.addText(app.url, { x: 1.0, y: 5.4, w: 6, h: 0.35, fontSize: 11, fontFace: "Arial", color: "E8611A", hyperlink: { url: app.url } });
+      slide.addText("ET Labs  |  PwC", { x: 1.0, y: 6.5, w: 6, h: 0.35, fontSize: 10, fontFace: "Arial", color: "777777", charSpacing: 1 });
+      slide.addText(`${index + 1} / ${slides.length}`, { x: 11.5, y: 6.8, w: 1.5, h: 0.35, fontSize: 9, fontFace: "Arial", color: "999999", align: "right" });
     } else {
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.12, h: 7.5, fill: { type: "solid", color: colors.accentHex } });
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.1, h: 7.5, fill: { type: "solid", color: colors.accentHex } });
 
-      slide.addText(slideData.title, { x: 0.5, y: 0.4, w: 7, h: 0.9, fontSize: 28, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
-      slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 1.3, w: 2.5, h: 0.05, fill: { type: "solid", color: colors.accentHex } });
+      slide.addText(slideData.title.toUpperCase(), { x: 0.5, y: 0.5, w: 7, h: 0.8, fontSize: 24, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true, charSpacing: 1.5 });
+      slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 1.35, w: 1.8, h: 0.04, fill: { type: "solid", color: colors.accentHex } });
 
       if (slideData.subtitle) {
-        slide.addText(slideData.subtitle, { x: 0.5, y: 1.5, w: 7, h: 0.6, fontSize: 15, fontFace: "Arial", color: "888888", italic: true });
+        slide.addText(slideData.subtitle.toUpperCase(), { x: 0.5, y: 1.55, w: 7, h: 0.5, fontSize: 11, fontFace: "Arial", color: "999999", charSpacing: 1.5 });
       }
 
       if (pptImageData) {
-        slide.addImage({ data: pptImageData, x: 7.8, y: 0.5, w: 5.2, h: 3.5, rounding: true });
-        slide.addShape(pptx.ShapeType.rect, { x: 7.8, y: 0.5, w: 5.2, h: 3.5, fill: { type: "solid", color: colors.bg.replace("#", "") }, transparency: 60, rectRadius: 0.15 } as any);
+        slide.addImage({ data: pptImageData, x: 8.0, y: 0.5, w: 4.8, h: 3.2, rounding: true });
+        slide.addShape(pptx.ShapeType.rect, { x: 8.0, y: 0.5, w: 4.8, h: 3.2, fill: { type: "solid", color: colors.bg.replace("#", "") }, transparency: 55, rectRadius: 0.12 } as any);
       }
 
       if (slideData.bullets && slideData.bullets.length > 0) {
-        const startY = slideData.subtitle ? 2.2 : 1.7;
-        const contentWidth = pptImageData ? 6.8 : 11;
-        const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 16, color: colors.text === "#FFFFFF" ? "EEEEEE" : "444444", paraSpaceAfter: 12, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
-        slide.addText(bulletText, { x: 0.5, y: startY, w: contentWidth, h: 3.2, fontFace: "Arial", valign: "top" });
+        const startY = slideData.subtitle ? 2.3 : 1.8;
+        const contentWidth = pptImageData ? 7.0 : 11;
+        const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 15, color: colors.text === "#FFFFFF" ? "DDDDDD" : "3D3D3D", paraSpaceAfter: 14, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
+        slide.addText(bulletText, { x: 0.5, y: startY, w: contentWidth, h: 3.5, fontFace: "Arial", valign: "top", lineSpacingMultiple: 1.25 });
       }
 
-      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 7.1, w: 13.33, h: 0.04, fill: { type: "solid", color: colors.accentHex }, transparency: 50 } as any);
-      slide.addText(`${index + 1} / ${slides.length}`, { x: 11.5, y: 6.8, w: 1.5, h: 0.4, fontSize: 10, fontFace: "Arial", color: "AAAAAA", align: "right" });
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 7.1, w: 13.33, h: 0.03, fill: { type: "solid", color: colors.accentHex }, transparency: 50 } as any);
+      slide.addText(`${index + 1} / ${slides.length}`, { x: 11.5, y: 6.8, w: 1.5, h: 0.35, fontSize: 9, fontFace: "Arial", color: "999999", align: "right" });
     }
 
     if (slideData.notes) {
@@ -170,21 +172,21 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
     return (
       <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
         {imgSrc && (
-          <img src={imgSrc} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
+          <img src={imgSrc} alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#191919] via-[#191919]/90 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#191919] via-[#191919]/85 to-[#191919]/40" />
         {imgSrc && (
-          <div className="absolute right-[3%] top-[10%] w-[38%] h-[65%] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+          <div className="absolute right-[3%] top-[12%] w-[32%] h-[55%] rounded-xl overflow-hidden shadow-2xl border border-white/10">
             <img src={imgSrc} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-black/20" />
           </div>
         )}
-        <div className="absolute left-[5%] top-[12%] w-[0.5%] h-[25%] rounded-full" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute bottom-0 left-0 w-full h-[1%]" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute left-[7%] top-[18%] right-[45%]">
-          <h2 className="text-white font-extrabold text-lg sm:text-2xl md:text-3xl leading-tight drop-shadow-lg">{slide.title}</h2>
-          {slide.subtitle && <p className="mt-2 text-sm sm:text-base font-medium" style={{ color: colors.accent }}>{slide.subtitle}</p>}
-          <p className="mt-6 text-[10px] sm:text-xs text-gray-500">ET Labs | PwC</p>
+        <div className="absolute left-[5%] top-[16%] w-[0.4%] h-[22%] rounded-full" style={{ backgroundColor: colors.accent }} />
+        <div className="absolute bottom-0 left-0 w-full h-[0.6%]" style={{ backgroundColor: colors.accent }} />
+        <div className="absolute left-[7%] top-[18%] right-[40%]">
+          <h2 className="text-white font-extrabold text-base sm:text-xl md:text-2xl leading-tight tracking-wide uppercase">{slide.title}</h2>
+          {slide.subtitle && <p className="mt-2 text-xs sm:text-sm font-medium" style={{ color: colors.accent }}>{slide.subtitle}</p>}
+          <p className="mt-8 text-[9px] sm:text-[10px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</p>
         </div>
       </div>
     );
@@ -194,54 +196,56 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
     return (
       <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
         {imgSrc && (
-          <img src={imgSrc} alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" />
+          <img src={imgSrc} alt="" className="absolute inset-0 w-full h-full object-cover opacity-12" />
         )}
-        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}ee, ${colors.bg}cc)` }} />
-        <div className="absolute top-0 left-0 w-full h-[1%]" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute left-[8%] top-[15%] right-[8%]">
-          <h2 className="font-extrabold text-lg sm:text-2xl" style={{ color: colors.text }}>{slide.title}</h2>
+        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}f0, ${colors.bg}d0)` }} />
+        <div className="absolute top-0 left-0 w-full h-[0.6%]" style={{ backgroundColor: colors.accent }} />
+        <div className="absolute left-[8%] top-[16%] right-[8%]">
+          <h2 className="font-extrabold text-base sm:text-xl tracking-wide uppercase" style={{ color: colors.text }}>{slide.title}</h2>
+          <div className="mt-2 w-10 h-0.5" style={{ backgroundColor: colors.accent }} />
           {slide.bullets && slide.bullets.length > 0 && (
-            <ul className="mt-4 space-y-1.5">
+            <ul className="mt-4 space-y-2">
               {slide.bullets.map((b, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm" style={{ color: colors.text }}>
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
+                <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs leading-relaxed" style={{ color: colors.text }}>
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
                   {b}
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <div className="absolute bottom-[8%] left-[8%] text-[10px] text-gray-500">ET Labs | PwC</div>
+        <div className="absolute bottom-[8%] left-[8%] text-[9px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</div>
+        <div className="absolute bottom-[8%] right-[4%] text-[9px] text-gray-400">{index + 1} / {total}</div>
       </div>
     );
   }
 
   return (
     <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
-      <div className="absolute left-0 top-0 w-[1%] h-full" style={{ backgroundColor: colors.accent }} />
+      <div className="absolute left-0 top-0 w-[0.8%] h-full" style={{ backgroundColor: colors.accent }} />
       {imgSrc && (
-        <div className="absolute right-[3%] top-[8%] w-[35%] h-[72%] rounded-2xl overflow-hidden shadow-xl border border-black/5">
+        <div className="absolute right-[3%] top-[8%] w-[33%] h-[68%] rounded-xl overflow-hidden shadow-xl border border-black/5">
           <img src={imgSrc} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 rounded-2xl" style={{ background: `linear-gradient(135deg, ${colors.bg}60, transparent)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}50, transparent)` }} />
         </div>
       )}
       <div className="absolute left-[4%] top-[8%]" style={{ width: imgSrc ? "55%" : "90%" }}>
-        <h2 className="font-bold text-base sm:text-xl" style={{ color: colors.text }}>{slide.title}</h2>
-        <div className="mt-1.5 w-14 h-0.5 rounded-full" style={{ backgroundColor: colors.accent }} />
-        {slide.subtitle && <p className="mt-2 text-xs italic text-gray-500">{slide.subtitle}</p>}
+        <h2 className="font-bold text-sm sm:text-lg tracking-wide uppercase" style={{ color: colors.text }}>{slide.title}</h2>
+        <div className="mt-1.5 w-10 h-0.5 rounded-full" style={{ backgroundColor: colors.accent }} />
+        {slide.subtitle && <p className="mt-2 text-[10px] tracking-wider text-gray-400 uppercase">{slide.subtitle}</p>}
         {slide.bullets && slide.bullets.length > 0 && (
           <ul className="mt-3 space-y-1.5">
             {slide.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-2 text-xs sm:text-sm" style={{ color: colors.text === "#FFFFFF" ? "#EEEEEE" : "#444444" }}>
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
+              <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs leading-relaxed" style={{ color: colors.text === "#FFFFFF" ? "#DDDDDD" : "#3D3D3D" }}>
+                <span className="mt-1 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
                 {b}
               </li>
             ))}
           </ul>
         )}
       </div>
-      <div className="absolute bottom-0 left-0 w-full h-[0.5%]" style={{ backgroundColor: colors.accent, opacity: 0.4 }} />
-      <div className="absolute bottom-[5%] right-[4%] text-[10px] text-gray-400">{index + 1} / {total}</div>
+      <div className="absolute bottom-0 left-0 w-full h-[0.4%]" style={{ backgroundColor: colors.accent, opacity: 0.4 }} />
+      <div className="absolute bottom-[5%] right-[4%] text-[9px] text-gray-400">{index + 1} / {total}</div>
     </div>
   );
 }

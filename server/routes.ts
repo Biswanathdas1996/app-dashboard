@@ -762,29 +762,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const url = process.env.PWC_GENAI_ENDPOINT_URL || "https://genai-sharedservice-americas.pwc.com/completions";
 
-      const prompt = `You are a professional presentation designer. Create a modern, visually appealing PowerPoint presentation for the following application.
+      const prompt = `You are a senior management consultant at a top-tier consulting firm. Create an executive-level PowerPoint presentation for a technology solution pitch.
 
 Application Name: ${appName}
 Category: ${category || "Technology"}
 Subcategory: ${subcategory || ""}
 Description: ${description}
 
-Generate exactly 6 slides in valid JSON format. Each slide should have:
-- "title": short slide title
-- "subtitle": a subtitle or tagline (optional)
-- "bullets": array of 3-5 concise bullet points
-- "notes": speaker notes (1-2 sentences)
-- "imageKeyword": MUST be exactly one of these available stock image categories: "analytics", "security", "cloud", "automation", "finance", "healthcare", "teamwork", "development", "innovation", "network", "government", "management", "technology", "ux", "growth". Pick the one that best matches the slide content.
+CONTENT GUIDELINES:
+- Write in a professional, authoritative consulting tone
+- Every bullet must be precise, data-driven language (e.g., "Reduce processing time by up to 60%" not "Makes things faster")
+- Use strong action verbs to start each bullet (Streamline, Accelerate, Optimize, Enable, Transform, Automate, Enhance, Deliver)
+- Keep bullet points to ONE concise line each (maximum 12 words per bullet)
+- No filler words, no generic statements, no vague claims
+- Subtitles should be sharp taglines, not sentences
+- Speaker notes should provide executive talking points with specific context
 
-The slides should follow this structure:
-1. Title slide - app name, tagline, category
-2. Problem Statement - what problem does it solve
-3. Key Features - main capabilities
-4. How It Works - workflow or process
-5. Benefits & Impact - value proposition
-6. Get Started - next steps, call to action
+Generate exactly 6 slides in valid JSON format. Each slide must have:
+- "title": concise, impactful title (2-5 words, no articles)
+- "subtitle": sharp tagline or value statement (optional, max 8 words)
+- "bullets": array of exactly 4 precise bullet points
+- "notes": speaker notes with 2-3 executive talking points
+- "imageKeyword": MUST be exactly one of: "analytics", "security", "cloud", "automation", "finance", "healthcare", "teamwork", "development", "innovation", "network", "government", "management", "technology", "ux", "growth"
 
-Return ONLY a valid JSON array of slide objects, no markdown, no code fences, no extra text.`;
+SLIDE STRUCTURE:
+1. Title Slide — Application name, compelling value proposition tagline, category context
+2. The Challenge — Clearly articulate the business problem with quantifiable impact
+3. Solution Overview — Core capabilities framed as strategic advantages
+4. Architecture & Workflow — How it works in 4 clear, sequential steps
+5. Business Impact — Measurable outcomes, ROI metrics, competitive advantages
+6. Next Steps — Clear call-to-action with implementation pathway
+
+EXAMPLE OF GOOD vs BAD BULLETS:
+BAD: "Provides good security features for users"
+GOOD: "Enterprise-grade encryption with zero-trust architecture"
+BAD: "Helps teams work together better"
+GOOD: "Enable cross-functional collaboration across 50+ integrations"
+
+Return ONLY a valid JSON array of slide objects. No markdown, no code fences, no explanation.`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -854,12 +869,12 @@ Return ONLY a valid JSON array of slide objects, no markdown, no code fences, no
       } catch (parseErr) {
         console.error("Failed to parse LLM response:", textContent.substring(0, 800));
         slides = [
-          { title: appName, subtitle: category || "Application Overview", bullets: ["Innovative solution for modern enterprises"], notes: "" },
-          { title: "Overview", bullets: [description.substring(0, 300)], notes: "" },
-          { title: "Key Features", bullets: ["Advanced capabilities", "Seamless integration", "Enterprise-grade security", "Real-time analytics"], notes: "" },
-          { title: "How It Works", bullets: ["Simple setup process", "Intuitive interface", "Real-time processing", "Automated workflows"], notes: "" },
-          { title: "Benefits", bullets: ["Increased efficiency", "Cost reduction", "Better insights", "Scalable solution"], notes: "" },
-          { title: "Get Started", subtitle: "Begin your journey today", bullets: ["Contact our team", "Request a demo", "Start free trial"], notes: "" }
+          { title: appName, subtitle: category || "Driving Digital Transformation", bullets: ["Enterprise-grade solution for modern organizations"], notes: "", imageKeyword: "technology" },
+          { title: "The Challenge", subtitle: "Why This Matters", bullets: ["Legacy systems create operational bottlenecks", "Manual processes reduce team productivity by 40%", "Data silos limit strategic decision-making", "Growing compliance requirements demand automation"], notes: "", imageKeyword: "management" },
+          { title: "Solution Overview", subtitle: "Strategic Capabilities", bullets: ["Streamline end-to-end workflow automation", "Deliver real-time analytics and actionable insights", "Enable seamless cross-platform integration", "Enforce enterprise-grade security and compliance"], notes: "", imageKeyword: "innovation" },
+          { title: "Architecture & Workflow", subtitle: "How It Works", bullets: ["Configure — Deploy in minutes with guided setup", "Integrate — Connect existing systems via secure APIs", "Automate — Define intelligent workflow triggers", "Monitor — Track performance through live dashboards"], notes: "", imageKeyword: "development" },
+          { title: "Business Impact", subtitle: "Measurable Outcomes", bullets: ["Accelerate operational efficiency by up to 60%", "Reduce manual processing costs significantly", "Enhance data-driven decision accuracy", "Scale seamlessly across departments and regions"], notes: "", imageKeyword: "growth" },
+          { title: "Next Steps", subtitle: "Your Path Forward", bullets: ["Schedule a personalized executive demo", "Receive a tailored implementation roadmap", "Launch pilot program within 2 weeks", "Achieve full deployment in under 90 days"], notes: "", imageKeyword: "teamwork" }
         ];
       }
 
