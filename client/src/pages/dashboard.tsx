@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText, X, Sparkles, ArrowRight, Zap, Shield, Globe } from "lucide-react";
 import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
+import { SmartSearch } from "@/components/smart-search";
 import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
@@ -85,7 +86,7 @@ export default function Dashboard() {
             <p className="text-base sm:text-lg lg:text-xl text-white/70 mb-8 max-w-2xl leading-relaxed font-body">
               Acting as a bridge between ideas and tangible working prototypes.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 mb-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 <span className="text-sm text-white/80 font-medium">{totalApplications} Applications</span>
@@ -95,6 +96,7 @@ export default function Dashboard() {
                 <span className="text-sm text-white/80 font-medium">Fast & Compliant</span>
               </div>
             </div>
+            <SmartSearch />
           </div>
         </div>
       </div>
