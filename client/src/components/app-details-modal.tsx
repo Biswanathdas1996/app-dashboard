@@ -194,6 +194,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                 <RichTextViewer 
                   content={app.description || ""} 
                   className="text-gray-700 leading-relaxed text-lg"
+                  maxLines={0}
                 />
               </div>
             </div>

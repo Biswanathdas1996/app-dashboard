@@ -5,7 +5,7 @@ interface RichTextViewerProps {
 }
 
 export function RichTextViewer({ content, className = "", maxLines = 3 }: RichTextViewerProps) {
-  const maxLinesClass = maxLines ? `line-clamp-${maxLines}` : ""
+  const maxLinesClass = maxLines > 0 ? `line-clamp-${maxLines}` : ""
   
   return (
     <div 
