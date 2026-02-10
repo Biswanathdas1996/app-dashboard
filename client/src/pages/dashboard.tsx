@@ -210,6 +210,53 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <a
+        href="https://etlab-projects.pwc.in/agent-marketplace/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block relative overflow-hidden bg-[#0c0c14] cursor-pointer"
+      >
+        <div className="absolute inset-0">
+          <img
+            src={agentPromoImage}
+            alt="Agent Marketplace"
+            className="w-full h-full object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0c0c14] via-[#0c0c14]/70 to-[#0c0c14]/40" />
+        </div>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+                <Bot className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                    Agent Marketplace
+                  </h3>
+                  <div className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/20 border border-emerald-400/30 rounded-full">
+                    <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse" />
+                    <span className="text-[8px] font-bold text-emerald-300 uppercase tracking-wider">New</span>
+                  </div>
+                </div>
+                <p className="text-[11px] sm:text-xs text-white/40 mt-0.5">
+                  50+ autonomous AI agents ready to deploy across your enterprise
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="hidden sm:block text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
+                Explore Now
+              </span>
+              <div className="w-8 h-8 bg-indigo-500/20 border border-indigo-500/30 rounded-lg flex items-center justify-center group-hover:bg-indigo-500/30 transition-all">
+                <ArrowRight className="h-4 w-4 text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+
       <main className="bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
