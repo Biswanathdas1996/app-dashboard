@@ -325,9 +325,6 @@ export default function Dashboard() {
                 <AppCard
                   key={app.id}
                   app={app}
-                  onClick={() =>
-                    window.open(app.url, "_blank", "noopener,noreferrer")
-                  }
                 />
               ))}
             </div>

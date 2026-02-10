@@ -43,13 +43,16 @@ export function AppCard({ app, onClick }: AppCardProps) {
     { gradient: "from-gray-500 to-gray-600", bg: "bg-gray-50", text: "text-gray-700" };
   
   const handleClick = () => {
+    const trackingData = createTrackingData(app.id, app.name, app.category, "detail_view");
+    trackView.mutate(trackingData);
+    setShowDetailsModal(true);
+  };
+
+  const handleLaunch = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const trackingData = createTrackingData(app.id, app.name, app.category, "launch");
     trackView.mutate(trackingData);
-    if (onClick) {
-      onClick(app);
-    } else {
-      window.open(app.url, '_blank', 'noopener,noreferrer');
-    }
+    window.open(app.url, '_blank', 'noopener,noreferrer');
   };
 
   const handleViewDetails = (e: React.MouseEvent) => {
@@ -163,6 +166,7 @@ export function AppCard({ app, onClick }: AppCardProps) {
 
           <div className="mt-auto pt-4">
             <Button
+              onClick={handleLaunch}
               className={`w-full bg-gradient-to-r ${colors.gradient} text-white hover:opacity-90 transition-all rounded-xl font-semibold py-2.5 text-sm shadow-sm hover:shadow-md border-0`}
             >
               <ExternalLink className="h-3.5 w-3.5 mr-2" />
