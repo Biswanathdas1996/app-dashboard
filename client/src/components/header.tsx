@@ -1,5 +1,5 @@
 import { useLocation, Link } from "wouter";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { PwCLogo } from "./pwc-logo";
 import { Button } from "./ui/button";
 import { NavigationMenu } from "./navigation-menu";
@@ -40,6 +40,14 @@ export function Header({ onCategoryChange, currentCategory, currentSubcategory }
           )}
 
           <div className="flex items-center gap-3 shrink-0">
+            <Button 
+              size="sm"
+              className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold text-sm h-9 px-4 transition-all shadow-sm hover:shadow-md"
+              onClick={() => window.open('https://etlab-projects.pwc.in/agent-marketplace/', '_blank', 'noopener,noreferrer')}
+            >
+              Agent Store
+              <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
+            </Button>
             <Button 
               size="sm"
               className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold text-sm h-9 px-4 transition-all shadow-sm hover:shadow-md"
