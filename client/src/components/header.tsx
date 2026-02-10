@@ -1,19 +1,16 @@
 import { useLocation, Link } from "wouter";
-import { Search, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { PwCLogo } from "./pwc-logo";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { NavigationMenu } from "./navigation-menu";
 
 interface HeaderProps {
-  onSearchChange?: (search: string) => void;
-  searchValue?: string;
   onCategoryChange?: (category: string, subcategory?: string) => void;
   currentCategory?: string;
   currentSubcategory?: string;
 }
 
-export function Header({ onSearchChange, searchValue, onCategoryChange, currentCategory, currentSubcategory }: HeaderProps) {
+export function Header({ onCategoryChange, currentCategory, currentSubcategory }: HeaderProps) {
   const [location] = useLocation();
 
   return (
@@ -43,23 +40,6 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
           )}
 
           <div className="flex items-center gap-3 shrink-0">
-            {location === "/" && onSearchChange && (
-              <div className="hidden lg:flex items-center">
-                <div className="relative w-64">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <Search className="text-gray-400 h-4 w-4" />
-                  </div>
-                  <Input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchValue || ""}
-                    onChange={(e) => onSearchChange(e.target.value)}
-                    className="pl-9 pr-4 h-9 bg-gray-50 border-gray-200 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all text-sm placeholder:text-gray-400"
-                  />
-                </div>
-              </div>
-            )}
-
             <Button 
               size="sm"
               className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold text-sm h-9 px-4 transition-all shadow-sm hover:shadow-md"
@@ -79,28 +59,13 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
           </div>
         </div>
 
-        {location === "/" && onSearchChange && (
-          <div className="md:hidden pb-3 space-y-2">
-            {onCategoryChange && (
-              <div className="w-full min-w-0">
-                <NavigationMenu 
-                  onCategoryChange={onCategoryChange}
-                  currentCategory={currentCategory}
-                  currentSubcategory={currentSubcategory}
-                />
-              </div>
-            )}
-            
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Search className="text-gray-400 h-4 w-4" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search applications..."
-                value={searchValue || ""}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-9 pr-4 h-9 bg-gray-50 border-gray-200 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all text-sm placeholder:text-gray-400"
+        {location === "/" && onCategoryChange && (
+          <div className="md:hidden pb-3">
+            <div className="w-full min-w-0">
+              <NavigationMenu 
+                onCategoryChange={onCategoryChange}
+                currentCategory={currentCategory}
+                currentSubcategory={currentSubcategory}
               />
             </div>
           </div>

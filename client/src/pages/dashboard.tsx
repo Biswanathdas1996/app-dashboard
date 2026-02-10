@@ -57,8 +57,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header
-        onSearchChange={setSearch}
-        searchValue={search}
         onCategoryChange={handleCategoryChange}
         currentCategory={category}
         currentSubcategory={subcategory}
