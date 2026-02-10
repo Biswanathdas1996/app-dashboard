@@ -170,13 +170,11 @@ export default function Dashboard() {
           </div>
         </DialogContent>
       </Dialog>
-
       <Header
         onCategoryChange={handleCategoryChange}
         currentCategory={category}
         currentSubcategory={subcategory}
       />
-
       <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" style={{ zIndex: 20 }}>
         <div className="absolute inset-0 overflow-hidden">
           <img
@@ -209,7 +207,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
       <a
         href="https://etlab-projects.pwc.in/agent-marketplace/"
         target="_blank"
@@ -249,9 +246,7 @@ export default function Dashboard() {
                     <span className="text-[9px] font-bold text-indigo-300 uppercase tracking-wider">New</span>
                   </div>
                 </div>
-                <p className="text-xs text-white/35 mt-0.5 truncate">
-                  Discover, deploy & manage 50+ autonomous AI agents for enterprise workflows
-                </p>
+                <p className="text-xs text-white/35 mt-0.5 truncate">Discover, deploy & manage autonomous AI agents for enterprise workflows</p>
               </div>
             </div>
 
@@ -281,7 +276,6 @@ export default function Dashboard() {
           </div>
         </div>
       </a>
-
       <main className="bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
@@ -370,15 +364,12 @@ export default function Dashboard() {
           )}
         </div>
       </main>
-
       <IndustryInsights />
-
       <DeployedAppsShowcase 
         searchValue={search}
         categoryFilter={category === "all" ? "" : category}
         subcategoryFilter={subcategory === "all" ? "" : subcategory}
       />
-
       <section id="project-requisition" className="bg-gray-50">
         <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
           <div className="absolute inset-0">
