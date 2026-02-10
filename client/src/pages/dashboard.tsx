@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { FileText, X, Sparkles, ArrowRight, Zap, Shield, Globe } from "lucide-react";
 import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
+import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
 import genaiImage from "@assets/genai-story_1751387441561.webp";
@@ -24,6 +25,12 @@ export default function Dashboard() {
     category === "all" ? "" : category,
     subcategory === "all" ? "" : subcategory,
   );
+
+  const { data: requisitions = [] } = useQuery<any[]>({
+    queryKey: ["/api/requisitions"],
+  });
+
+  const totalApplications = (apps?.length || 0) + requisitions.length;
 
   const handleClearFilters = () => {
     setSearch("");
@@ -81,7 +88,7 @@ export default function Dashboard() {
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-sm text-white/80 font-medium">{apps?.length || 0} Applications</span>
+                <span className="text-sm text-white/80 font-medium">{totalApplications} Applications</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Zap className="h-3.5 w-3.5 text-yellow-400" />
