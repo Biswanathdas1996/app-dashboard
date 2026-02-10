@@ -73,29 +73,24 @@ export default function Dashboard() {
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/60 to-gray-900/80" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-gray-900/40" />
         </div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-3 py-1.5 mb-6">
-              <Sparkles className="h-3.5 w-3.5 text-orange-400" />
-              <span className="text-xs font-medium text-white/90">AI-Powered Solutions</span>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-2.5 py-1">
+                <Sparkles className="h-3 w-3 text-orange-400" />
+                <span className="text-[11px] font-medium text-white/90">AI-Powered</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-2.5 py-1">
+                <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-[11px] font-medium text-white/80">{totalApplications} Apps</span>
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-4 font-header leading-[1.1] tracking-tight">
-              ET Labs — <span className="gradient-text">AI Driven</span>{" "}
-              Rapid GTM
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3 font-header leading-[1.1] tracking-tight">
+              ET Labs — <span className="gradient-text">AI Driven</span> Rapid GTM
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-white/70 mb-8 max-w-2xl leading-relaxed font-body">
-              Acting as a bridge between ideas and tangible working prototypes.
+            <p className="text-sm sm:text-base text-white/60 mb-6 max-w-xl leading-relaxed font-body">
+              Bridge between ideas and tangible working prototypes.
             </p>
-            <div className="flex flex-wrap items-center gap-3 mb-8">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-sm text-white/80 font-medium">{totalApplications} Applications</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
-                <Zap className="h-3.5 w-3.5 text-yellow-400" />
-                <span className="text-sm text-white/80 font-medium">Fast & Compliant</span>
-              </div>
-            </div>
             <SmartSearch />
           </div>
         </div>

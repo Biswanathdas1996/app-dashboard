@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { Search, Sparkles, ExternalLink, X, Briefcase, Globe } from "lucide-react";
-import { Input } from "./ui/input";
+import { Search, Sparkles, ExternalLink, X, Briefcase, Globe, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import type { WebApp } from "@shared/schema";
 
@@ -106,26 +105,6 @@ function scoreResult(
   });
 
   return { score, matched };
-}
-
-function getSmartSuggestion(query: string, resultCount: number): string {
-  if (resultCount === 0) {
-    return `No matches found for "${query}". Try different keywords.`;
-  }
-  const q = query.toLowerCase();
-  if (q.includes("finance") || q.includes("bank") || q.includes("money")) {
-    return `Found ${resultCount} financial solution${resultCount !== 1 ? 's' : ''} that can help with your needs`;
-  }
-  if (q.includes("data") || q.includes("analytic") || q.includes("report")) {
-    return `Found ${resultCount} analytics & data tool${resultCount !== 1 ? 's' : ''} for your use case`;
-  }
-  if (q.includes("security") || q.includes("risk")) {
-    return `Found ${resultCount} security & risk solution${resultCount !== 1 ? 's' : ''} available`;
-  }
-  if (q.includes("employee") || q.includes("train") || q.includes("hr")) {
-    return `Found ${resultCount} HR & training solution${resultCount !== 1 ? 's' : ''} for your team`;
-  }
-  return `Found ${resultCount} relevant application${resultCount !== 1 ? 's' : ''} for "${query}"`;
 }
 
 export function SmartSearch() {
@@ -243,116 +222,126 @@ export function SmartSearch() {
     return tmp.textContent || tmp.innerText || "";
   };
 
+  const editorialResults = results.filter(r => r.source === "editorial");
+  const portfolioResults = results.filter(r => r.source === "portfolio");
+
   return (
-    <div ref={containerRef} className="relative w-full max-w-2xl">
-      <div className={`relative transition-all duration-300 ${isOpen ? "z-50" : ""}`}>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-            <Sparkles className="h-4 w-4 text-orange-400" />
+    <div ref={containerRef} className="relative w-full max-w-xl">
+      <div className={`relative transition-all duration-200 ${isOpen ? "z-50" : ""}`}>
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+            <Search className="h-3.5 w-3.5 text-white/30 group-focus-within:text-orange-400 transition-colors" />
           </div>
-          <Input
+          <input
             ref={inputRef}
             type="text"
-            placeholder="Ask AI to find apps... e.g. 'I need a finance tool' or 'show analytics apps'"
+            placeholder="Search apps... try 'finance tool' or 'analytics'"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
-            className="pl-11 pr-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 rounded-2xl focus:bg-white/15 focus:border-orange-400/50 focus:ring-2 focus:ring-orange-400/20 transition-all text-sm backdrop-blur-md font-medium"
+            className="w-full pl-9 pr-8 h-10 bg-white/[0.07] border border-white/[0.12] text-white text-[13px] placeholder:text-white/30 rounded-xl focus:bg-white/[0.12] focus:border-white/25 focus:outline-none focus:ring-1 focus:ring-orange-400/30 transition-all backdrop-blur-sm"
           />
           {query && (
             <button
               onClick={clearSearch}
-              className="absolute inset-y-0 right-0 flex items-center pr-4 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-white/25 hover:text-white/50 transition-colors"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
 
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-scale-in z-50">
-            <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-                <p className="text-xs font-medium text-gray-600">
-                  {getSmartSuggestion(query, results.length)}
-                </p>
-              </div>
-            </div>
-
+          <div className="absolute top-full left-0 right-0 mt-1.5 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-200/80 overflow-hidden animate-scale-in z-50">
             {results.length > 0 ? (
-              <div className="max-h-[400px] overflow-y-auto p-2">
-                {results.map((result) => (
-                  <div
-                    key={result.id}
-                    onClick={() => handleLaunch(result)}
-                    className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-200 ${result.url ? "cursor-pointer hover:bg-gray-50" : "cursor-default"} mb-1`}
-                  >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                      result.source === "editorial" 
-                        ? "bg-gradient-to-br from-orange-500 to-orange-600" 
-                        : "bg-gradient-to-br from-blue-500 to-blue-600"
-                    }`}>
-                      {result.source === "editorial" ? (
-                        <Globe className="h-4 w-4 text-white" />
-                      ) : (
-                        <Briefcase className="h-4 w-4 text-white" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h4 className="text-sm font-semibold text-gray-900 truncate group-hover:text-primary transition-colors">
-                          {result.name}
-                        </h4>
-                      </div>
-                      <p className="text-xs text-gray-500 line-clamp-1 mb-1.5">
-                        {stripHtml(result.description)}
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
-                          result.source === "editorial"
-                            ? "bg-orange-50 text-orange-600"
-                            : "bg-blue-50 text-blue-600"
-                        }`}>
-                          {result.source === "editorial" ? "Labs Editorial" : "Project Portfolio"}
-                        </span>
-                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
-                          {result.category}
-                        </span>
-                        {result.matchedKeywords.length > 0 && (
-                          <span className="text-[10px] text-gray-400">
-                            matched: {result.matchedKeywords.slice(0, 3).join(", ")}
-                          </span>
+              <div className="max-h-[340px] overflow-y-auto">
+                <div className="px-3 pt-2.5 pb-1">
+                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
+                    {results.length} result{results.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+
+                {editorialResults.length > 0 && (
+                  <div className="px-1.5 pb-1">
+                    {editorialResults.map((result) => (
+                      <div
+                        key={result.id}
+                        onClick={() => handleLaunch(result)}
+                        className={`group/item flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all duration-150 ${result.url ? "cursor-pointer hover:bg-gray-50" : "cursor-default"}`}
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shrink-0">
+                          <Globe className="h-3 w-3 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[13px] font-semibold text-gray-900 truncate group-hover/item:text-orange-600 transition-colors">
+                              {result.name}
+                            </span>
+                            <span className="text-[9px] font-medium text-orange-500 bg-orange-50 px-1.5 py-0.5 rounded shrink-0">
+                              Editorial
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-gray-400 truncate leading-tight mt-0.5">
+                            {result.category} {result.matchedKeywords.length > 0 && `· ${result.matchedKeywords.slice(0, 2).join(", ")}`}
+                          </p>
+                        </div>
+                        {result.url && (
+                          <ArrowUpRight className="h-3.5 w-3.5 text-gray-300 group-hover/item:text-orange-500 shrink-0 transition-colors" />
                         )}
                       </div>
-                    </div>
-                    {result.url && (
-                      <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-primary/10">
-                          <ExternalLink className="h-3.5 w-3.5 text-gray-400 group-hover:text-primary" />
-                        </div>
-                      </div>
-                    )}
+                    ))}
                   </div>
-                ))}
+                )}
+
+                {editorialResults.length > 0 && portfolioResults.length > 0 && (
+                  <div className="mx-3 border-t border-gray-100" />
+                )}
+
+                {portfolioResults.length > 0 && (
+                  <div className="px-1.5 py-1">
+                    {portfolioResults.map((result) => (
+                      <div
+                        key={result.id}
+                        onClick={() => handleLaunch(result)}
+                        className={`group/item flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all duration-150 ${result.url ? "cursor-pointer hover:bg-gray-50" : "cursor-default"}`}
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0">
+                          <Briefcase className="h-3 w-3 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[13px] font-semibold text-gray-900 truncate group-hover/item:text-blue-600 transition-colors">
+                              {result.name}
+                            </span>
+                            <span className="text-[9px] font-medium text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded shrink-0">
+                              Portfolio
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-gray-400 truncate leading-tight mt-0.5">
+                            {result.category} {result.matchedKeywords.length > 0 && `· ${result.matchedKeywords.slice(0, 2).join(", ")}`}
+                          </p>
+                        </div>
+                        {result.url && (
+                          <ArrowUpRight className="h-3.5 w-3.5 text-gray-300 group-hover/item:text-blue-500 shrink-0 transition-colors" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="p-6 text-center">
-                <Search className="h-8 w-8 text-gray-200 mx-auto mb-2" />
-                <p className="text-sm text-gray-500">No matching applications found</p>
-                <p className="text-xs text-gray-400 mt-1">Try broader keywords like "finance", "analytics", or "security"</p>
+              <div className="px-4 py-5 text-center">
+                <Search className="h-5 w-5 text-gray-200 mx-auto mb-1.5" />
+                <p className="text-xs text-gray-400">No results for "{query}"</p>
               </div>
             )}
 
-            <div className="px-4 py-2.5 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between">
-              <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
-                Smart Search
-              </span>
-              <div className="flex items-center gap-1 text-[10px] text-gray-400">
-                <span>Press</span>
-                <kbd className="px-1.5 py-0.5 bg-white border border-gray-200 rounded text-[10px] font-mono">Esc</kbd>
-                <span>to close</span>
+            <div className="px-3 py-1.5 border-t border-gray-100 bg-gray-50/60 flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <Sparkles className="h-2.5 w-2.5 text-orange-400" />
+                <span className="text-[9px] text-gray-400 font-medium uppercase tracking-wider">Smart Search</span>
               </div>
+              <kbd className="text-[9px] text-gray-400 bg-white border border-gray-200 rounded px-1 py-0.5 font-mono leading-none">esc</kbd>
             </div>
           </div>
         )}
