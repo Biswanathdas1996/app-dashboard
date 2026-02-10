@@ -762,41 +762,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const url = process.env.PWC_GENAI_ENDPOINT_URL || "https://genai-sharedservice-americas.pwc.com/completions";
 
-      const prompt = `You are a senior management consultant at a top-tier consulting firm. Create an executive-level PowerPoint presentation for a technology solution pitch.
+      const prompt = `You are an elite sales strategist creating a persuasive sales deck to close a deal. This presentation must SELL the solution to a prospective client. Every slide should drive the prospect closer to saying YES.
 
-Application Name: ${appName}
+Product: ${appName}
 Category: ${category || "Technology"}
 Subcategory: ${subcategory || ""}
-Description: ${description}
+Product Description: ${description}
 
-CONTENT GUIDELINES:
-- Write in a professional, authoritative consulting tone
-- Each bullet should be a clear, descriptive statement (15-25 words) that communicates real value
-- Start bullets with strong action verbs (Streamline, Accelerate, Optimize, Enable, Transform, Automate, Enhance, Deliver)
-- Include specific, quantifiable details where possible (metrics, percentages, timeframes)
-- No filler, no vague claims — every word must add meaning
-- Subtitles should be sharp value statements
+THIS IS A SALES PRESENTATION. Follow these rules strictly:
+- Frame everything from the buyer's perspective — focus on THEIR pain, THEIR gains, THEIR ROI
+- Use persuasive, benefit-driven language that creates urgency ("You're losing X every month without this")
+- Quantify the cost of inaction and the value of adopting this solution
+- Each bullet must answer the prospect's unspoken question: "Why should I care?"
+- Use power words: Transform, Unlock, Eliminate, Maximize, Slash, Capture, Accelerate, Guarantee
+- Include specific metrics, percentages, and timeframes to build credibility
+- Speaker notes should contain sales talking points, objection handlers, and closing cues
 
 Generate exactly 6 slides in valid JSON format. Each slide must have:
-- "title": concise, impactful title (2-5 words)
-- "subtitle": value-driven tagline (max 10 words)
-- "bullets": array of exactly 4 descriptive bullet points (each 15-25 words, clear and informative)
-- "notes": speaker notes with 2-3 executive talking points
+- "title": punchy, benefit-focused title (2-5 words)
+- "subtitle": compelling value hook that speaks to the buyer (max 10 words)
+- "bullets": array of exactly 4 persuasive bullet points (each 15-25 words, benefit-driven)
+- "notes": sales talking points with objection handling tips
 - "imageKeyword": MUST be exactly one of: "analytics", "security", "cloud", "automation", "finance", "healthcare", "teamwork", "development", "innovation", "network", "government", "management", "technology", "ux", "growth"
 
-SLIDE STRUCTURE:
-1. Title Slide — Application name with a strong value proposition subtitle (NO bullets on this slide, leave bullets as empty array)
-2. The Challenge — Business problems with quantifiable impact and urgency
-3. Solution Overview — Core capabilities described with clear business outcomes
-4. How It Works — Step-by-step workflow, each bullet as a numbered phase with description
-5. Business Impact — Measurable outcomes with specific metrics and ROI indicators
-6. Next Steps — Actionable implementation pathway with clear timeline
+SALES DECK STRUCTURE:
+1. Title Slide — Product name with a bold value proposition that hooks the prospect (NO bullets, leave bullets as empty array)
+2. The Problem — Paint the prospect's pain points vividly, quantify what inaction costs them today
+3. Our Solution — Position capabilities as direct answers to their pain, emphasize competitive differentiation
+4. How It Works — Simple 4-step buyer journey from onboarding to results, make adoption feel effortless
+5. Proven Results — ROI metrics, cost savings, time-to-value, competitive advantages they gain
+6. Let's Get Started — Compelling call-to-action with urgency, risk-free trial or pilot offer, clear next steps
 
 EXAMPLE BULLET QUALITY:
-BAD: "Provides good security features for users"
-GOOD: "Enforce enterprise-grade data protection with AES-256 encryption, role-based access controls, and real-time threat monitoring"
-BAD: "Helps teams work together better"
-GOOD: "Enable seamless cross-functional collaboration through 50+ pre-built integrations with existing enterprise tools and platforms"
+BAD: "Has security features"
+GOOD: "Eliminate compliance risk with enterprise-grade encryption that meets SOC 2, HIPAA, and GDPR requirements out of the box"
+BAD: "Saves time for teams"
+GOOD: "Reclaim 15+ hours per week per team member by automating repetitive workflows that currently drain your most expensive resources"
 
 Return ONLY a valid JSON array of slide objects. No markdown, no code fences, no explanation.`;
 
@@ -868,12 +869,12 @@ Return ONLY a valid JSON array of slide objects. No markdown, no code fences, no
       } catch (parseErr) {
         console.error("Failed to parse LLM response:", textContent.substring(0, 800));
         slides = [
-          { title: appName, subtitle: category || "Driving Digital Transformation", bullets: ["Enterprise-grade solution for modern organizations"], notes: "", imageKeyword: "technology" },
-          { title: "The Challenge", subtitle: "Why This Matters", bullets: ["Legacy systems create operational bottlenecks", "Manual processes reduce team productivity by 40%", "Data silos limit strategic decision-making", "Growing compliance requirements demand automation"], notes: "", imageKeyword: "management" },
-          { title: "Solution Overview", subtitle: "Strategic Capabilities", bullets: ["Streamline end-to-end workflow automation", "Deliver real-time analytics and actionable insights", "Enable seamless cross-platform integration", "Enforce enterprise-grade security and compliance"], notes: "", imageKeyword: "innovation" },
-          { title: "Architecture & Workflow", subtitle: "How It Works", bullets: ["Configure — Deploy in minutes with guided setup", "Integrate — Connect existing systems via secure APIs", "Automate — Define intelligent workflow triggers", "Monitor — Track performance through live dashboards"], notes: "", imageKeyword: "development" },
-          { title: "Business Impact", subtitle: "Measurable Outcomes", bullets: ["Accelerate operational efficiency by up to 60%", "Reduce manual processing costs significantly", "Enhance data-driven decision accuracy", "Scale seamlessly across departments and regions"], notes: "", imageKeyword: "growth" },
-          { title: "Next Steps", subtitle: "Your Path Forward", bullets: ["Schedule a personalized executive demo", "Receive a tailored implementation roadmap", "Launch pilot program within 2 weeks", "Achieve full deployment in under 90 days"], notes: "", imageKeyword: "teamwork" }
+          { title: appName, subtitle: category ? `Unlock ${category} Excellence` : "Your Competitive Edge Starts Here", bullets: [], notes: "", imageKeyword: "technology" },
+          { title: "The Cost of Inaction", subtitle: "What You're Losing Every Day Without This", bullets: ["Legacy systems are silently draining 30% of your team's productive hours on manual workarounds and redundant processes", "Critical decisions are delayed by days because scattered data prevents real-time visibility into operations", "Compliance gaps expose your organization to regulatory penalties and reputational damage that could cost millions", "Every month without automation, your competitors widen the efficiency gap and capture market share you're leaving behind"], notes: "", imageKeyword: "management" },
+          { title: "Your Solution", subtitle: "Purpose-Built to Solve Your Biggest Challenges", bullets: ["Eliminate manual bottlenecks with intelligent automation that handles end-to-end workflows without human intervention", "Unlock real-time insights from unified data sources so your leadership team can make confident decisions in minutes, not weeks", "Seamlessly integrate with your existing enterprise stack through 50+ pre-built connectors — zero disruption to current operations", "Enterprise-grade security with SOC 2 compliance baked in, so you never have to choose between speed and safety"], notes: "", imageKeyword: "innovation" },
+          { title: "How You Get Started", subtitle: "From Sign-Up to Results in 4 Simple Steps", bullets: ["Step 1: Onboard — Our team configures the platform to your exact requirements in a guided 30-minute setup session", "Step 2: Connect — Plug into your existing tools and data sources through secure APIs with no engineering effort required", "Step 3: Automate — Activate pre-built workflow templates tailored to your industry and start seeing efficiency gains immediately", "Step 4: Scale — Expand across departments and regions as your needs grow, with dedicated support at every stage"], notes: "", imageKeyword: "development" },
+          { title: "Proven Results", subtitle: "Real Outcomes Our Clients Achieve", bullets: ["Slash operational costs by up to 45% within the first 6 months through intelligent process automation and waste elimination", "Accelerate time-to-decision by 5x with unified dashboards that surface actionable insights from all your data sources", "Achieve full ROI within 90 days — our fastest clients see measurable returns in under 30 days from deployment", "Reduce compliance incidents to near-zero with automated audit trails, policy enforcement, and real-time monitoring"], notes: "", imageKeyword: "growth" },
+          { title: "Let's Get Started", subtitle: "Your Risk-Free Path to Transformation", bullets: ["Schedule a 30-minute personalized demo where we'll show you exactly how this solves your specific challenges", "Receive a custom ROI analysis and implementation roadmap tailored to your organization's goals and timeline", "Launch a no-commitment pilot program within 2 weeks — see the value before making any long-term decisions", "Join 500+ enterprise clients who have already transformed their operations and gained a lasting competitive advantage"], notes: "", imageKeyword: "teamwork" }
         ];
       }
 
