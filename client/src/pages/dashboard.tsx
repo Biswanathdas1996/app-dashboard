@@ -63,8 +63,8 @@ export default function Dashboard() {
         currentSubcategory={subcategory}
       />
 
-      <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        <div className="absolute inset-0">
+      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" style={{ zIndex: 20 }}>
+        <div className="absolute inset-0 overflow-hidden">
           <img
             src={genaiImage}
             alt="GenAI Innovation"
