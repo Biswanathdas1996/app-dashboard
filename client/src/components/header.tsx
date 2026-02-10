@@ -33,7 +33,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
           </div>
 
           {location === "/" && onCategoryChange && (
-            <div className="hidden md:flex items-center flex-1 justify-center max-w-xl mx-4">
+            <div className="hidden md:flex items-center flex-1 justify-center mx-4 min-w-0">
               <NavigationMenu 
                 onCategoryChange={onCategoryChange}
                 currentCategory={currentCategory}
@@ -82,7 +82,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
         {location === "/" && onSearchChange && (
           <div className="md:hidden pb-3 space-y-2">
             {onCategoryChange && (
-              <div className="overflow-x-auto scrollbar-hide -mx-1">
+              <div className="w-full min-w-0">
                 <NavigationMenu 
                   onCategoryChange={onCategoryChange}
                   currentCategory={currentCategory}
