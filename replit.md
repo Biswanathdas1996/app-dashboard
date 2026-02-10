@@ -108,7 +108,7 @@ Uses PostgreSQL database with Drizzle ORM for all data persistence. The storage 
 - `start`: Production server startup
 
 ## Changelog
-- February 10, 2026: **AI Image Generation for PPT** - Added multimodal AI image generation for presentation slides using PwC GenAI service (Gemini/Imagen models), with SVG fallback graphics, slide preview with images, and embedded images in downloaded PowerPoint files
+- February 10, 2026: **Stock Images for PPT** - Replaced AI image generation with curated stock image library (15 categories: analytics, security, cloud, automation, finance, healthcare, teamwork, development, innovation, network, government, management, technology, ux, growth). Backend uses keyword matching with synonym support to dynamically select relevant images per slide. Modern PPT layout with full-bleed background images, overlay gradients, and refined typography.
 - February 10, 2026: **PPT Slide Preview** - Generate PPT button now shows an interactive slide preview with navigation, thumbnails, and download option instead of direct download
 - February 10, 2026: **Major UI Modernization** - Complete visual overhaul with modern design language: updated typography (Inter + Plus Jakarta Sans), cleaner card designs with reduced visual noise, refined color palette, modern pill-style navigation, glassmorphism header, improved hero section, streamlined Industry Insights cards, cleaner Project Portfolio layout, modernized form design, and consistent spacing/border-radius throughout
 - July 29, 2025: **Fixed Production Redirect Issue** - Resolved the automatic redirect from root URL to `/app-dashboard/` in production deployments by implementing ES module-compatible route overrides that serve the application directly from root URL
