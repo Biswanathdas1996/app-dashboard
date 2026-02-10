@@ -674,6 +674,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     { url: "https://www.artificialintelligence-news.com/feed/", source: "AI News" },
   ];
 
+  async function fetchOGImage(url: string): Promise<string | null> {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const resp = await fetch(url, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NewsBot/1.0)' },
+      });
+      clearTimeout(timeout);
+      const html = await resp.text();
+      const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+        || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+      if (ogMatch) return ogMatch[1];
+      const twitterMatch = html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
+        || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+      if (twitterMatch) return twitterMatch[1];
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
   async function fetchAINews(): Promise<NewsArticle[]> {
     const now = Date.now();
     if (cachedNews.length > 0 && now - lastFetchTime < CACHE_DURATION) {
@@ -712,7 +734,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-    cachedNews = allArticles.slice(0, 8);
+    const top = allArticles.slice(0, 8);
+
+    const ogPromises = top.map(async (article) => {
+      if (!article.image && article.url && article.url !== "#") {
+        article.image = await fetchOGImage(article.url);
+      }
+    });
+    await Promise.all(ogPromises);
+
+    cachedNews = top;
     lastFetchTime = now;
     return cachedNews;
   }
