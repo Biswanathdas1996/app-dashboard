@@ -229,8 +229,10 @@ export function SmartSearch() {
     <div ref={containerRef} className="relative w-full max-w-xl">
       <div className={`relative transition-all duration-200 ${isOpen ? "z-50" : ""}`}>
         <div className="relative group">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-            <Search className="h-4 w-4 text-white/50 group-focus-within:text-orange-400 transition-colors" />
+          <div className="absolute inset-y-0 left-0 flex items-center pl-1">
+            <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
+              <Search className="h-4 w-4 text-white" strokeWidth={2.5} />
+            </div>
           </div>
           <input
             ref={inputRef}
@@ -239,12 +241,12 @@ export function SmartSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
-            className="w-full pl-10 pr-8 h-10 bg-white/[0.07] border border-white/[0.12] text-white text-[13px] placeholder:text-white/30 rounded-xl focus:bg-white/[0.12] focus:border-white/25 focus:outline-none focus:ring-1 focus:ring-orange-400/30 transition-all backdrop-blur-sm"
+            className="w-full pl-11 pr-8 h-10 bg-white/[0.07] border border-white/[0.12] text-white text-[13px] placeholder:text-white/30 rounded-xl focus:bg-white/[0.12] focus:border-white/25 focus:outline-none focus:ring-1 focus:ring-orange-400/30 transition-all backdrop-blur-sm"
           />
           {query && (
             <button
               onClick={clearSearch}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-white/25 hover:text-white/50 transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-white/30 hover:text-white/60 transition-colors"
             >
               <X className="h-3.5 w-3.5" />
             </button>
