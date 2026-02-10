@@ -34,8 +34,9 @@ const gradients = [
 export function IndustryInsights() {
   const { data: articles = [], isLoading } = useQuery<NewsArticle[]>({
     queryKey: ["/api/news"],
-    staleTime: 30 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const displayArticles = articles.slice(0, 4);

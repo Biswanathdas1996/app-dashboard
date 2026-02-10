@@ -665,7 +665,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   let cachedNews: NewsArticle[] = [];
   let lastFetchTime = 0;
-  const CACHE_DURATION = 30 * 60 * 1000;
+  const CACHE_DURATION = 2 * 60 * 1000;
 
   const RSS_FEEDS = [
     { url: "https://techcrunch.com/category/artificial-intelligence/feed/", source: "TechCrunch" },
