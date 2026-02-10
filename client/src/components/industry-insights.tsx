@@ -37,6 +37,7 @@ export function IndustryInsights() {
     staleTime: 0,
     gcTime: 0,
     refetchOnWindowFocus: true,
+    refetchInterval: 2 * 60 * 1000,
   });
 
   const displayArticles = articles.slice(0, 4);
