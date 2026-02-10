@@ -214,43 +214,68 @@ export default function Dashboard() {
         href="https://etlab-projects.pwc.in/agent-marketplace/"
         target="_blank"
         rel="noopener noreferrer"
-        className="group block relative overflow-hidden bg-[#0c0c14] cursor-pointer"
+        className="group block relative overflow-hidden cursor-pointer border-y border-white/[0.06]"
+        style={{ background: 'linear-gradient(135deg, #0f0a1e 0%, #0c0c18 40%, #0a1628 100%)' }}
       >
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 overflow-hidden">
           <img
             src={agentPromoImage}
             alt="Agent Marketplace"
-            className="w-full h-full object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+            className="absolute right-0 top-0 h-full w-2/3 object-cover opacity-20 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700 mask-gradient-left"
+            style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,0.6), transparent)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,0.6), transparent)' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0c0c14] via-[#0c0c14]/70 to-[#0c0c14]/40" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_right,_rgba(99,102,241,0.08),transparent_70%)]" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
         </div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
-                <Bot className="h-5 w-5 text-white" />
+
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4 sm:gap-5 min-w-0">
+              <div className="relative shrink-0">
+                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur-sm opacity-30 group-hover:opacity-50 transition-opacity" />
+                <div className="relative w-11 h-11 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                  <Bot className="h-5.5 w-5.5 text-white" />
+                </div>
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight font-header whitespace-nowrap">
                     Agent Marketplace
                   </h3>
-                  <div className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/20 border border-emerald-400/30 rounded-full">
-                    <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse" />
-                    <span className="text-[8px] font-bold text-emerald-300 uppercase tracking-wider">New</span>
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-indigo-500/15 to-purple-500/15 border border-indigo-400/20 rounded-full">
+                    <Sparkles className="h-2.5 w-2.5 text-indigo-400" />
+                    <span className="text-[9px] font-bold text-indigo-300 uppercase tracking-wider">New</span>
                   </div>
                 </div>
-                <p className="text-[11px] sm:text-xs text-white/40 mt-0.5">
-                  50+ autonomous AI agents ready to deploy across your enterprise
+                <p className="text-xs text-white/35 mt-0.5 truncate">
+                  Discover, deploy & manage 50+ autonomous AI agents for enterprise workflows
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="hidden sm:block text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
-                Explore Now
-              </span>
-              <div className="w-8 h-8 bg-indigo-500/20 border border-indigo-500/30 rounded-lg flex items-center justify-center group-hover:bg-indigo-500/30 transition-all">
-                <ArrowRight className="h-4 w-4 text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
+
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="hidden md:flex items-center gap-2">
+                {[
+                  { icon: Cpu, color: "text-cyan-400" },
+                  { icon: Network, color: "text-indigo-400" },
+                  { icon: Workflow, color: "text-purple-400" },
+                ].map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={i} className="w-7 h-7 bg-white/[0.04] border border-white/[0.06] rounded-lg flex items-center justify-center">
+                      <Icon className={`h-3.5 w-3.5 ${item.color}`} />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="h-6 w-px bg-white/[0.06] hidden md:block" />
+              <div className="flex items-center gap-2 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-xl px-4 py-2 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 group-hover:border-indigo-400/30 transition-all duration-300">
+                <span className="text-xs font-bold text-indigo-300 group-hover:text-indigo-200 transition-colors whitespace-nowrap">
+                  Explore
+                </span>
+                <ArrowRight className="h-3.5 w-3.5 text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
           </div>
