@@ -774,7 +774,8 @@ Generate exactly 6 slides in valid JSON format. Each slide should have:
 - "subtitle": a subtitle or tagline (optional)
 - "bullets": array of 3-5 concise bullet points
 - "notes": speaker notes (1-2 sentences)
-- "imageKeyword": a single keyword describing a relevant stock image concept (e.g. "analytics", "security", "cloud", "dashboard", "automation")
+- "imageKeyword": a single keyword describing a relevant visual concept (e.g. "analytics", "security", "cloud", "dashboard", "automation")
+- "imagePrompt": a detailed 1-2 sentence description of a professional illustration that would complement this slide's content (e.g. "A modern analytics dashboard showing real-time data visualization with colorful charts and graphs on a dark background")
 
 The slides should follow this structure:
 1. Title slide - app name, tagline, category
@@ -850,6 +851,7 @@ Return ONLY a valid JSON array of slide objects, no markdown, no code fences, no
           bullets: Array.isArray(s.bullets) ? s.bullets.map(String) : [],
           notes: s.notes ? String(s.notes) : undefined,
           imageKeyword: s.imageKeyword ? String(s.imageKeyword) : undefined,
+          imagePrompt: s.imagePrompt ? String(s.imagePrompt) : undefined,
         }));
       } catch (parseErr) {
         console.error("Failed to parse LLM response:", textContent.substring(0, 800));
@@ -867,6 +869,146 @@ Return ONLY a valid JSON array of slide objects, no markdown, no code fences, no
     } catch (error) {
       console.error("Error generating PPT content:", error);
       res.status(500).json({ error: "Failed to generate presentation content" });
+    }
+  });
+
+  app.post("/api/generate-slide-image", async (req, res) => {
+    try {
+      const { prompt, slideIndex } = req.body;
+      if (!prompt) {
+        return res.status(400).json({ error: "Image prompt is required" });
+      }
+
+      const apiKey = process.env.PWC_GENAI_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "PWC_GENAI_API_KEY not configured" });
+      }
+
+      const baseUrl = (process.env.PWC_GENAI_ENDPOINT_URL || "https://genai-sharedservice-americas.pwc.com/completions").replace("/completions", "");
+
+      const imagePrompt = `Generate a professional, modern, clean illustration for a business presentation slide. The image should be: ${prompt}. Style: flat design, corporate, minimal, high quality, no text overlays, suitable for a PowerPoint slide background or accent image. Colors should complement orange (#E8611A) and dark gray (#191919) brand palette.`;
+
+      let imageBase64 = "";
+
+      try {
+        const imgResponse = await fetch(`${baseUrl}/images/generations`, {
+          method: "POST",
+          headers: {
+            "accept": "application/json",
+            "API-Key": apiKey,
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "vertex_ai/imagen-3.0-generate-002",
+            prompt: imagePrompt,
+            n: 1,
+            size: "1024x576",
+            response_format: "b64_json"
+          })
+        });
+
+        if (imgResponse.ok) {
+          const imgData = await imgResponse.json() as any;
+          if (imgData?.data?.[0]?.b64_json) {
+            imageBase64 = imgData.data[0].b64_json;
+          } else if (imgData?.data?.[0]?.url) {
+            const fetchedImg = await fetch(imgData.data[0].url);
+            const buffer = await fetchedImg.arrayBuffer();
+            imageBase64 = Buffer.from(buffer).toString("base64");
+          }
+        }
+      } catch (imgErr) {
+        console.log("Imagen model attempt failed, trying Gemini multimodal...");
+      }
+
+      if (!imageBase64) {
+        try {
+          const geminiResponse = await fetch(`${baseUrl}/completions`, {
+            method: "POST",
+            headers: {
+              "accept": "application/json",
+              "API-Key": apiKey,
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "vertex_ai.gemini-2.0-flash",
+              prompt: `Generate an image: ${imagePrompt}`,
+              temperature: 0.8,
+              max_tokens: 4096,
+              stream: false,
+              response_modalities: ["IMAGE", "TEXT"],
+              media_resolution: "low"
+            })
+          });
+
+          if (geminiResponse.ok) {
+            const gemData = await geminiResponse.json() as any;
+            const extractBase64 = (obj: any): string => {
+              if (!obj || typeof obj !== "object") return "";
+              if (obj.inline_data?.data) return obj.inline_data.data;
+              if (obj.b64_json) return obj.b64_json;
+              if (obj.image?.data) return obj.image.data;
+              if (obj.data && typeof obj.data === "string" && obj.data.length > 500) return obj.data;
+              for (const val of Object.values(obj)) {
+                const found = extractBase64(val);
+                if (found) return found;
+              }
+              return "";
+            };
+            imageBase64 = extractBase64(gemData);
+          }
+        } catch (gemErr) {
+          console.log("Gemini multimodal attempt failed, generating SVG fallback...");
+        }
+      }
+
+      if (!imageBase64) {
+        const keywords = prompt.toLowerCase();
+        const iconPaths: Record<string, string> = {
+          analytics: '<circle cx="50" cy="70" r="8" fill="#E8611A"/><rect x="30" y="40" width="12" height="40" rx="3" fill="#E8611A" opacity="0.7"/><rect x="47" y="25" width="12" height="55" rx="3" fill="#E8611A" opacity="0.85"/><rect x="64" y="50" width="12" height="30" rx="3" fill="#E8611A" opacity="0.6"/><rect x="81" y="15" width="12" height="65" rx="3" fill="#E8611A"/>',
+          security: '<path d="M56 15L30 30V50C30 68 41 84 56 90C71 84 82 68 82 50V30L56 15Z" fill="none" stroke="#E8611A" stroke-width="3"/><path d="M48 52L54 58L68 44" fill="none" stroke="#E8611A" stroke-width="3" stroke-linecap="round"/>',
+          cloud: '<ellipse cx="56" cy="50" rx="28" ry="18" fill="#E8611A" opacity="0.3"/><ellipse cx="42" cy="55" rx="20" ry="14" fill="#E8611A" opacity="0.5"/><ellipse cx="70" cy="55" rx="18" ry="12" fill="#E8611A" opacity="0.4"/><circle cx="56" cy="45" r="15" fill="#E8611A" opacity="0.6"/>',
+          automation: '<circle cx="56" cy="50" r="25" fill="none" stroke="#E8611A" stroke-width="2.5"/><circle cx="56" cy="50" r="8" fill="#E8611A"/><path d="M56 25V35M56 65V75M31 50H41M71 50H81" stroke="#E8611A" stroke-width="2.5" stroke-linecap="round"/>',
+          dashboard: '<rect x="22" y="20" width="30" height="25" rx="4" fill="#E8611A" opacity="0.8"/><rect x="58" y="20" width="30" height="25" rx="4" fill="#E8611A" opacity="0.5"/><rect x="22" y="52" width="30" height="25" rx="4" fill="#E8611A" opacity="0.4"/><rect x="58" y="52" width="30" height="25" rx="4" fill="#E8611A" opacity="0.65"/>',
+          launch: '<polygon points="56,15 70,75 56,60 42,75" fill="#E8611A"/><ellipse cx="56" cy="82" rx="18" ry="5" fill="#E8611A" opacity="0.3"/>',
+          default: '<circle cx="56" cy="50" r="30" fill="none" stroke="#E8611A" stroke-width="2"/><circle cx="56" cy="50" r="15" fill="#E8611A" opacity="0.6"/><circle cx="56" cy="50" r="5" fill="#E8611A"/>'
+        };
+
+        let selectedIcon = iconPaths.default;
+        for (const [key, val] of Object.entries(iconPaths)) {
+          if (keywords.includes(key)) {
+            selectedIcon = val;
+            break;
+          }
+        }
+
+        const hue = (slideIndex || 0) * 30 + 15;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 112 63">
+          <defs>
+            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:hsl(${hue},8%,12%)"/>
+              <stop offset="100%" style="stop-color:hsl(${hue + 20},12%,18%)"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="70%" cy="40%" r="50%">
+              <stop offset="0%" style="stop-color:#E8611A;stop-opacity:0.15"/>
+              <stop offset="100%" style="stop-color:#E8611A;stop-opacity:0"/>
+            </radialGradient>
+          </defs>
+          <rect width="112" height="63" fill="url(#bg)"/>
+          <rect width="112" height="63" fill="url(#glow)"/>
+          <g transform="translate(0,0)">${selectedIcon}</g>
+        </svg>`;
+
+        imageBase64 = Buffer.from(svg).toString("base64");
+        return res.json({ imageBase64, format: "svg+xml" });
+      }
+
+      res.json({ imageBase64, format: "png" });
+    } catch (error) {
+      console.error("Error generating slide image:", error);
+      res.status(500).json({ error: "Failed to generate image" });
     }
   });
 

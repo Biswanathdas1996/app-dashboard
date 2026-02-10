@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ExternalLink, FileText, Eye, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2, Presentation, Loader2, ChevronLeft, ChevronRight, Download, ArrowLeft } from "lucide-react";
+import { ExternalLink, FileText, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2, Presentation, Loader2, ChevronLeft, ChevronRight, Download, ArrowLeft, ImageIcon } from "lucide-react";
 import type { WebApp } from "@shared/schema";
 import { RichTextViewer } from "./rich-text-viewer";
 import { useState } from "react";
@@ -19,6 +19,9 @@ interface SlideData {
   bullets: string[];
   notes?: string;
   imageKeyword?: string;
+  imagePrompt?: string;
+  imageBase64?: string;
+  imageFormat?: string;
 }
 
 const SLIDE_COLORS = [
@@ -55,7 +58,50 @@ async function fetchSlideContent(app: WebApp): Promise<SlideData[]> {
   return slides;
 }
 
+async function fetchSlideImage(slide: SlideData, index: number): Promise<{ imageBase64: string; format: string }> {
+  const prompt = slide.imagePrompt || slide.imageKeyword || slide.title;
+  const response = await fetch("/api/generate-slide-image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, slideIndex: index }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to generate image");
+  }
+  return await response.json();
+}
+
+function svgToPngBase64(svgBase64: string, width = 800, height = 450): Promise<string> {
+  return new Promise((resolve) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) { resolve(""); return; }
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL("image/png");
+      resolve(dataUrl);
+    };
+    img.onerror = () => resolve("");
+    img.src = `data:image/svg+xml;base64,${svgBase64}`;
+  });
+}
+
 async function downloadPPT(slides: SlideData[], app: WebApp): Promise<void> {
+  const processedSlides = await Promise.all(
+    slides.map(async (s) => {
+      if (s.imageBase64 && s.imageFormat?.includes("svg")) {
+        const pngDataUrl = await svgToPngBase64(s.imageBase64);
+        if (pngDataUrl) {
+          return { ...s, imageBase64: pngDataUrl.split(",")[1], imageFormat: "png" };
+        }
+      }
+      return s;
+    })
+  );
+
   const PptxGenJS = (await import("pptxgenjs")).default;
   const pptx = new PptxGenJS();
 
@@ -65,19 +111,33 @@ async function downloadPPT(slides: SlideData[], app: WebApp): Promise<void> {
   pptx.subject = app.name;
   pptx.title = `${app.name} - Presentation`;
 
-  slides.forEach((slideData, index) => {
+  processedSlides.forEach((slideData, index) => {
     const slide = pptx.addSlide();
     const colors = SLIDE_COLORS[index % SLIDE_COLORS.length];
 
     slide.background = { color: colors.bg.replace("#", "") };
 
+    const hasImage = slideData.imageBase64 && slideData.imageBase64.length > 100;
+    const imgFormat = slideData.imageFormat || "png";
+    const pptImageData = hasImage ? `data:image/${imgFormat};base64,${slideData.imageBase64}` : null;
+
     if (index === 0) {
       slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: "100%", h: "100%", fill: { type: "solid", color: "191919" } });
+
+      if (pptImageData) {
+        slide.addImage({
+          data: pptImageData,
+          x: 7.5, y: 0.5, w: 5, h: 4,
+          rounding: true,
+          transparency: 20,
+        });
+      }
+
       slide.addShape(pptx.ShapeType.rect, { x: 0, y: 4.8, w: "100%", h: 0.06, fill: { type: "solid", color: "E8611A" } });
       slide.addShape(pptx.ShapeType.rect, { x: 0.6, y: 0.5, w: 0.08, h: 1.2, fill: { type: "solid", color: "E8611A" } });
-      slide.addText(slideData.title, { x: 1.0, y: 1.0, w: 10, h: 1.6, fontSize: 40, fontFace: "Arial", color: "FFFFFF", bold: true, lineSpacingMultiple: 1.1 });
+      slide.addText(slideData.title, { x: 1.0, y: 1.0, w: 6, h: 1.6, fontSize: 40, fontFace: "Arial", color: "FFFFFF", bold: true, lineSpacingMultiple: 1.1 });
       if (slideData.subtitle) {
-        slide.addText(slideData.subtitle, { x: 1.0, y: 2.7, w: 10, h: 0.8, fontSize: 20, fontFace: "Arial", color: "E8611A" });
+        slide.addText(slideData.subtitle, { x: 1.0, y: 2.7, w: 6, h: 0.8, fontSize: 20, fontFace: "Arial", color: "E8611A" });
       }
       const categoryLabel = [app.category, app.subcategory].filter(Boolean).join(" · ");
       slide.addText(categoryLabel, { x: 1.0, y: 3.8, w: 6, h: 0.5, fontSize: 13, fontFace: "Arial", color: "999999" });
@@ -85,23 +145,43 @@ async function downloadPPT(slides: SlideData[], app: WebApp): Promise<void> {
     } else if (index === slides.length - 1) {
       slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: "100%", h: "100%", fill: { type: "solid", color: colors.bg.replace("#", "") } });
       slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: "100%", h: 0.06, fill: { type: "solid", color: "FFFFFF" } });
-      slide.addText(slideData.title, { x: 1.0, y: 1.2, w: 11, h: 1.2, fontSize: 36, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
+
+      if (pptImageData) {
+        slide.addImage({
+          data: pptImageData,
+          x: 8.0, y: 1.5, w: 4, h: 3,
+          rounding: true,
+          transparency: 15,
+        });
+      }
+
+      slide.addText(slideData.title, { x: 1.0, y: 1.2, w: 7, h: 1.2, fontSize: 36, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
       if (slideData.bullets && slideData.bullets.length > 0) {
         const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 16, color: colors.text.replace("#", ""), paraSpaceAfter: 10, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
-        slide.addText(bulletText, { x: 1.0, y: 2.6, w: 11, h: 2, fontFace: "Arial", valign: "top" });
+        slide.addText(bulletText, { x: 1.0, y: 2.6, w: 7, h: 2, fontFace: "Arial", valign: "top" });
       }
-      slide.addText(app.url, { x: 1.0, y: 4.5, w: 8, h: 0.4, fontSize: 12, fontFace: "Arial", color: colors.text.replace("#", ""), hyperlink: { url: app.url } });
+      slide.addText(app.url, { x: 1.0, y: 4.5, w: 6, h: 0.4, fontSize: 12, fontFace: "Arial", color: colors.text.replace("#", ""), hyperlink: { url: app.url } });
     } else {
       slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.5, h: "100%", fill: { type: "solid", color: colors.accentHex } });
-      slide.addText(slideData.title, { x: 0.8, y: 0.4, w: 11.5, h: 0.9, fontSize: 28, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
+
+      if (pptImageData) {
+        slide.addImage({
+          data: pptImageData,
+          x: 8.2, y: 0.8, w: 4, h: 3.5,
+          rounding: true,
+          transparency: 10,
+        });
+      }
+
+      slide.addText(slideData.title, { x: 0.8, y: 0.4, w: 7, h: 0.9, fontSize: 28, fontFace: "Arial", color: colors.text.replace("#", ""), bold: true });
       slide.addShape(pptx.ShapeType.rect, { x: 0.8, y: 1.3, w: 2, h: 0.04, fill: { type: "solid", color: colors.accentHex } });
       if (slideData.subtitle) {
-        slide.addText(slideData.subtitle, { x: 0.8, y: 1.5, w: 11.5, h: 0.6, fontSize: 15, fontFace: "Arial", color: "888888", italic: true });
+        slide.addText(slideData.subtitle, { x: 0.8, y: 1.5, w: 7, h: 0.6, fontSize: 15, fontFace: "Arial", color: "888888", italic: true });
       }
       if (slideData.bullets && slideData.bullets.length > 0) {
         const startY = slideData.subtitle ? 2.2 : 1.7;
         const bulletText = slideData.bullets.map((b) => ({ text: b, options: { fontSize: 16, color: colors.text === "#FFFFFF" ? "EEEEEE" : "444444", paraSpaceAfter: 12, bullet: { type: "bullet" as const, color: colors.accentHex } } }));
-        slide.addText(bulletText, { x: 0.8, y: startY, w: 11.5, h: 3, fontFace: "Arial", valign: "top" });
+        slide.addText(bulletText, { x: 0.8, y: startY, w: 7, h: 3, fontFace: "Arial", valign: "top" });
       }
       slide.addText(`${index + 1} / ${slides.length}`, { x: 11.5, y: 4.9, w: 1.5, h: 0.4, fontSize: 10, fontFace: "Arial", color: "AAAAAA", align: "right" });
     }
@@ -120,12 +200,26 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
+  const hasImage = slide.imageBase64 && slide.imageBase64.length > 100;
+  const imgFormat = slide.imageFormat || "png";
+  const imgSrc = hasImage
+    ? imgFormat.includes("svg")
+      ? `data:image/svg+xml;base64,${slide.imageBase64}`
+      : `data:image/${imgFormat};base64,${slide.imageBase64}`
+    : null;
+
   if (isFirst) {
     return (
       <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
+        {imgSrc && (
+          <div className="absolute right-[4%] top-[8%] w-[40%] h-[75%] rounded-xl overflow-hidden opacity-80">
+            <img src={imgSrc} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#191919] via-transparent to-transparent" />
+          </div>
+        )}
         <div className="absolute left-[5%] top-[10%] w-[0.6%] h-[22%] rounded-full" style={{ backgroundColor: colors.accent }} />
         <div className="absolute bottom-[4%] left-0 w-full h-[1.2%]" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute left-[8%] top-[20%] right-[10%]">
+        <div className="absolute left-[8%] top-[20%] right-[50%]">
           <h2 className="text-white font-extrabold text-lg sm:text-2xl md:text-3xl leading-tight">{slide.title}</h2>
           {slide.subtitle && <p className="mt-2 text-sm sm:text-base font-medium" style={{ color: colors.accent }}>{slide.subtitle}</p>}
           <p className="mt-4 text-[10px] sm:text-xs text-gray-500">ET Labs | PwC</p>
@@ -137,8 +231,13 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
   if (isLast) {
     return (
       <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
+        {imgSrc && (
+          <div className="absolute right-[5%] top-[20%] w-[30%] h-[60%] rounded-xl overflow-hidden opacity-70">
+            <img src={imgSrc} alt="" className="w-full h-full object-cover" />
+          </div>
+        )}
         <div className="absolute top-0 left-0 w-full h-[1.2%]" style={{ backgroundColor: "#FFFFFF" }} />
-        <div className="absolute left-[8%] top-[18%] right-[10%]">
+        <div className="absolute left-[8%] top-[18%] right-[40%]">
           <h2 className="font-extrabold text-lg sm:text-2xl" style={{ color: colors.text }}>{slide.title}</h2>
           {slide.bullets && slide.bullets.length > 0 && (
             <ul className="mt-4 space-y-1.5">
@@ -158,7 +257,12 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
   return (
     <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
       <div className="absolute left-0 top-0 w-[3.8%] h-full" style={{ backgroundColor: colors.accent }} />
-      <div className="absolute left-[6%] top-[8%] right-[6%]">
+      {imgSrc && (
+        <div className="absolute right-[4%] top-[10%] w-[32%] h-[70%] rounded-xl overflow-hidden opacity-75">
+          <img src={imgSrc} alt="" className="w-full h-full object-cover" />
+        </div>
+      )}
+      <div className="absolute left-[6%] top-[8%]" style={{ width: imgSrc ? "52%" : "88%" }}>
         <h2 className="font-bold text-base sm:text-xl" style={{ color: colors.text }}>{slide.title}</h2>
         <div className="mt-1.5 w-12 h-0.5 rounded-full" style={{ backgroundColor: colors.accent }} />
         {slide.subtitle && <p className="mt-2 text-xs italic text-gray-500">{slide.subtitle}</p>}
@@ -184,6 +288,7 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
   const [isDownloading, setIsDownloading] = useState(false);
   const [generatedSlides, setGeneratedSlides] = useState<SlideData[] | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [imageLoadingCount, setImageLoadingCount] = useState(0);
   const { toast } = useToast();
 
   const copyToClipboard = async (text: string) => {
@@ -202,6 +307,30 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
       const slides = await fetchSlideContent(app);
       setGeneratedSlides(slides);
       setCurrentSlide(0);
+
+      setImageLoadingCount(slides.length);
+      const imagePromises = slides.map(async (slide, idx) => {
+        try {
+          const imgResult = await fetchSlideImage(slide, idx);
+          return { index: idx, ...imgResult };
+        } catch {
+          return { index: idx, imageBase64: "", format: "" };
+        }
+      });
+
+      const imageResults = await Promise.allSettled(imagePromises);
+      setGeneratedSlides(prev => {
+        if (!prev) return prev;
+        const updated = [...prev];
+        imageResults.forEach(result => {
+          if (result.status === "fulfilled" && result.value.imageBase64) {
+            const { index, imageBase64, format } = result.value;
+            updated[index] = { ...updated[index], imageBase64, imageFormat: format };
+          }
+        });
+        return updated;
+      });
+      setImageLoadingCount(0);
     } catch (error: any) {
       console.error("PPT generation error:", error);
       toast({
@@ -257,6 +386,8 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
   };
 
   if (generatedSlides) {
+    const currentSlideHasImage = generatedSlides[currentSlide]?.imageBase64 && generatedSlides[currentSlide].imageBase64!.length > 100;
+
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-5xl w-[95vw] max-h-[92vh] overflow-hidden p-0 gap-0 flex flex-col rounded-3xl border border-gray-200/60 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.25)] bg-gray-950">
@@ -276,6 +407,18 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
               </button>
               <div className="h-4 w-px bg-white/10" />
               <h3 className="text-sm font-semibold text-white/80">{app.name}</h3>
+              {imageLoadingCount > 0 && (
+                <div className="flex items-center gap-1.5 text-xs text-orange-400/80">
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                  <span>Generating images...</span>
+                </div>
+              )}
+              {imageLoadingCount === 0 && generatedSlides.some(s => s.imageBase64) && (
+                <div className="flex items-center gap-1.5 text-xs text-emerald-400/70">
+                  <ImageIcon className="h-3 w-3" />
+                  <span>Images ready</span>
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -298,12 +441,18 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-0 overflow-hidden">
-            <div className="w-full max-w-3xl">
+            <div className="w-full max-w-3xl relative">
               <SlidePreview
                 slide={generatedSlides[currentSlide]}
                 index={currentSlide}
                 total={generatedSlides.length}
               />
+              {imageLoadingCount > 0 && !currentSlideHasImage && (
+                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                  <Loader2 className="h-3 w-3 text-orange-400 animate-spin" />
+                  <span className="text-[10px] text-white/60">Loading image...</span>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-4 mt-5">
@@ -353,10 +502,17 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
                       : "border-transparent opacity-50 hover:opacity-80"
                   }`}
                 >
-                  <div className="w-full h-full p-1.5 flex flex-col justify-center" style={{ backgroundColor: SLIDE_COLORS[i % SLIDE_COLORS.length].bg }}>
-                    {i === 0 && <div className="w-1 h-3 rounded-full mb-1" style={{ backgroundColor: SLIDE_COLORS[0].accent }} />}
-                    {i > 0 && i < generatedSlides.length - 1 && <div className="absolute left-0 top-0 w-1 h-full" style={{ backgroundColor: SLIDE_COLORS[i % SLIDE_COLORS.length].accent }} />}
-                    <p className="text-[6px] font-bold truncate leading-tight" style={{ color: SLIDE_COLORS[i % SLIDE_COLORS.length].text }}>{s.title}</p>
+                  <div className="w-full h-full p-1.5 flex flex-col justify-center relative" style={{ backgroundColor: SLIDE_COLORS[i % SLIDE_COLORS.length].bg }}>
+                    {s.imageBase64 && s.imageBase64.length > 100 && (
+                      <div className="absolute inset-0 opacity-30">
+                        <img
+                          src={s.imageFormat?.includes("svg") ? `data:image/svg+xml;base64,${s.imageBase64}` : `data:image/${s.imageFormat || "png"};base64,${s.imageBase64}`}
+                          alt="" className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {i === 0 && <div className="w-1 h-3 rounded-full mb-1 relative z-10" style={{ backgroundColor: SLIDE_COLORS[0].accent }} />}
+                    <p className="text-[6px] font-bold truncate leading-tight relative z-10" style={{ color: SLIDE_COLORS[i % SLIDE_COLORS.length].text }}>{s.title}</p>
                   </div>
                 </button>
               ))}
