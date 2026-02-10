@@ -176,17 +176,27 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-[#191919] via-[#191919]/85 to-[#191919]/40" />
         {imgSrc && (
-          <div className="absolute right-[3%] top-[12%] w-[32%] h-[55%] rounded-xl overflow-hidden shadow-2xl border border-white/10">
+          <div className="absolute right-[2%] top-[6%] w-[34%] h-[78%] rounded-xl overflow-hidden shadow-2xl border border-white/10">
             <img src={imgSrc} alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/20" />
           </div>
         )}
-        <div className="absolute left-[5%] top-[16%] w-[0.4%] h-[22%] rounded-full" style={{ backgroundColor: colors.accent }} />
+        <div className="absolute left-[4%] top-[10%] w-[0.4%] h-[30%] rounded-full" style={{ backgroundColor: colors.accent }} />
         <div className="absolute bottom-0 left-0 w-full h-[0.6%]" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute left-[7%] top-[18%] right-[40%]">
+        <div className="absolute left-[6%] top-[12%] right-[38%]">
           <h2 className="text-white font-extrabold text-base sm:text-xl md:text-2xl leading-tight tracking-wide uppercase">{slide.title}</h2>
-          {slide.subtitle && <p className="mt-2 text-xs sm:text-sm font-medium" style={{ color: colors.accent }}>{slide.subtitle}</p>}
-          <p className="mt-8 text-[9px] sm:text-[10px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</p>
+          {slide.subtitle && <p className="mt-1.5 text-xs sm:text-sm font-medium" style={{ color: colors.accent }}>{slide.subtitle}</p>}
+          {slide.bullets && slide.bullets.length > 0 && (
+            <ul className="mt-3 space-y-1">
+              {slide.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-1.5 text-[10px] sm:text-[11px] leading-snug text-gray-300">
+                  <span className="mt-1 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="mt-3 text-[8px] sm:text-[9px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</p>
         </div>
       </div>
     );
@@ -200,52 +210,53 @@ function SlidePreview({ slide, index, total }: { slide: SlideData; index: number
         )}
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}f0, ${colors.bg}d0)` }} />
         <div className="absolute top-0 left-0 w-full h-[0.6%]" style={{ backgroundColor: colors.accent }} />
-        <div className="absolute left-[8%] top-[16%] right-[8%]">
+        <div className="absolute left-[5%] top-[8%] right-[5%] bottom-[8%] flex flex-col">
           <h2 className="font-extrabold text-base sm:text-xl tracking-wide uppercase" style={{ color: colors.text }}>{slide.title}</h2>
-          <div className="mt-2 w-10 h-0.5" style={{ backgroundColor: colors.accent }} />
+          <div className="mt-1.5 w-10 h-0.5" style={{ backgroundColor: colors.accent }} />
           {slide.bullets && slide.bullets.length > 0 && (
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-2.5 space-y-1.5 flex-1">
               {slide.bullets.map((b, i) => (
-                <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs leading-relaxed" style={{ color: colors.text }}>
+                <li key={i} className="flex items-start gap-1.5 text-[11px] sm:text-xs leading-snug" style={{ color: colors.text }}>
                   <span className="mt-1 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
                   {b}
                 </li>
               ))}
             </ul>
           )}
+          <div className="flex items-center justify-between mt-auto">
+            <span className="text-[8px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</span>
+            <span className="text-[8px] text-gray-400">{index + 1} / {total}</span>
+          </div>
         </div>
-        <div className="absolute bottom-[8%] left-[8%] text-[9px] text-gray-500 tracking-widest uppercase">ET Labs  |  PwC</div>
-        <div className="absolute bottom-[8%] right-[4%] text-[9px] text-gray-400">{index + 1} / {total}</div>
       </div>
     );
   }
 
   return (
     <div className="w-full aspect-[16/9] rounded-xl overflow-hidden relative" style={{ backgroundColor: colors.bg }}>
-      <div className="absolute left-0 top-0 w-[0.8%] h-full" style={{ backgroundColor: colors.accent }} />
+      <div className="absolute left-0 top-0 w-[0.6%] h-full" style={{ backgroundColor: colors.accent }} />
       {imgSrc && (
-        <div className="absolute right-[3%] top-[8%] w-[33%] h-[68%] rounded-xl overflow-hidden shadow-xl border border-black/5">
+        <div className="absolute right-[2%] top-[6%] w-[28%] h-[78%] rounded-lg overflow-hidden shadow-xl border border-black/5">
           <img src={imgSrc} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}50, transparent)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.bg}40, transparent)` }} />
         </div>
       )}
-      <div className="absolute left-[4%] top-[8%]" style={{ width: imgSrc ? "55%" : "90%" }}>
-        <h2 className="font-bold text-sm sm:text-lg tracking-wide uppercase" style={{ color: colors.text }}>{slide.title}</h2>
-        <div className="mt-1.5 w-10 h-0.5 rounded-full" style={{ backgroundColor: colors.accent }} />
-        {slide.subtitle && <p className="mt-2 text-[10px] tracking-wider text-gray-400 uppercase">{slide.subtitle}</p>}
+      <div className="absolute left-[3%] top-[6%] bottom-[8%] flex flex-col" style={{ width: imgSrc ? "62%" : "92%" }}>
+        <h2 className="font-bold text-sm sm:text-base tracking-wide uppercase" style={{ color: colors.text }}>{slide.title}</h2>
+        <div className="mt-1 w-8 h-0.5 rounded-full" style={{ backgroundColor: colors.accent }} />
+        {slide.subtitle && <p className="mt-1 text-[9px] tracking-wider text-gray-400 uppercase">{slide.subtitle}</p>}
         {slide.bullets && slide.bullets.length > 0 && (
-          <ul className="mt-3 space-y-1.5">
+          <ul className="mt-2 space-y-1 flex-1">
             {slide.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs leading-relaxed" style={{ color: colors.text === "#FFFFFF" ? "#DDDDDD" : "#3D3D3D" }}>
-                <span className="mt-1 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
+              <li key={i} className="flex items-start gap-1.5 text-[10px] sm:text-[11px] leading-snug" style={{ color: colors.text === "#FFFFFF" ? "#DDDDDD" : "#3D3D3D" }}>
+                <span className="mt-0.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors.accent }} />
                 {b}
               </li>
             ))}
           </ul>
         )}
+        <div className="mt-auto text-[8px] text-gray-400">{index + 1} / {total}</div>
       </div>
-      <div className="absolute bottom-0 left-0 w-full h-[0.4%]" style={{ backgroundColor: colors.accent, opacity: 0.4 }} />
-      <div className="absolute bottom-[5%] right-[4%] text-[9px] text-gray-400">{index + 1} / {total}</div>
     </div>
   );
 }
