@@ -17,6 +17,7 @@ import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs/promises";
+import Parser from "rss-parser";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -642,6 +643,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error getting analytics summary:", error);
       res.status(500).json({ message: "Failed to get analytics summary" });
+    }
+  });
+
+  // AI News RSS feed endpoint
+  const rssParser = new Parser({
+    timeout: 10000,
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; NewsAggregator/1.0)',
+    },
+  });
+
+  interface NewsArticle {
+    title: string;
+    description: string;
+    url: string;
+    image: string | null;
+    source: string;
+    publishedAt: string;
+  }
+
+  let cachedNews: NewsArticle[] = [];
+  let lastFetchTime = 0;
+  const CACHE_DURATION = 30 * 60 * 1000;
+
+  const RSS_FEEDS = [
+    { url: "https://techcrunch.com/category/artificial-intelligence/feed/", source: "TechCrunch" },
+    { url: "https://feeds.feedburner.com/venturebeat/SZYF", source: "VentureBeat" },
+    { url: "https://www.technologyreview.com/feed/", source: "MIT Tech Review" },
+    { url: "https://www.artificialintelligence-news.com/feed/", source: "AI News" },
+  ];
+
+  async function fetchAINews(): Promise<NewsArticle[]> {
+    const now = Date.now();
+    if (cachedNews.length > 0 && now - lastFetchTime < CACHE_DURATION) {
+      return cachedNews;
+    }
+
+    const allArticles: NewsArticle[] = [];
+
+    const feedPromises = RSS_FEEDS.map(async (feed) => {
+      try {
+        const parsed = await rssParser.parseURL(feed.url);
+        const items = (parsed.items || []).slice(0, 4);
+        for (const item of items) {
+          const imgMatch = (item['content:encoded'] || item.content || item.summary || "")
+            .match(/<img[^>]+src=["']([^"']+)["']/);
+          const mediaContent = (item as any)['media:content']?.['$']?.url 
+            || (item as any)['media:thumbnail']?.['$']?.url
+            || null;
+
+          allArticles.push({
+            title: item.title || "Untitled",
+            description: (item.contentSnippet || item.summary || "")
+              .replace(/<[^>]*>/g, "").substring(0, 200),
+            url: item.link || "#",
+            image: item.enclosure?.url || mediaContent || (imgMatch ? imgMatch[1] : null),
+            source: feed.source,
+            publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
+          });
+        }
+      } catch (err) {
+        console.error(`Failed to fetch RSS from ${feed.source}:`, err);
+      }
+    });
+
+    await Promise.all(feedPromises);
+
+    allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+    cachedNews = allArticles.slice(0, 8);
+    lastFetchTime = now;
+    return cachedNews;
+  }
+
+  app.get("/api/news", async (_req, res) => {
+    try {
+      const articles = await fetchAINews();
+      res.json(articles);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      res.json([]);
     }
   });
 

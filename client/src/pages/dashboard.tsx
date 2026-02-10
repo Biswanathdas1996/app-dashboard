@@ -6,9 +6,10 @@ import { useApps } from "@/hooks/use-apps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
-import { FileText, X, Sparkles, ArrowRight, Zap, Shield, Globe } from "lucide-react";
+import { FileText, X, Sparkles, Zap } from "lucide-react";
 import { DeployedAppsShowcase } from "@/components/deployed-apps-showcase";
 import { SmartSearch } from "@/components/smart-search";
+import { IndustryInsights } from "@/components/industry-insights";
 import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/syc-hero-woman-and-robot_1751385387506.avif";
 import projectBannerImage from "@assets/pwc_focus-photo_digital-banner_1600x900_30_0258_1751385870025.avif";
@@ -185,48 +186,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      <section className="bg-white border-t border-gray-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-header mb-3">
-              Industry Insights
-            </h2>
-            <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
-              Stay informed with the latest trends, research, and thought leadership
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { title: "Container train operations after 20 years of deregulation", gradient: "from-orange-500 to-rose-500", icon: Globe },
-              { title: "Unlocking growth opportunities in India's insurance sector", gradient: "from-blue-500 to-indigo-500", icon: Shield },
-              { title: "Building a resilient and efficient rural banking system", gradient: "from-emerald-500 to-teal-500", icon: Zap },
-              { title: "Making the case for global workforce migration", gradient: "from-purple-500 to-violet-500", icon: Sparkles },
-            ].map((card, i) => {
-              const Icon = card.icon;
-              return (
-                <div key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                  <div className={`aspect-[16/10] bg-gradient-to-br ${card.gradient} relative overflow-hidden`}>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Icon className="h-12 w-12 text-white/30 group-hover:scale-110 transition-transform duration-500" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-sm font-semibold text-gray-900 leading-snug group-hover:text-primary transition-colors line-clamp-3">
-                      {card.title}
-                    </h3>
-                    <div className="flex items-center gap-1 mt-3 text-xs font-medium text-gray-400 group-hover:text-primary transition-colors">
-                      Read more
-                      <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <IndustryInsights />
 
       <DeployedAppsShowcase 
         searchValue={search}
