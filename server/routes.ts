@@ -771,33 +771,32 @@ Description: ${description}
 
 CONTENT GUIDELINES:
 - Write in a professional, authoritative consulting tone
-- Every bullet must be precise, data-driven language (e.g., "Reduce processing time by up to 60%" not "Makes things faster")
-- Use strong action verbs to start each bullet (Streamline, Accelerate, Optimize, Enable, Transform, Automate, Enhance, Deliver)
-- Keep bullet points to ONE concise line each (maximum 12 words per bullet)
-- No filler words, no generic statements, no vague claims
-- Subtitles should be sharp taglines, not sentences
-- Speaker notes should provide executive talking points with specific context
+- Each bullet should be a clear, descriptive statement (15-25 words) that communicates real value
+- Start bullets with strong action verbs (Streamline, Accelerate, Optimize, Enable, Transform, Automate, Enhance, Deliver)
+- Include specific, quantifiable details where possible (metrics, percentages, timeframes)
+- No filler, no vague claims — every word must add meaning
+- Subtitles should be sharp value statements
 
 Generate exactly 6 slides in valid JSON format. Each slide must have:
-- "title": concise, impactful title (2-5 words, no articles)
-- "subtitle": sharp tagline or value statement (optional, max 8 words)
-- "bullets": array of exactly 4 precise bullet points
+- "title": concise, impactful title (2-5 words)
+- "subtitle": value-driven tagline (max 10 words)
+- "bullets": array of exactly 4 descriptive bullet points (each 15-25 words, clear and informative)
 - "notes": speaker notes with 2-3 executive talking points
 - "imageKeyword": MUST be exactly one of: "analytics", "security", "cloud", "automation", "finance", "healthcare", "teamwork", "development", "innovation", "network", "government", "management", "technology", "ux", "growth"
 
 SLIDE STRUCTURE:
-1. Title Slide — Application name, compelling value proposition tagline, category context
-2. The Challenge — Clearly articulate the business problem with quantifiable impact
-3. Solution Overview — Core capabilities framed as strategic advantages
-4. Architecture & Workflow — How it works in 4 clear, sequential steps
-5. Business Impact — Measurable outcomes, ROI metrics, competitive advantages
-6. Next Steps — Clear call-to-action with implementation pathway
+1. Title Slide — Application name with a strong value proposition subtitle (NO bullets on this slide, leave bullets as empty array)
+2. The Challenge — Business problems with quantifiable impact and urgency
+3. Solution Overview — Core capabilities described with clear business outcomes
+4. How It Works — Step-by-step workflow, each bullet as a numbered phase with description
+5. Business Impact — Measurable outcomes with specific metrics and ROI indicators
+6. Next Steps — Actionable implementation pathway with clear timeline
 
-EXAMPLE OF GOOD vs BAD BULLETS:
+EXAMPLE BULLET QUALITY:
 BAD: "Provides good security features for users"
-GOOD: "Enterprise-grade encryption with zero-trust architecture"
+GOOD: "Enforce enterprise-grade data protection with AES-256 encryption, role-based access controls, and real-time threat monitoring"
 BAD: "Helps teams work together better"
-GOOD: "Enable cross-functional collaboration across 50+ integrations"
+GOOD: "Enable seamless cross-functional collaboration through 50+ pre-built integrations with existing enterprise tools and platforms"
 
 Return ONLY a valid JSON array of slide objects. No markdown, no code fences, no explanation.`;
 
