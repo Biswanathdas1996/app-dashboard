@@ -1,0 +1,95 @@
+def call_gemini(
+        prompt,
+        model="vertex_ai.gemini-2.0-flash",
+        temperature=1,
+        top_p=1,
+        presence_penalty=0,
+        seed=25,
+        stop=None,
+        stream=False,
+        stream_options=None,
+        timeout_seconds=240,
+        max_rounds=5,
+        max_output_tokens=None):
+    """
+    Calls the PwC GenAI shared service 'completions' endpoint with the given prompt.
+    Returns a *plain text string*, similar to your original call_gemini (response.text),
+    and on any error returns: 'An error occurred: {e}'.
+    """
+
+    try:
+        # Endpoint
+        url = os.getenv(
+            "GENAI_COMPLETIONS_URL",
+            "https://genai-sharedservice-americas.pwc.com/completions")
+
+        # Single API key
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError("GEMINI_API_KEY not found in environment.")
+
+        # (Optional) keep the same style log line as your original
+        print("Chosen - ", api_key)
+
+        # Headers
+        headers = {
+            "accept": "application/json",
+            "API-Key": api_key,
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": model,
+            "prompt": prompt,
+            "presence_penalty": presence_penalty,
+            "seed": seed,
+            "stop": stop,
+            "stream": stream,
+            "stream_options": stream_options,
+            "temperature": temperature,
+            "top_p": top_p
+        }
+        if max_output_tokens is not None:
+            payload["max_tokens"] = max_output_tokens
+
+        # Request
+        resp = requests.post(url,
+                             headers=headers,
+                             json=payload,
+                             timeout=timeout_seconds)
+        if resp.status_code != 200:
+            print(f"API Error {resp.status_code}: {resp.text[:500]}")
+        resp.raise_for_status()
+
+        # Try to extract a plain text string from common response shapes.
+        # If we can't, fall back to the raw text body to keep parity with your original.
+        try:
+            data = resp.json()
+            # Common keys that may contain the text
+            for key in ("completion", "text", "output", "result"):
+                if isinstance(data, dict) and isinstance(data.get(key), str):
+                    return data[key]
+
+            # OpenAI-style choices
+            if isinstance(data, dict) and isinstance(data.get("choices"),
+                                                     list) and data["choices"]:
+                choice = data["choices"][0]
+                if isinstance(choice, dict):
+                    if isinstance(choice.get("text"), str):
+                        return choice["text"]
+                    msg = choice.get("message")
+                    if isinstance(msg, dict) and isinstance(
+                            msg.get("content"), str):
+                        return msg["content"]
+
+            # If schema is unknown, return the *raw* body text like your original
+            return resp.text
+
+        except ValueError:
+            # Not JSON — return raw text body to match original behavior
+            return resp.text
+
+    except Exception as e:
+        # Match exact error text style from your original function
+        return f"An error occurred: {e}"
