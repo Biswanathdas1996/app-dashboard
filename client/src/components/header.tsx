@@ -1,5 +1,5 @@
 import { useLocation, Link } from "wouter";
-import { Search, Settings } from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
 import { PwCLogo } from "./pwc-logo";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -17,29 +17,23 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
   const [location] = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200/30 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 shadow-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          {/* Logo and Title */}
-          <div className="flex items-center gap-4">
-            <div className="transition-transform hover:scale-105 duration-200">
-              <PwCLogo size="md" />
-            </div>
+        <div className="flex h-16 items-center justify-between gap-4">
+          <div className="flex items-center gap-3 shrink-0">
+            <PwCLogo size="md" />
             <div className="hidden sm:block">
-              <div className="flex flex-col">
-                <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none">
-                  ET Labs
-                </h1>
-                <p className="text-sm font-medium text-primary/80 tracking-wide leading-none mt-0.5">
-                  Ideas Hub
-                </p>
-              </div>
+              <h1 className="text-lg font-extrabold text-gray-900 tracking-tight leading-none font-header">
+                ET Labs
+              </h1>
+              <p className="text-xs font-semibold text-primary tracking-wide leading-none mt-0.5 uppercase">
+                Ideas Hub
+              </p>
             </div>
           </div>
 
-          {/* Navigation Menu - Only show on dashboard */}
           {location === "/" && onCategoryChange && (
-            <div className="hidden md:flex items-center flex-1 justify-center max-w-2xl mx-4">
+            <div className="hidden md:flex items-center flex-1 justify-center max-w-xl mx-4">
               <NavigationMenu 
                 onCategoryChange={onCategoryChange}
                 currentCategory={currentCategory}
@@ -48,61 +42,47 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
             </div>
           )}
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            {/* Search Bar - Only show on dashboard */}
-            {location.includes("/app-dashboard") && onSearchChange && (
+          <div className="flex items-center gap-3 shrink-0">
+            {location === "/" && onSearchChange && (
               <div className="hidden lg:flex items-center">
-                <div className="relative w-80">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="relative w-64">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <Search className="text-gray-400 h-4 w-4" />
                   </div>
                   <Input
                     type="text"
-                    placeholder="Search applications..."
+                    placeholder="Search..."
                     value={searchValue || ""}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    className="pl-11 pr-4 py-2.5 h-10 bg-gradient-to-r from-gray-50/80 to-white/90 border border-gray-200/40 rounded-xl focus:bg-white focus:border-orange-400/60 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-white/90 shadow-sm hover:shadow-md backdrop-blur-sm font-medium"
+                    className="pl-9 pr-4 h-9 bg-gray-50 border-gray-200 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all text-sm placeholder:text-gray-400"
                   />
                 </div>
               </div>
             )}
 
-            {/* New Request Button */}
             <Button 
-              variant="outline"
               size="sm"
-              className="font-semibold"
+              className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold text-sm h-9 px-4 transition-all shadow-sm hover:shadow-md"
               onClick={() => {
-                console.log('New Request button clicked'); // Debug log
                 const requisitionSection = document.getElementById('project-requisition');
-                console.log('Found section:', requisitionSection); // Debug log
                 if (requisitionSection) {
                   requisitionSection.scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'start'
                   });
-                } else {
-                  console.error('Project requisition section not found');
                 }
               }}
             >
-              <Settings className="h-4 w-4 mr-2" />
               New Request
+              <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Button>
-
-            
           </div>
-
-
         </div>
 
-        {/* Mobile Navigation and Search - Only show on dashboard */}
         {location === "/" && onSearchChange && (
-          <div className="md:hidden px-4 pb-4 space-y-3">
-            {/* Mobile Navigation */}
+          <div className="md:hidden pb-3 space-y-2">
             {onCategoryChange && (
-              <div className="overflow-x-auto scrollbar-hide">
+              <div className="overflow-x-auto scrollbar-hide -mx-1">
                 <NavigationMenu 
                   onCategoryChange={onCategoryChange}
                   currentCategory={currentCategory}
@@ -111,9 +91,8 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
               </div>
             )}
             
-            {/* Mobile Search */}
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Search className="text-gray-400 h-4 w-4" />
               </div>
               <Input
@@ -121,7 +100,7 @@ export function Header({ onSearchChange, searchValue, onCategoryChange, currentC
                 placeholder="Search applications..."
                 value={searchValue || ""}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-11 pr-4 py-2.5 h-10 bg-gradient-to-r from-gray-50/80 to-white/90 border border-gray-200/40 rounded-xl focus:bg-white focus:border-orange-400/60 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm placeholder:text-gray-400 hover:bg-white/90 shadow-sm hover:shadow-md backdrop-blur-sm font-medium"
+                className="pl-9 pr-4 h-9 bg-gray-50 border-gray-200 rounded-lg focus:bg-white focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all text-sm placeholder:text-gray-400"
               />
             </div>
           </div>

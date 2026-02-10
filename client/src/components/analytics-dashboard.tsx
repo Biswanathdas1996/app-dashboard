@@ -13,7 +13,7 @@ export function AnalyticsDashboard() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}>
+            <Card key={i} className="rounded-2xl border-gray-100">
               <CardHeader className="pb-2">
                 <Skeleton className="h-4 w-20" />
                 <Skeleton className="h-8 w-16" />
@@ -21,166 +21,118 @@ export function AnalyticsDashboard() {
             </Card>
           ))}
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-32" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-4 w-full" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-32" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-4 w-full" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     );
   }
 
   if (!analytics) {
     return (
-      <div className="text-center py-8">
-        <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-500">No analytics data available</p>
+      <div className="text-center py-16">
+        <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Activity className="h-6 w-6 text-gray-300" />
+        </div>
+        <p className="text-gray-400 text-sm">No analytics data available</p>
       </div>
     );
   }
 
+  const statCards = [
+    { label: "Total Views", value: analytics.totalViews.toLocaleString(), sub: "All-time views", icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Popular Apps", value: analytics.mostViewedApps.length, sub: "With views", icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { label: "Categories", value: analytics.viewsByCategory.length, sub: "Active", icon: BarChart3, color: "text-violet-600", bg: "bg-violet-50" },
+    { label: "Recent Activity", value: analytics.recentViews.length, sub: "Events", icon: Clock, color: "text-orange-600", bg: "bg-orange-50" },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Views</CardTitle>
-            <Eye className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{analytics.totalViews.toLocaleString()}</div>
-            <p className="text-xs text-gray-500 mt-1">All-time application views</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Popular Apps</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{analytics.mostViewedApps.length}</div>
-            <p className="text-xs text-gray-500 mt-1">Applications with views</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Categories</CardTitle>
-            <BarChart3 className="h-4 w-4 text-purple-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-purple-600">{analytics.viewsByCategory.length}</div>
-            <p className="text-xs text-gray-500 mt-1">Active categories</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
-            <Clock className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{analytics.recentViews.length}</div>
-            <p className="text-xs text-gray-500 mt-1">Recent view events</p>
-          </CardContent>
-        </Card>
+        {statCards.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={stat.label} className="rounded-2xl border-gray-100 hover:shadow-md transition-shadow">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-medium text-gray-500">{stat.label}</span>
+                  <div className={`w-9 h-9 ${stat.bg} rounded-xl flex items-center justify-center`}>
+                    <Icon className={`h-4 w-4 ${stat.color}`} />
+                  </div>
+                </div>
+                <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+                <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Most Viewed Apps */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <Card className="rounded-2xl border-gray-100">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base font-semibold flex items-center gap-2 font-header">
+              <TrendingUp className="h-4 w-4 text-emerald-600" />
               Most Viewed Applications
             </CardTitle>
-            <CardDescription>
-              Top performing applications by total views
+            <CardDescription className="text-xs text-gray-400">
+              Top performing by total views
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {analytics.mostViewedApps.slice(0, 8).map((app, index) => (
-                <div key={app.appId} className="flex items-center justify-between">
+                <div key={`viewed-${app.appId}-${index}`} className="flex items-center justify-between py-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                    <div className="w-7 h-7 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xs font-bold">
                       {index + 1}
                     </div>
                     <div>
                       <p className="font-medium text-sm text-gray-900 truncate max-w-48">
                         {app.appName}
                       </p>
-                      <Badge variant="secondary" className="text-xs">
-                        {app.appCategory}
-                      </Badge>
+                      <span className="text-[11px] text-gray-400 font-medium">{app.appCategory}</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg text-blue-600">{app.viewCount}</p>
-                    <p className="text-xs text-gray-500">views</p>
+                    <span className="text-sm font-bold text-gray-900">{app.viewCount}</span>
+                    <span className="text-xs text-gray-400 ml-1">views</span>
                   </div>
                 </div>
               ))}
               {analytics.mostViewedApps.length === 0 && (
-                <p className="text-center text-gray-500 py-8">No app views recorded yet</p>
+                <p className="text-center text-gray-400 py-8 text-sm">No views recorded yet</p>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Views by Category */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-purple-600" />
+        <Card className="rounded-2xl border-gray-100">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base font-semibold flex items-center gap-2 font-header">
+              <BarChart3 className="h-4 w-4 text-violet-600" />
               Views by Category
             </CardTitle>
-            <CardDescription>
-              Distribution of views across categories
+            <CardDescription className="text-xs text-gray-400">
+              Distribution across categories
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {analytics.viewsByCategory.map((category, index) => {
+              {analytics.viewsByCategory.map((category) => {
                 const maxViews = Math.max(...analytics.viewsByCategory.map(c => c.viewCount));
                 const percentage = maxViews > 0 ? (category.viewCount / maxViews) * 100 : 0;
                 
                 return (
-                  <div key={category.category} className="space-y-2">
+                  <div key={`cat-${category.category}`} className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm text-gray-900">
+                      <span className="text-sm font-medium text-gray-700">
                         {category.category}
                       </span>
-                      <span className="font-bold text-purple-600">
+                      <span className="text-sm font-bold text-gray-900">
                         {category.viewCount}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-100 rounded-full h-1.5">
                       <div 
-                        className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+                        className="bg-gradient-to-r from-violet-500 to-purple-500 h-1.5 rounded-full transition-all duration-700 ease-out"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -188,48 +140,45 @@ export function AnalyticsDashboard() {
                 );
               })}
               {analytics.viewsByCategory.length === 0 && (
-                <p className="text-center text-gray-500 py-8">No category data available</p>
+                <p className="text-center text-gray-400 py-8 text-sm">No category data available</p>
               )}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent Views */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-orange-600" />
+      <Card className="rounded-2xl border-gray-100">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base font-semibold flex items-center gap-2 font-header">
+            <Clock className="h-4 w-4 text-orange-600" />
             Recent Activity
           </CardTitle>
-          <CardDescription>
-            Latest application view events
+          <CardDescription className="text-xs text-gray-400">
+            Latest view events
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-1">
             {analytics.recentViews.slice(0, 10).map((view) => (
-              <div key={view.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+              <div key={view.id} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full shrink-0"></div>
                   <div>
                     <p className="font-medium text-sm text-gray-900">
                       {view.appName}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {view.appCategory} • {view.viewType.replace('_', ' ')}
+                    <p className="text-xs text-gray-400">
+                      {view.appCategory} &middot; {view.viewType.replace('_', ' ')}
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs text-gray-500">
-                    {format(new Date(view.createdAt), 'MMM dd, HH:mm')}
-                  </p>
-                </div>
+                <span className="text-xs text-gray-400 shrink-0">
+                  {format(new Date(view.createdAt), 'MMM dd, HH:mm')}
+                </span>
               </div>
             ))}
             {analytics.recentViews.length === 0 && (
-              <p className="text-center text-gray-500 py-8">No recent activity</p>
+              <p className="text-center text-gray-400 py-8 text-sm">No recent activity</p>
             )}
           </div>
         </CardContent>
