@@ -1,10 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ExternalLink, FileText, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2, Presentation, Loader2, ChevronLeft, ChevronRight, Download, ArrowLeft, ImageIcon } from "lucide-react";
+import { ExternalLink, FileText, X, Star, Calendar, Copy, Check, Globe, Paperclip, ArrowUpRight, Layers, Link2, Presentation, Loader2, ChevronLeft, ChevronRight, Download, ArrowLeft, ImageIcon, Maximize, Minimize } from "lucide-react";
 import type { WebApp } from "@shared/schema";
 import { RichTextViewer } from "./rich-text-viewer";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AppDetailsModalProps {
@@ -249,7 +249,37 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
   const [generatedSlides, setGeneratedSlides] = useState<SlideData[] | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [imageLoadingCount, setImageLoadingCount] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showFullscreenControls, setShowFullscreenControls] = useState(true);
   const { toast } = useToast();
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!generatedSlides) return;
+    if (e.key === "ArrowRight" || e.key === " ") {
+      e.preventDefault();
+      setCurrentSlide(prev => Math.min(generatedSlides.length - 1, prev + 1));
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setCurrentSlide(prev => Math.max(0, prev - 1));
+    } else if (e.key === "Escape" && isFullscreen) {
+      e.preventDefault();
+      setIsFullscreen(false);
+    }
+  }, [generatedSlides, isFullscreen]);
+
+  useEffect(() => {
+    if (isFullscreen) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [isFullscreen, handleKeyDown]);
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+    setShowFullscreenControls(true);
+    const timer = setTimeout(() => setShowFullscreenControls(false), 3000);
+    return () => clearTimeout(timer);
+  }, [isFullscreen, currentSlide]);
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -348,6 +378,97 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
   if (generatedSlides) {
     const currentSlideHasImage = generatedSlides[currentSlide]?.imageBase64 && generatedSlides[currentSlide].imageBase64!.length > 100;
 
+    if (isFullscreen) {
+      return (
+        <div
+          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center cursor-none"
+          onMouseMove={() => { setShowFullscreenControls(true); }}
+          onClick={(e) => {
+            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            if (clickX > rect.width / 2) {
+              setCurrentSlide(prev => Math.min(generatedSlides.length - 1, prev + 1));
+            } else {
+              setCurrentSlide(prev => Math.max(0, prev - 1));
+            }
+          }}
+        >
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full max-w-[100vw] max-h-[100vh] aspect-[16/9]">
+              <div className="w-full h-full" style={{ transform: "scale(1)", transformOrigin: "center" }}>
+                <SlidePreview
+                  slide={generatedSlides[currentSlide]}
+                  index={currentSlide}
+                  total={generatedSlides.length}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`fixed bottom-0 left-0 right-0 transition-all duration-500 ${showFullscreenControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
+            style={{ cursor: "default" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-6 px-8">
+              <div className="flex items-center justify-between max-w-4xl mx-auto">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5">
+                    <span className="text-sm font-semibold text-white">{currentSlide + 1}</span>
+                    <span className="text-sm text-white/40">/</span>
+                    <span className="text-sm text-white/60">{generatedSlides.length}</span>
+                  </div>
+                  <span className="text-sm text-white/40 truncate max-w-[200px]">{generatedSlides[currentSlide].title}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setCurrentSlide(prev => Math.max(0, prev - 1)); }}
+                    disabled={currentSlide === 0}
+                    className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white disabled:opacity-30 transition-all"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+
+                  <div className="flex items-center gap-1 mx-2">
+                    {generatedSlides.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={(e) => { e.stopPropagation(); setCurrentSlide(i); }}
+                        className={`h-1.5 rounded-full transition-all ${i === currentSlide ? "w-6 bg-orange-500" : "w-1.5 bg-white/30 hover:bg-white/50"}`}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setCurrentSlide(prev => Math.min(generatedSlides.length - 1, prev + 1)); }}
+                    disabled={currentSlide === generatedSlides.length - 1}
+                    className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white disabled:opacity-30 transition-all"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
+                  className="flex items-center gap-2 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white/70 hover:text-white rounded-full px-4 py-2 text-sm transition-all"
+                >
+                  <Minimize className="h-4 w-4" />
+                  Exit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`fixed top-4 right-4 text-xs text-white/30 transition-opacity duration-500 ${showFullscreenControls ? "opacity-100" : "opacity-0"}`}
+          >
+            Press ESC to exit
+          </div>
+        </div>
+      );
+    }
+
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-5xl w-[95vw] max-h-[92vh] overflow-hidden p-0 gap-0 flex flex-col rounded-3xl border border-gray-200/60 shadow-[0_25px_60px_-12px_rgba(0,0,0,0.25)] bg-gray-950">
@@ -381,6 +502,15 @@ export function AppDetailsModal({ isOpen, onClose, app }: AppDetailsModalProps) 
               )}
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                size="sm"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFullscreen(true); }}
+                className="bg-white/10 hover:bg-white/20 text-white/80 hover:text-white font-semibold text-xs h-8 px-4 rounded-lg transition-all gap-1.5"
+              >
+                <Maximize className="h-3.5 w-3.5" />
+                Present
+              </Button>
               <Button
                 type="button"
                 size="sm"
